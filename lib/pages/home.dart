@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/components/user/github_user.dart';
-import 'package:flutter_template/controller/todo.dart';
-import 'package:flutter_template/pages/settings.dart';
-import 'package:flutter_template/pages/todo_list.dart';
+import 'package:beyond_pda/components/user/github_user.dart';
+import 'package:beyond_pda/controller/todo.dart';
+import 'package:beyond_pda/pages/settings.dart';
+import 'package:beyond_pda/pages/todo_list.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {

@@ -1,15 +1,15 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_template/controller/settings.dart';
-import 'package:flutter_template/controller/todo.dart';
-import 'package:flutter_template/controller/user.dart';
-import 'package:flutter_template/i18n/translations.dart';
-import 'package:flutter_template/repository/todo_repository.dart';
-import 'package:flutter_template/repository/user_repository.dart';
-import 'package:flutter_template/routes.dart';
-import 'package:flutter_template/pages/unknown.dart';
-import 'package:flutter_template/service/http_service.dart';
+import 'package:beyond_pda/controller/settings.dart';
+import 'package:beyond_pda/controller/todo.dart';
+import 'package:beyond_pda/controller/user.dart';
+import 'package:beyond_pda/i18n/translations.dart';
+import 'package:beyond_pda/repository/todo_repository.dart';
+import 'package:beyond_pda/repository/user_repository.dart';
+import 'package:beyond_pda/routes.dart';
+import 'package:beyond_pda/pages/unknown.dart';
+import 'package:beyond_pda/service/http_service.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 

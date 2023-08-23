@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/models/github_user.dart';
-import 'package:flutter_template/repository/user_repository.dart';
+import 'package:beyond_pda/models/github_user.dart';
+import 'package:beyond_pda/repository/user_repository.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {

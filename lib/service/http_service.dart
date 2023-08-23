@@ -9,7 +9,7 @@ class HttpService extends GetxService {
   }) async {
     _dio = Dio();
     _dio.options.baseUrl = baseUrl;
-    _dio.options.connectTimeout = const Duration(milliseconds: 5000);
+    _dio.options.connectTimeout = const Duration(milliseconds: 10000);
     _dio.options.receiveTimeout = const Duration(milliseconds: 3000);
     _dio.interceptors.add(LogInterceptor(responseBody: true));
     // _dio.interceptors.add();其他拦截器

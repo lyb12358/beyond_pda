@@ -1,6 +1,6 @@
 {
-    "name": "flutter_template",
-    "short_name": "flutter_template",
+    "name": "beyond_pda",
+    "short_name": "beyond_pda",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#hexcode",

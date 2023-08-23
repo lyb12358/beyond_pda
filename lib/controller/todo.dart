@@ -1,5 +1,5 @@
-import 'package:flutter_template/models/todo.dart';
-import 'package:flutter_template/repository/todo_repository.dart';
+import 'package:beyond_pda/models/todo.dart';
+import 'package:beyond_pda/repository/todo_repository.dart';
 import 'package:get/get.dart';
 
 class TodoController extends GetxController {

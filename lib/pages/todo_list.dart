@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_pickers/helpers/show_responsive_dialog.dart';
-import 'package:flutter_template/components/add_todo_dialog.dart';
-import 'package:flutter_template/components/todo_item.dart';
-import 'package:flutter_template/controller/todo.dart';
+import 'package:beyond_pda/components/add_todo_dialog.dart';
+import 'package:beyond_pda/components/todo_item.dart';
+import 'package:beyond_pda/controller/todo.dart';
 import 'package:get/get.dart';
 
 class TodoListPage extends GetView<TodoController> {

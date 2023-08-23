@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/controller/settings.dart';
+import 'package:beyond_pda/controller/settings.dart';
 import 'package:get/get.dart';
 
 class SettingPage extends GetResponsiveView<SettingsController> {
