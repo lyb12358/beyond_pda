@@ -49,6 +49,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.1+4"
+  badges:
+    dependency: transitive
+    description:
+      name: badges
+      sha256: "727580d938b7a1ff47ea42df730d581415606b4224cfa708671c10287f8d3fe6"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -57,6 +65,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.1"
+  bubble_bottom_bar:
+    dependency: "direct main"
+    description:
+      name: bubble_bottom_bar
+      sha256: e90a47657e34666eacb775b125a626789931a87a6e62c25ff68137ed5240f0e7
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.0"
   build:
     dependency: transitive
     description:
@@ -781,6 +797,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  sm_scan:
+    dependency: "direct main"
+    description:
+      name: sm_scan
+      sha256: b01249783da0b121d45d3a21fca500a606e881d44767638350653d440cb67e8a
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "5.0.0"
   source_gen:
     dependency: transitive
     description:

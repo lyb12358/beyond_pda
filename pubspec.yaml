@@ -49,6 +49,8 @@ dependencies:
   auth_buttons: ^1.0.1+4
   flutter_web_auth_2: ^2.1.5
   extended_image: ^8.0.2
+  bubble_bottom_bar: ^2.0.0
+  sm_scan: ^5.0.0
 
 dev_dependencies:
   flutter_test:
