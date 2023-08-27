@@ -64,6 +64,10 @@ class SettingsController extends GetxController {
     box.write('locale', lol.languageCode);
   }
 
+  void setVersion(String code) {
+    version.value = code;
+  }
+
   getLocaleFromPreferences() async {
     Locale locale;
     GetStorage box = GetStorage();

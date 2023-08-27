@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:beyond_pda/components/user/github_user.dart';
 import 'package:beyond_pda/controller/todo.dart';
 import 'package:beyond_pda/pages/settings.dart';
+import 'package:beyond_pda/pages/Test.dart';
 import 'package:beyond_pda/pages/todo_list.dart';
 import 'package:get/get.dart';
 
@@ -83,14 +84,14 @@ class HomePage extends StatelessWidget {
                         title: Text('Settings'.tr),
                         leading: const Icon(Icons.settings),
                         onTap: () {
-                          Get.to(SettingPage());
+                          Get.to(() => SettingPage());
                         },
                       ),
                       ListTile(
                         title: Text('Help'.tr),
                         leading: const Icon(Icons.help),
                         onTap: () {
-                          // Add your help page navigation logic here
+                          Get.to(() => TestPage());
                         },
                       ),
                     ],
@@ -111,7 +112,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      body: const TodoListPage(),
+      body: TodoListPage(),
     );
   }
 }
