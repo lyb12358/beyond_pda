@@ -2,7 +2,6 @@ import 'package:beyond_pda/controller/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_pickers/helpers/show_responsive_dialog.dart';
 import 'package:beyond_pda/components/add_todo_dialog.dart';
-import 'package:beyond_pda/components/todo_item.dart';
 import 'package:beyond_pda/controller/todo.dart';
 import 'package:get/get.dart';
 
