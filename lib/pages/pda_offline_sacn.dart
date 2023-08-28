@@ -20,9 +20,9 @@ class _MyState extends State<PdaOfflineScanPage>
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
-        // appBar: AppBar(
-        //   title: const Text('离线盘点'),
-        // ),
+        appBar: AppBar(
+          title: const Text('离线盘点'),
+        ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {

@@ -1,4 +1,5 @@
 import 'package:beyond_pda/pages/Test.dart';
+import 'package:beyond_pda/pages/pda_login.dart';
 import 'package:beyond_pda/pages/pda_offline_sacn.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,7 +30,9 @@ class HomePage extends StatelessWidget {
               )
             ],
           ),
-          onPressed: () {},
+          onPressed: () {
+            Get.to(() => const PdaLoginPage());
+          },
         ),
         const SizedBox(height: 40),
         ElevatedButton(
@@ -50,7 +53,7 @@ class HomePage extends StatelessWidget {
             ],
           ),
           onPressed: () {
-            Get.to(() => const TestPage());
+            Get.to(() => const PdaOfflineScanPage());
           },
         ),
       ],
