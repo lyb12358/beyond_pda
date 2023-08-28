@@ -1,3 +1,4 @@
+import 'package:beyond_pda/controller/offline_scan_controller.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
     Get.put(TodoController());
     Get.put(SettingsController());
     Get.put(UserController());
+    Get.put(OfflineScanController());
     return GetMaterialApp(
       initialRoute: '/',
       getPages: routes,

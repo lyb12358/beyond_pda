@@ -1,4 +1,7 @@
+import 'package:beyond_pda/pages/Test.dart';
+import 'package:beyond_pda/pages/pda_offline_sacn.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
@@ -46,7 +49,9 @@ class HomePage extends StatelessWidget {
               )
             ],
           ),
-          onPressed: () {},
+          onPressed: () {
+            Get.to(() => const TestPage());
+          },
         ),
       ],
     );

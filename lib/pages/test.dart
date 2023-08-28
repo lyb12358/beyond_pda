@@ -39,7 +39,6 @@ class _MyState extends State<TestPage> with ShangmiScanMixin<TestPage> {
   Future<void> shangmiCodeHandle(String code) async {
     /// 编写你的逻辑
     print('扫描到数据：$code');
-    c.setVersion(code);
     setState(() {
       _code = code;
     });
