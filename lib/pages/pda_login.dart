@@ -1,11 +1,14 @@
+import 'package:beyond_pda/controller/user.dart';
 import 'package:flutter/material.dart';
 import 'package:beyond_pda/animation/fade_animation.dart';
+import 'package:get/get.dart';
 
 class PdaLoginPage extends StatelessWidget {
   const PdaLoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    UserController c = Get.find();
     return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
@@ -103,9 +106,12 @@ class PdaLoginPage extends StatelessWidget {
                                   decoration: BoxDecoration(
                                       border: Border(bottom: BorderSide())),
                                   child: TextField(
+                                    onChanged: (text) {
+                                      c.name.value = text;
+                                    },
                                     decoration: InputDecoration(
                                         border: InputBorder.none,
-                                        hintText: "Email or Phone number",
+                                        hintText: "工号",
                                         hintStyle:
                                             TextStyle(color: Colors.grey[400])),
                                   ),
@@ -113,9 +119,12 @@ class PdaLoginPage extends StatelessWidget {
                                 Container(
                                   padding: EdgeInsets.all(8.0),
                                   child: TextField(
+                                    onChanged: (text) {
+                                      c.pwd.value = text;
+                                    },
                                     decoration: InputDecoration(
                                         border: InputBorder.none,
-                                        hintText: "Password",
+                                        hintText: "密码",
                                         hintStyle:
                                             TextStyle(color: Colors.grey[400])),
                                   ),
@@ -128,20 +137,23 @@ class PdaLoginPage extends StatelessWidget {
                       ),
                       FadeAnimation(
                           2,
-                          Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                gradient: LinearGradient(colors: [
-                                  Color.fromRGBO(143, 148, 251, 1),
-                                  Color.fromRGBO(143, 148, 251, .6),
-                                ])),
-                            child: Center(
-                              child: Text(
-                                "登录",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                          GestureDetector(
+                            onTap: () => c.login(c.name.value, c.pwd.value),
+                            child: Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  gradient: LinearGradient(colors: [
+                                    Color.fromRGBO(143, 148, 251, 1),
+                                    Color.fromRGBO(143, 148, 251, .6),
+                                  ])),
+                              child: Center(
+                                child: Text(
+                                  "登录",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
                           )),

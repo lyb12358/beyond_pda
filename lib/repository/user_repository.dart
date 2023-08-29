@@ -18,43 +18,72 @@ class UserRepository extends GetxService {
     return this;
   }
 
-  Future<GithubUser> getGithubUserInfo() async {
-    var githubToken = getGithubToken();
+  Future getUserInfo() async {
     try {
-      final response = await _httpService.get<Map<String, dynamic>>('/user',
-          options: Options(headers: {
-            'Accept': 'application/vnd.github+json',
-            'Authorization': 'Bearer $githubToken',
-            'X-GitHub-Api-Version': "2022-11-28"
-          }));
-      return GithubUser.fromJson(response.data!);
-    } on DioException catch (e) {
+      final response = await _httpService.post(
+          '/beyond-usercenter/common/getUserInfo',
+          data: {'systemCode': 'TerminalPlatform'});
+      if (response.data['code'] == 200) {
+        GetStorage box = GetStorage();
+        box.write('userId', response.data['data']['sysUser']['id']);
+        box.write('name', response.data['data']['sysUser']['realName']);
+        box.write('workCode', response.data['data']['sysUser']['workCode']);
+        return response.data['data']['sysUser'];
+      } else {
+        Get.snackbar('失败', response.data['msg']);
+        throw Exception('请求失败');
+      }
+    } catch (e) {
       // 处理错误，例如自动重试
       debugPrint(e.toString());
-      rethrow;
     }
   }
 
-  getGithubToken() {
+  getToken() {
     GetStorage box = GetStorage();
-    var githubToken = box.read("github_token") ?? '';
-    return githubToken;
+    var token = box.read("x-token") ?? '';
+    return token;
   }
 
-  setGithubToken(String token) {
+  setToken(String token) {
     GetStorage box = GetStorage();
-    box.write("github_token", token);
+    box.write("x-token", token);
   }
 
-  login() async {
-    final result = await FlutterWebAuth2.authenticate(
-      url:
-          'https://github.com/login/oauth/authorize?client_id=$clientId&scope=read:user',
-      callbackUrlScheme: scheme,
-    );
-    var authorizationCode = getCodeFromUrl(result, 'code');
-    var token = await getAccessToken(authorizationCode);
-    setGithubToken(token);
+  login(String name, String pwd) async {
+    try {
+      final response = await _httpService.post('/beyond-usercenter/login',
+          data: {'username': name, 'password': pwd});
+      if (response.data['code'] == 200) {
+        setToken(response.data['data']['token']);
+        GetStorage box = GetStorage();
+        box.write('account', name);
+        box.write('pwd', pwd);
+        return true;
+      } else {
+        Get.snackbar('失败', response.data['msg']);
+        return false;
+      }
+    } on DioException catch (e) {
+      // 处理错误，例如自动重试
+      debugPrint(e.toString());
+    }
+  }
+
+  getShopList(String workCode) async {
+    try {
+      final response = await _httpService.post(
+          '/beyond-usercenter/common/getUserShopsIgnoreBrand',
+          data: {'systemCode': 'TerminalPlatform', 'workCode': workCode});
+      if (response.data['code'] == 200) {
+        return response.data['data']['shops'];
+      } else {
+        Get.snackbar('失败', response.data['msg']);
+        throw Exception('请求失败');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   String getCodeFromUrl(String url, String paramName) {

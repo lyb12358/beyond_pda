@@ -62,7 +62,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    const GithubUserInfoWidget(),
+                    //const GithubUserInfoWidget(),
                   ],
                 ),
                 Divider(

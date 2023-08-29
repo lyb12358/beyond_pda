@@ -22,8 +22,8 @@ void main() async {
 }
 
 initServices() async {
-  await Get.putAsync<HttpService>(
-      () async => await HttpService().init(baseUrl: "https://api.github.com"));
+  await Get.putAsync<HttpService>(() async => await HttpService()
+      .init(baseUrl: "https://map.beyond-itcenter.com/usercenter"));
   await Get.putAsync<ToDoRepository>(() async => await ToDoRepository().init());
   Get.put(UserRepository().init());
 }

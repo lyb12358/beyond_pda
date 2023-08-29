@@ -1,18 +1,16 @@
-import 'package:beyond_pda/controller/user.dart';
 import 'package:beyond_pda/pages/Test.dart';
+import 'package:beyond_pda/pages/choose_shop.dart';
 import 'package:beyond_pda/pages/pda_login.dart';
 import 'package:beyond_pda/pages/pda_offline_sacn.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
-class HomePage extends StatelessWidget {
+class OnlineWorkshopPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const HomePage({Key? key});
+  const OnlineWorkshopPage({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    UserController c = Get.find();
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -25,7 +23,7 @@ class HomePage extends StatelessWidget {
                 color: Colors.lightBlue,
               ),
               Text(
-                "在线盘点",
+                "盘点",
                 style: TextStyle(
                   color: Colors.lightBlue,
                   fontSize: 15,
@@ -34,16 +32,7 @@ class HomePage extends StatelessWidget {
             ],
           ),
           onPressed: () {
-            GetStorage box = GetStorage();
-            String xx = box.read('account');
-            String yy = box.read('pwd');
-            if (xx.isNotEmpty) {
-              print(xx);
-              print(yy);
-              c.login(xx, yy);
-            } else {
-              Get.to(() => const PdaLoginPage());
-            }
+            Get.to(() => const ChooseShopPage());
           },
         ),
         const SizedBox(height: 40),
