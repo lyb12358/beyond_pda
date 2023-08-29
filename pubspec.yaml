@@ -52,6 +52,7 @@ dependencies:
   bubble_bottom_bar: ^2.0.0
   sm_scan: ^5.0.0
   simple_animations: ^5.0.2
+  bruno: ^3.4.2
 
 dev_dependencies:
   flutter_test:
