@@ -1,6 +1,7 @@
 import 'package:beyond_pda/controller/user_controller.dart';
 import 'package:beyond_pda/pages/login_page.dart';
 import 'package:beyond_pda/pages/offline_sacn_page.dart';
+import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -16,10 +17,15 @@ class HomePage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
+          style: ButtonStyle(
+            surfaceTintColor: MaterialStatePropertyAll(Colors.transparent),
+            shadowColor: MaterialStatePropertyAll(Colors.transparent),
+          ),
           child: const Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                Icons.wifi_outlined,
+                Icons.wifi,
                 size: 80,
                 color: Colors.lightBlue,
               ),
@@ -27,12 +33,13 @@ class HomePage extends StatelessWidget {
                 "在线盘点",
                 style: TextStyle(
                   color: Colors.lightBlue,
-                  fontSize: 15,
+                  fontSize: 20,
                 ),
               )
             ],
           ),
           onPressed: () {
+            BrnLoadingDialog.show(context, barrierDismissible: false);
             GetStorage box = GetStorage();
             String xx = box.read('account');
             String yy = box.read('pwd');
@@ -41,11 +48,17 @@ class HomePage extends StatelessWidget {
             } else {
               Get.to(() => const PdaLoginPage());
             }
+            BrnLoadingDialog.dismiss(context);
           },
         ),
-        const SizedBox(height: 40),
+        const SizedBox(height: 60),
         ElevatedButton(
+          style: ButtonStyle(
+            surfaceTintColor: MaterialStatePropertyAll(Colors.transparent),
+            shadowColor: MaterialStatePropertyAll(Colors.transparent),
+          ),
           child: const Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 Icons.wifi_off_outlined,
@@ -56,7 +69,7 @@ class HomePage extends StatelessWidget {
                 "离线盘点",
                 style: TextStyle(
                   color: Colors.orange,
-                  fontSize: 15,
+                  fontSize: 20,
                 ),
               )
             ],

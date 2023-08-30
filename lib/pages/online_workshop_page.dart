@@ -18,25 +18,25 @@ class _OnlineWorkshopState extends State<OnlineWorkshopPage> {
   final List<BrnBottomTabBarItem> bottomTabs = [
     BrnBottomTabBarItem(
       icon: Icon(
-        Icons.add_business_outlined,
+        Icons.add_business,
       ),
       title: Text('门店盘点', style: TextStyle(fontSize: 16)),
     ),
     BrnBottomTabBarItem(
       icon: Icon(
-        Icons.category_outlined,
+        Icons.category,
       ),
       title: Text('产品查询', style: TextStyle(fontSize: 16)),
     ),
     BrnBottomTabBarItem(
       icon: Icon(
-        Icons.inventory_2_outlined,
+        Icons.inventory_2,
       ),
       title: Text('库存查询', style: TextStyle(fontSize: 16)),
     ),
     BrnBottomTabBarItem(
       icon: Icon(
-        Icons.person_outline_outlined,
+        Icons.person,
       ),
       title: Text('我的', style: TextStyle(fontSize: 16)),
     ),

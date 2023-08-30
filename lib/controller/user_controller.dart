@@ -1,4 +1,5 @@
 import 'package:beyond_pda/pages/online_workshop_page.dart';
+import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:beyond_pda/repository/user_repository.dart';
 import 'package:get/get.dart';
@@ -24,6 +25,7 @@ class UserController extends GetxController {
       user.value = userInfo;
       GetStorage box = GetStorage();
       String xx = box.read('name') ?? '';
+      name.value = user['realName'];
       Get.snackbar('登录成功', '欢迎你$xx');
       Get.offAll(() => OnlineWorkshopPage());
     } catch (e) {
@@ -33,9 +35,7 @@ class UserController extends GetxController {
   }
 
   void login(String name, String pwd) async {
-    print('开始判断');
     if (await _userRepository.login(name, pwd)) {
-      print('login 好了');
       await getUserInfo();
     }
   }
