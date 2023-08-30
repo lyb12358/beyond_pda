@@ -3,7 +3,6 @@ import 'package:beyond_pda/pages/online_gridview_page.dart';
 import 'package:beyond_pda/pages/prod_query_page.dart';
 import 'package:beyond_pda/pages/user_deatail_page.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:bruno/bruno.dart';
 
 class OnlineWorkshopPage extends StatefulWidget {

@@ -1,4 +1,5 @@
 import 'package:beyond_pda/controller/user_controller.dart';
+import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:beyond_pda/animation/fade_animation.dart';
 import 'package:get/get.dart';
@@ -111,7 +112,7 @@ class PdaLoginPage extends StatelessWidget {
                                     },
                                     decoration: InputDecoration(
                                         border: InputBorder.none,
-                                        hintText: "工号",
+                                        hintText: "账号",
                                         hintStyle:
                                             TextStyle(color: Colors.grey[400])),
                                   ),
@@ -138,7 +139,12 @@ class PdaLoginPage extends StatelessWidget {
                       FadeAnimation(
                           2,
                           GestureDetector(
-                            onTap: () => c.login(c.name.value, c.pwd.value),
+                            onTap: () async {
+                              BrnLoadingDialog.show(context,
+                                  barrierDismissible: false);
+                              await c.login(c.name.value, c.pwd.value);
+                              BrnLoadingDialog.dismiss(context);
+                            },
                             child: Container(
                               height: 50,
                               decoration: BoxDecoration(

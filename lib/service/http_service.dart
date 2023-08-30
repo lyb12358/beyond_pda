@@ -40,12 +40,10 @@ class HttpService extends GetxService {
           isDismissible: true,
           duration: Duration(seconds: 2),
         );
-        debugPrint('response: $response');
       } else {
-        debugPrint('response: $response');
+        //debugPrint('response: $response');
         return handler.next(response);
       }
-      debugPrint('response: $response');
     },
     onError: (error, handler) {
       debugPrint('response: $error');

@@ -38,13 +38,13 @@ class HomePage extends StatelessWidget {
               )
             ],
           ),
-          onPressed: () {
+          onPressed: () async {
             BrnLoadingDialog.show(context, barrierDismissible: false);
             GetStorage box = GetStorage();
-            String xx = box.read('account');
-            String yy = box.read('pwd');
+            String xx = box.read('account') ?? '';
+            String yy = box.read('pwd') ?? '';
             if (xx.isNotEmpty) {
-              c.login(xx, yy);
+              await c.login(xx, yy);
             } else {
               Get.to(() => const PdaLoginPage());
             }

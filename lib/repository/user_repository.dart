@@ -7,10 +7,6 @@ import 'package:get_storage/get_storage.dart';
 class UserRepository extends GetxService {
   late HttpService _httpService;
 
-  static const clientId = "Iv1.7f5b0df57491a993";
-  static const scheme = "valid-callback-scheme";
-  static const authUrl = 'https://github.com/login/oauth/access_token';
-
   UserRepository init() {
     _httpService = Get.find<HttpService>();
     return this;

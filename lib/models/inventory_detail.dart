@@ -1,4 +1,5 @@
 import 'package:isar/isar.dart';
+part 'inventory_detail.g.dart';
 
 @collection
 class InventoryDetail {

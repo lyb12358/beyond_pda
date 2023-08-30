@@ -1,4 +1,5 @@
 import 'package:beyond_pda/controller/offline_scan_controller.dart';
+import 'package:beyond_pda/repository/product_repository.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -24,7 +25,8 @@ void main() async {
 initServices() async {
   await Get.putAsync<HttpService>(() async => await HttpService()
       .init(baseUrl: "https://map.beyond-itcenter.com/usercenter"));
-  await Get.putAsync<ToDoRepository>(() async => await ToDoRepository().init());
+  await Get.putAsync<ProductRepository>(
+      () async => await ProductRepository().init());
   Get.put(UserRepository().init());
 }
 
@@ -33,8 +35,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(TodoController());
-    Get.put(SettingsController());
     Get.put(UserController());
     Get.put(OfflineScanController());
     return GetMaterialApp(
