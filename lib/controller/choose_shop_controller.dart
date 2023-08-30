@@ -1,4 +1,4 @@
-import 'package:beyond_pda/controller/user.dart';
+import 'package:beyond_pda/controller/user_controller.dart';
 import 'package:get/get.dart';
 
 class ChooseShopController extends GetxController {

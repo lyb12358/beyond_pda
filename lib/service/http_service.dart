@@ -1,6 +1,5 @@
 import 'package:beyond_pda/pages/home.dart';
 import 'package:flutter/material.dart';
-import 'package:beyond_pda/pages/pda_login.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:get_storage/get_storage.dart';
@@ -26,7 +25,6 @@ class HttpService extends GetxService {
       options.headers['cookie'] = box.read("x-token") ?? '';
       options.headers['x-token'] = box.read("x-token") ?? '';
       options.headers['systemCode'] = 'TerminalPlatform';
-      print('request: ' + options.toString());
       return handler.next(options);
     },
     onResponse: (response, handler) {
@@ -42,15 +40,15 @@ class HttpService extends GetxService {
           isDismissible: true,
           duration: Duration(seconds: 2),
         );
-        print('response: ' + response.toString());
+        debugPrint('response: $response');
       } else {
-        print('response: ' + response.toString());
+        debugPrint('response: $response');
         return handler.next(response);
       }
-      print('response: ' + response.toString());
+      debugPrint('response: $response');
     },
     onError: (error, handler) {
-      print('response: ' + error.toString());
+      debugPrint('response: $error');
       return handler.next(error);
     },
   );

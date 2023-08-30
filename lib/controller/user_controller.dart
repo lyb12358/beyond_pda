@@ -1,4 +1,4 @@
-import 'package:beyond_pda/pages/online_workshop.dart';
+import 'package:beyond_pda/pages/online_workshop_page.dart';
 import 'package:flutter/material.dart';
 import 'package:beyond_pda/models/github_user.dart';
 import 'package:beyond_pda/repository/user_repository.dart';
@@ -19,7 +19,7 @@ class UserController extends GetxController {
     //getUserInfo();
   }
 
-  Future<void> getUserInfo() async {
+  getUserInfo() async {
     try {
       final userInfo = await _userRepository.getUserInfo();
       user.value = userInfo;
@@ -34,9 +34,12 @@ class UserController extends GetxController {
   }
 
   void login(String name, String pwd) async {
+    print('开始判断');
     if (await _userRepository.login(name, pwd)) {
+      print('login 好了');
       await getUserInfo();
     }
+    print('失败！！！！！');
   }
 
   getShopList() async {

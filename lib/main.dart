@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:beyond_pda/controller/settings.dart';
 import 'package:beyond_pda/controller/todo.dart';
-import 'package:beyond_pda/controller/user.dart';
+import 'package:beyond_pda/controller/user_controller.dart';
 import 'package:beyond_pda/i18n/translations.dart';
 import 'package:beyond_pda/repository/todo_repository.dart';
 import 'package:beyond_pda/repository/user_repository.dart';

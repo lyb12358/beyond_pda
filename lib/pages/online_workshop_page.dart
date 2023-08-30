@@ -1,7 +1,7 @@
 import 'package:beyond_pda/pages/Test.dart';
-import 'package:beyond_pda/pages/choose_shop.dart';
-import 'package:beyond_pda/pages/pda_login.dart';
-import 'package:beyond_pda/pages/pda_offline_sacn.dart';
+import 'package:beyond_pda/pages/choose_shop_page.dart';
+import 'package:beyond_pda/pages/pda_login_page.dart';
+import 'package:beyond_pda/pages/pda_offline_sacn_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

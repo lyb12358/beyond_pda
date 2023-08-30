@@ -30,12 +30,13 @@ class UserRepository extends GetxService {
         box.write('workCode', response.data['data']['sysUser']['workCode']);
         return response.data['data']['sysUser'];
       } else {
-        Get.snackbar('失败', response.data['msg']);
+        Get.snackbar('警告', response.data['msg']);
         throw Exception('请求失败');
       }
     } catch (e) {
       // 处理错误，例如自动重试
       debugPrint(e.toString());
+      Get.snackbar('警告', '网络连接失败');
     }
   }
 
@@ -50,7 +51,7 @@ class UserRepository extends GetxService {
     box.write("x-token", token);
   }
 
-  login(String name, String pwd) async {
+  Future<bool> login(String name, String pwd) async {
     try {
       final response = await _httpService.post('/beyond-usercenter/login',
           data: {'username': name, 'password': pwd});
@@ -61,12 +62,14 @@ class UserRepository extends GetxService {
         box.write('pwd', pwd);
         return true;
       } else {
-        Get.snackbar('失败', response.data['msg']);
+        Get.snackbar('警告', response.data['msg']);
         return false;
       }
     } on DioException catch (e) {
       // 处理错误，例如自动重试
       debugPrint(e.toString());
+      Get.snackbar('警告', '网络连接失败');
+      return false;
     }
   }
 
@@ -78,11 +81,12 @@ class UserRepository extends GetxService {
       if (response.data['code'] == 200) {
         return response.data['data']['shops'];
       } else {
-        Get.snackbar('失败', response.data['msg']);
+        Get.snackbar('警告', response.data['msg']);
         throw Exception('请求失败');
       }
     } catch (e) {
       debugPrint(e.toString());
+      Get.snackbar('警告', '网络连接失败');
     }
   }
 
@@ -90,33 +94,5 @@ class UserRepository extends GetxService {
     Uri uri = Uri.parse(url);
     Map<String, dynamic> queryParameters = uri.queryParameters;
     return queryParameters[paramName];
-  }
-
-  /// 注意，这部分代码一定要在服务端执行，不要在客户端执行，否则会暴露你的客户端密钥
-  Future<String> getAccessToken(String authorizationCode) async {
-    const String clientSecret =
-        '4d6652d*******************409ed61c'; // 替换为你的 GitHub OAuth App 客户端密钥
-
-    try {
-      final response = await Dio().post(
-        authUrl,
-        data: {
-          'client_id': clientId,
-          'client_secret': clientSecret,
-          'code': authorizationCode,
-        },
-        options: Options(headers: {'Accept': 'application/json'}),
-      );
-
-      // 解析返回的 JSON 数据，提取 access_token
-      final Map<String, dynamic> data = response.data;
-      if (data.containsKey('access_token')) {
-        return data['access_token'];
-      } else {
-        throw Exception('Access token not found in response.');
-      }
-    } catch (e) {
-      throw Exception('Failed to get access token: $e');
-    }
   }
 }

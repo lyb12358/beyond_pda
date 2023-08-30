@@ -1,4 +1,4 @@
-import 'package:beyond_pda/controller/user.dart';
+import 'package:beyond_pda/controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:beyond_pda/animation/fade_animation.dart';
 import 'package:get/get.dart';

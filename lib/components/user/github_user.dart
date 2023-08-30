@@ -1,7 +1,7 @@
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:beyond_pda/controller/user.dart';
+import 'package:beyond_pda/controller/user_controller.dart';
 import 'package:get/get.dart';
 
 // class GithubUserInfoWidget extends StatelessWidget {
