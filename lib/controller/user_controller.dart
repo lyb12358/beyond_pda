@@ -1,6 +1,5 @@
 import 'package:beyond_pda/pages/online_workshop_page.dart';
 import 'package:flutter/material.dart';
-import 'package:beyond_pda/models/github_user.dart';
 import 'package:beyond_pda/repository/user_repository.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -39,7 +38,6 @@ class UserController extends GetxController {
       print('login 好了');
       await getUserInfo();
     }
-    print('失败！！！！！');
   }
 
   getShopList() async {

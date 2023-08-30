@@ -1,7 +1,6 @@
 import 'package:beyond_pda/controller/user_controller.dart';
-import 'package:beyond_pda/pages/Test.dart';
-import 'package:beyond_pda/pages/pda_login_page.dart';
-import 'package:beyond_pda/pages/pda_offline_sacn_page.dart';
+import 'package:beyond_pda/pages/login_page.dart';
+import 'package:beyond_pda/pages/offline_sacn_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';

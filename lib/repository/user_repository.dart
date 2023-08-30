@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:beyond_pda/models/github_user.dart';
 import 'package:beyond_pda/service/http_service.dart';
-import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 

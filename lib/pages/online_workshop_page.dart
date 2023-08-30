@@ -1,63 +1,78 @@
-import 'package:beyond_pda/pages/Test.dart';
-import 'package:beyond_pda/pages/choose_shop_page.dart';
-import 'package:beyond_pda/pages/pda_login_page.dart';
-import 'package:beyond_pda/pages/pda_offline_sacn_page.dart';
+import 'package:beyond_pda/pages/inventory_query_page.dart';
+import 'package:beyond_pda/pages/online_gridview_page.dart';
+import 'package:beyond_pda/pages/prod_query_page.dart';
+import 'package:beyond_pda/pages/user_deatail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:bruno/bruno.dart';
 
-class OnlineWorkshopPage extends StatelessWidget {
-  // ignore: use_key_in_widget_constructors
-  const OnlineWorkshopPage({Key? key});
+class OnlineWorkshopPage extends StatefulWidget {
+  const OnlineWorkshopPage({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _OnlineWorkshopState createState() => _OnlineWorkshopState();
+}
+
+class _OnlineWorkshopState extends State<OnlineWorkshopPage> {
+  final List<BrnBottomTabBarItem> bottomTabs = [
+    BrnBottomTabBarItem(
+      icon: Icon(
+        Icons.add_business_outlined,
+      ),
+      title: Text('门店盘点', style: TextStyle(fontSize: 16)),
+    ),
+    BrnBottomTabBarItem(
+      icon: Icon(
+        Icons.category_outlined,
+      ),
+      title: Text('产品查询', style: TextStyle(fontSize: 16)),
+    ),
+    BrnBottomTabBarItem(
+      icon: Icon(
+        Icons.inventory_2_outlined,
+      ),
+      title: Text('库存查询', style: TextStyle(fontSize: 16)),
+    ),
+    BrnBottomTabBarItem(
+      icon: Icon(
+        Icons.person_outline_outlined,
+      ),
+      title: Text('我的', style: TextStyle(fontSize: 16)),
+    ),
+  ];
+  final List tabBodies = [
+    OnlineGridviewPage(),
+    ProdQueryPage(),
+    InventoryQueryPage(),
+    UserDetailPage(),
+  ];
+
+  int currentIndex = 0;
+  var currentPage;
+
+  @override
+  void initState() {
+    super.initState();
+    currentPage = tabBodies[currentIndex];
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ElevatedButton(
-          child: const Column(
-            children: [
-              Icon(
-                Icons.wifi_outlined,
-                size: 80,
-                color: Colors.lightBlue,
-              ),
-              Text(
-                "盘点",
-                style: TextStyle(
-                  color: Colors.lightBlue,
-                  fontSize: 15,
-                ),
-              )
-            ],
-          ),
-          onPressed: () {
-            Get.to(() => const ChooseShopPage());
-          },
-        ),
-        const SizedBox(height: 40),
-        ElevatedButton(
-          child: const Column(
-            children: [
-              Icon(
-                Icons.wifi_off_outlined,
-                size: 80,
-                color: Colors.orange,
-              ),
-              Text(
-                "离线盘点",
-                style: TextStyle(
-                  color: Colors.orange,
-                  fontSize: 15,
-                ),
-              )
-            ],
-          ),
-          onPressed: () {
-            Get.to(() => const PdaOfflineScanPage());
-          },
-        ),
-      ],
+    return Scaffold(
+      backgroundColor: Color.fromRGBO(244, 245, 245, 1),
+      bottomNavigationBar: BrnBottomTabBar(
+        currentIndex: currentIndex,
+        items: bottomTabs,
+        iconSize: 30,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+            currentPage = tabBodies[currentIndex];
+          });
+        },
+      ),
+      body: currentPage,
     );
   }
 }
