@@ -1,4 +1,5 @@
 import 'package:beyond_pda/controller/user_controller.dart';
+import 'package:beyond_pda/pages/choose_shop_page.dart';
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,15 +14,13 @@ class UserDetailPage extends GetView<UserController> {
       context: context,
       iconType: BrnDialogConstants.iconAlert,
       titleText: "提示",
-      descText: "确认登出将清空登录信息并返回首页",
+      descText: "确认登出将清除数据并返回首页",
       mainButtonText: "确认",
       secondaryButtonText: "关闭",
       onMainButtonClick: () {
-        print("主要按钮");
+        c.logout();
       },
-      onSecondaryButtonClick: () {
-        print("次要按钮");
-      },
+      onSecondaryButtonClick: () {},
     );
     BrnEnhanceOperationDialog downloadProdDialog = BrnEnhanceOperationDialog(
       context: context,
@@ -35,9 +34,7 @@ class UserDetailPage extends GetView<UserController> {
         await c.updatePdaData();
         BrnLoadingDialog.dismiss(context);
       },
-      onSecondaryButtonClick: () {
-        c.getSingleProd('94232113613');
-      },
+      onSecondaryButtonClick: () {},
     );
     return ListView.separated(
         itemBuilder: (context, index) {
@@ -80,17 +77,16 @@ class UserDetailPage extends GetView<UserController> {
                   leading: Icon(
                     Icons.store,
                   ), //左图标
-                  title: Obx(
-                      () => Text('当前门店:${c.singleProd.value.prodName}')), //中间标题
+                  title: Obx(() => Text('当前门店:${c.shopName.value}')), //中间标题
                   trailing: Icon(Icons.arrow_forward_ios),
-                  onTap: () => {logoutDialog.show()}),
+                  onTap: () => {Get.to(() => const ChooseShopPage())}),
               Divider(),
               ListTile(
                   leading: Icon(
                     Icons.king_bed,
                   ), //左图标
-                  title: Obx(
-                      () => Text('更新商品资料:上次更新${c.updateTime.value}')), //中间标题
+                  title: Obx(() => Text(
+                      '更新商品资料${c.updateTime.value.isEmpty ? '  待下载' : ' 上次更新日期： ${c.updateTime.value}'}')), //中间标题
                   trailing: Icon(Icons.arrow_forward_ios),
                   onTap: () => {downloadProdDialog.show()}),
               Divider(),

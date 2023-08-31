@@ -9,6 +9,9 @@ class HistoricRecordPage extends GetView<HistoricRecordController> {
   Widget build(BuildContext context) {
     Get.put(HistoricRecordController());
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('历史盘点'),
+      ),
       body: Center(child: Text('历史盘点')),
     );
   }

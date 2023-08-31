@@ -23,12 +23,12 @@ class _MyState extends State<PdaOfflineScanPage>
         appBar: AppBar(
           title: const Text('离线盘点'),
         ),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () {
-            print('乱点');
-          },
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   child: const Icon(Icons.add),
+        //   onPressed: () {
+        //     print('乱点');
+        //   },
+        // ),
         body: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: _dataTable(),
@@ -43,6 +43,7 @@ class _MyState extends State<PdaOfflineScanPage>
   List<DataColumn> _dataColumns() {
     List<DataColumn> columns = [];
     columns.add(const DataColumn(label: Text("产品编号")));
+    columns.add(const DataColumn(label: Text("产品名称")));
     columns.add(const DataColumn(label: Text("数量")));
     return columns;
   }
@@ -51,7 +52,11 @@ class _MyState extends State<PdaOfflineScanPage>
     List<DataRow> rows = [];
     c.codeList.forEach((row) {
       rows.add(DataRow(
-        cells: [DataCell(Text('${row.code}')), DataCell(Text('${row.num}'))],
+        cells: [
+          DataCell(Text('${row.code}')),
+          DataCell(Text('${row.prodName}')),
+          DataCell(Text('${row.num}'))
+        ],
       ));
     });
     return rows;
@@ -60,7 +65,6 @@ class _MyState extends State<PdaOfflineScanPage>
   @override
   Future<void> shangmiCodeHandle(String code) async {
     /// 编写你的逻辑
-    print('扫描到数据：$code');
     c.addCode(code);
   }
 }

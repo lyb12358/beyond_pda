@@ -9,6 +9,9 @@ class HoldonRecordPage extends GetView<HoldonRecordController> {
   Widget build(BuildContext context) {
     Get.put(HoldonRecordController());
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('盘点挂单'),
+      ),
       body: Center(child: Text('盘点挂单')),
     );
   }
