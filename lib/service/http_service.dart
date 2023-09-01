@@ -14,7 +14,7 @@ class HttpService extends GetxService {
     _dio.options.baseUrl = baseUrl;
     _dio.options.connectTimeout = const Duration(milliseconds: 10000);
     _dio.options.receiveTimeout = const Duration(milliseconds: 10000);
-    _dio.interceptors.add(LogInterceptor(responseBody: true));
+    //_dio.interceptors.add(LogInterceptor(responseBody: true));
     _dio.interceptors.add(_interceptor);
     return this;
   }

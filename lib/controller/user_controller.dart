@@ -26,6 +26,10 @@ class UserController extends GetxController {
   final onlineInventoryList = <OnlineSingleProdInventory>[].obs;
   final currentProd =
       OnlineSingleProdInventory('', '', '', '', '', 0, 0, 0).obs;
+  //库存变动控制器
+  final manualInputController = TextEditingController().obs;
+  //temporary variable
+  final tempBaseUrl = "https://ims-backend.beyond-itservice.com";
 
   final GetStorage box = GetStorage();
 
@@ -100,21 +104,66 @@ class UserController extends GetxController {
     currentProd.value.codeThumbnail = singleProd.value.codeThumbnail ?? '';
     currentProd.value.styleId = singleProd.value.styleId ?? 0;
     currentProd.value.onlineNum = onlineNum;
+    //新建对象防止响应式对象污染list
     if (checkCodeExist(codeList, code)) {
+      debugPrint('编号存在');
+      debugPrint('列表尺寸${codeList.length}');
       int i = codeList.indexWhere((element) => element.code == code);
+      debugPrint('索引是$i');
       OnlineSingleProdInventory spd = codeList[i];
-      int num = spd.num ?? 0;
+      int num = spd.num;
+      debugPrint('老库存是$num');
       currentProd.value.num = num + 1;
+      debugPrint('新库存是${currentProd.value.num}');
       if (i == 0) {
-        codeList[0] = currentProd.value;
+        codeList[0] = OnlineSingleProdInventory(
+            currentProd.value.code,
+            currentProd.value.prodName,
+            currentProd.value.catName,
+            currentProd.value.speName,
+            currentProd.value.codeThumbnail,
+            currentProd.value.styleId,
+            num + 1,
+            onlineNum);
       } else {
         codeList.removeAt(i);
-        codeList.insert(0, currentProd.value);
+        codeList.insert(
+            0,
+            OnlineSingleProdInventory(
+                currentProd.value.code,
+                currentProd.value.prodName,
+                currentProd.value.catName,
+                currentProd.value.speName,
+                currentProd.value.codeThumbnail,
+                currentProd.value.styleId,
+                num + 1,
+                onlineNum));
       }
     } else {
+      debugPrint('编号不存在');
       currentProd.value.num = 1;
-      codeList.insert(0, currentProd.value);
+      codeList.insert(
+          0,
+          OnlineSingleProdInventory(
+              currentProd.value.code,
+              currentProd.value.prodName,
+              currentProd.value.catName,
+              currentProd.value.speName,
+              currentProd.value.codeThumbnail,
+              currentProd.value.styleId,
+              1,
+              onlineNum));
     }
+    //改变输入框的值
+    manualInputController.value.text = (currentProd.value.num).toString();
+  }
+
+  //改变扫码商品库存时调用
+  setInventory(int newVal) {
+    currentProd.value.num = newVal;
+    int i = codeList
+        .indexWhere((element) => element.code == currentProd.value.code);
+    codeList[i] = currentProd.value;
   }
 
   bool checkCodeExist(List<OnlineSingleProdInventory> list, String code) {
@@ -139,9 +188,8 @@ class UserController extends GetxController {
     }
     if (checkCodeExist(onlineInventoryList, code)) {
       return onlineInventoryList
-              .firstWhere((element) => element.code == code)
-              .onlineNum ??
-          0;
+          .firstWhere((element) => element.code == code)
+          .onlineNum;
     } else {
       return 0;
     }
@@ -149,15 +197,15 @@ class UserController extends GetxController {
 }
 
 class OnlineSingleProdInventory {
-  String? code;
-  String? prodName;
-  String? catName;
-  String? speName;
-  String? codeThumbnail;
-  int? styleId;
+  String code;
+  String prodName;
+  String catName;
+  String speName;
+  String codeThumbnail;
+  int styleId;
   //数量
-  int? num;
-  int? onlineNum;
+  int num;
+  int onlineNum;
   OnlineSingleProdInventory(this.code, this.prodName, this.catName,
       this.speName, this.codeThumbnail, this.styleId, this.num, this.onlineNum);
 }

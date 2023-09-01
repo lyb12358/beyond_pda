@@ -74,14 +74,16 @@ class OnlineGridviewPage extends StatelessWidget {
                   )
                 ],
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (c.shopId.value == 0) {
                   checkShopDialog.show();
                 } else if (c.updateTime.isEmpty) {
                   checkProdDataDialog.show();
                 } else {
-                  c.getOnlineInventory();
+                  BrnLoadingDialog.show(context, barrierDismissible: false);
+                  await c.getOnlineInventory();
                   Get.to(() => const OnlineScanPage());
+                  BrnLoadingDialog.dismiss(context);
                 }
               },
             ),

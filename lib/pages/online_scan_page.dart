@@ -1,135 +1,159 @@
 import 'package:beyond_pda/controller/online_scan_controller.dart';
-import 'package:beyond_pda/controller/prod_query_controller.dart';
 import 'package:beyond_pda/controller/user_controller.dart';
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sm_scan/shangmi_scan_mixin.dart';
 
-class OnlineScanPage extends GetView<OnlineScanController> {
+class OnlineScanPage extends StatefulWidget {
   const OnlineScanPage({super.key});
+  @override
+  State<StatefulWidget> createState() {
+    // 将创建的State返回
+    return _MyState();
+  }
+}
+
+// 第一步：混入ShangmiScanMixin
+class _MyState extends State<OnlineScanPage>
+    with ShangmiScanMixin<OnlineScanPage> {
+  UserController c = Get.find();
+  final GetStorage box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
-    Get.put(ProdQueryController());
-    UserController c = Get.find();
-    final GetStorage box = GetStorage();
+    Get.put(OnlineScanController());
+    OnlineScanController c2 = Get.find();
     Map<String, String> headersMap = {
       'Cookie': 'x-token=${box.read("x-token")}'
     };
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('在线扫码'),
-      ),
-      body: SingleChildScrollView(
-          child: Obx(
-        () => Container(
-          color: Colors.white,
-          margin: EdgeInsets.only(left: 40, right: 40),
-          child: Column(
-            children: <Widget>[
-              Image.network(
-                'https://ims-backend.beyond-itservice.com/image/style/16167/161671621331959265thumbnail.jpg',
-                headers: headersMap,
-                scale: 2,
+    //赋予输入框初始值
+    //c.manualInputController.value.text = (c.currentProd.value.num).toString();
+    return Obx(() => (c.singleProd.value.prodCode ?? '').isEmpty
+        ? Scaffold(
+            appBar: AppBar(
+              title: const Text('在线扫码'),
+            ),
+            body: Center(
+                child: BrnAbnormalStateWidget(
+              img: Image.asset(
+                'assets/images/no_data.png',
+                scale: 3.0,
               ),
-              SizedBox(
-                height: 10,
-              ),
-              BrnPairInfoTable(
-                isValueAlign: true,
-                rowDistance: 8,
-                itemSpacing: 30,
-                children: [
-                  BrnInfoModal(
-                    keyPart: Text('产品编号:',
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 16,
-                        )),
-                    valuePart: Text('94222153403',
-                        style: TextStyle(
-                          fontSize: 16,
-                        )),
-                  ),
-                  BrnInfoModal(
-                    keyPart: Text('产品名称:',
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 16,
-                        )),
-                    valuePart: Text('如嫣',
-                        style: TextStyle(
-                          fontSize: 16,
-                        )),
-                  ),
-                  BrnInfoModal(
-                    keyPart: Text('规格:',
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 16,
-                        )),
-                    valuePart: Text('1.8m',
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 16,
-                        )),
-                  ),
-                  BrnInfoModal(
-                    keyPart: Text('盘点数量:',
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 16,
-                        )),
-                    valuePart: Padding(
-                      padding: const EdgeInsets.only(right: 30.0),
-                      child: BrnStepInputFormItem(
-                        canManualInput: true,
-                        value: 3,
-                        maxLimit: 200,
-                        onTip: () {
-                          BrnToast.show("点击触发onTip回调", context);
-                        },
-                        onAddTap: () {
-                          BrnToast.show("点击触发onAddTap回调", context);
-                        },
-                        onRemoveTap: () {
-                          BrnToast.show("点击触发onRemoveTap回调", context);
-                        },
-                        onChanged: (oldValue, newValue) {
-                          BrnToast.show(
-                              "点击触发回调${oldValue}_${newValue}_onChanged",
-                              context);
-                        },
-                      ),
+              content: '请扫码获取商品信息',
+            )),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              title: const Text('在线扫码'),
+            ),
+            body: SingleChildScrollView(
+              child: Container(
+                color: Colors.white,
+                margin: EdgeInsets.only(left: 40, right: 40),
+                child: Column(
+                  children: <Widget>[
+                    Image.network(
+                      c2.calImageUrl(),
+                      headers: headersMap,
+                      scale: 2,
                     ),
-                  ),
-                  BrnInfoModal(
-                    keyPart: Text('系统库存:',
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 16,
-                        )),
-                    valuePart: '2',
-                  ),
-                  BrnInfoModal(
-                    keyPart: Text('差异:',
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 16,
-                        )),
-                    valuePart: c.onlineInventoryList.length.toString(),
-                  ),
-                ],
+                    SizedBox(
+                      height: 10,
+                    ),
+                    BrnPairInfoTable(
+                      isValueAlign: true,
+                      rowDistance: 8,
+                      itemSpacing: 30,
+                      children: [
+                        BrnInfoModal(
+                          keyPart: Text('产品编号:',
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 16,
+                              )),
+                          valuePart: Text(c.currentProd.value.code ?? '',
+                              style: TextStyle(
+                                fontSize: 16,
+                              )),
+                        ),
+                        BrnInfoModal(
+                          keyPart: Text('产品名称:',
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 16,
+                              )),
+                          valuePart: Text(c.currentProd.value.prodName ?? '',
+                              style: TextStyle(
+                                fontSize: 16,
+                              )),
+                        ),
+                        BrnInfoModal(
+                          keyPart: Text('规格:',
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 16,
+                              )),
+                          valuePart: Text(c.currentProd.value.speName ?? '',
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 16,
+                              )),
+                        ),
+                        BrnInfoModal(
+                          keyPart: Text('盘点数量:',
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 16,
+                              )),
+                          valuePart: Padding(
+                            padding: const EdgeInsets.only(right: 30.0),
+                            child: BrnStepInputFormItem(
+                              canManualInput: true,
+                              isEdit: true,
+                              controller: c.manualInputController.value,
+                              maxLimit: 9999,
+                              onChanged: (oldValue, newValue) {
+                                debugPrint(newValue.toString());
+                                c.setInventory(newValue);
+                              },
+                            ),
+                          ),
+                        ),
+                        BrnInfoModal(
+                          keyPart: Text('系统库存:',
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 16,
+                              )),
+                          valuePart: Text(
+                              (c.currentProd.value.onlineNum ?? 0).toString()),
+                        ),
+                        BrnInfoModal(
+                            keyPart: Text('差异:',
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                )),
+                            valuePart: Text((c.currentProd.value.num! -
+                                    (c.currentProd.value.onlineNum ?? 0))
+                                .toString())),
+                      ],
+                    ),
+                    Container(
+                      height: 20,
+                    ),
+                  ],
+                ),
               ),
-              Container(
-                height: 20,
-              ),
-            ],
-          ),
-        ),
-      )),
-    );
+            ),
+          ));
+  }
+
+  @override
+  Future<void> shangmiCodeHandle(String code) async {
+    /// 编写你的逻辑
+    c.addCode(code);
   }
 }
