@@ -18,8 +18,8 @@ class OnlineScanController extends GetxController {
   String calImageUrl() {
     ProductData prod = c.singleProd.value;
     String baseLocation = c.tempBaseUrl;
-    String codeLocation = "image/code/";
-    String matLocation = "image/mat/";
+    String codeLocation = "/image/code/";
+    String matLocation = "/image/mat/";
     if ((prod.codeThumbnail ?? '').isEmpty) {
       return '$baseLocation/template/noImage.jpg';
     } else if ((prod.styleId ?? 0) != 0) {

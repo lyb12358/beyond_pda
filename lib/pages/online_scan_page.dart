@@ -127,8 +127,8 @@ class _MyState extends State<OnlineScanPage>
                               style: TextStyle(
                                 fontSize: 16,
                               )),
-                          valuePart: Text(
-                              (c.currentProd.value.onlineNum ?? 0).toString()),
+                          valuePart:
+                              Text((c.currentProd.value.onlineNum).toString()),
                         ),
                         BrnInfoModal(
                             keyPart: Text('差异:',
@@ -136,9 +136,8 @@ class _MyState extends State<OnlineScanPage>
                                 style: TextStyle(
                                   fontSize: 16,
                                 )),
-                            valuePart: Text((c.currentProd.value.num! -
-                                    (c.currentProd.value.onlineNum ?? 0))
-                                .toString())),
+                            valuePart:
+                                Text(c.currentProd.value.diffNum.toString())),
                       ],
                     ),
                     Container(

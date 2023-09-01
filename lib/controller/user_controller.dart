@@ -25,7 +25,7 @@ class UserController extends GetxController {
   final codeList = <OnlineSingleProdInventory>[].obs;
   final onlineInventoryList = <OnlineSingleProdInventory>[].obs;
   final currentProd =
-      OnlineSingleProdInventory('', '', '', '', '', 0, 0, 0).obs;
+      OnlineSingleProdInventory('', '', '', '', '', 0, 0, 0, 0).obs;
   //库存变动控制器
   final manualInputController = TextEditingController().obs;
   //temporary variable
@@ -114,6 +114,7 @@ class UserController extends GetxController {
       int num = spd.num;
       debugPrint('老库存是$num');
       currentProd.value.num = num + 1;
+      currentProd.value.diffNum = num + 1 - onlineNum;
       debugPrint('新库存是${currentProd.value.num}');
       if (i == 0) {
         codeList[0] = OnlineSingleProdInventory(
@@ -124,7 +125,8 @@ class UserController extends GetxController {
             currentProd.value.codeThumbnail,
             currentProd.value.styleId,
             num + 1,
-            onlineNum);
+            onlineNum,
+            currentProd.value.diffNum);
       } else {
         codeList.removeAt(i);
         codeList.insert(
@@ -137,11 +139,13 @@ class UserController extends GetxController {
                 currentProd.value.codeThumbnail,
                 currentProd.value.styleId,
                 num + 1,
-                onlineNum));
+                onlineNum,
+                currentProd.value.diffNum));
       }
     } else {
       debugPrint('编号不存在');
       currentProd.value.num = 1;
+      currentProd.value.diffNum = 1 - onlineNum;
       codeList.insert(
           0,
           OnlineSingleProdInventory(
@@ -152,7 +156,8 @@ class UserController extends GetxController {
               currentProd.value.codeThumbnail,
               currentProd.value.styleId,
               1,
-              onlineNum));
+              onlineNum,
+              currentProd.value.diffNum));
     }
     //改变输入框的值
     manualInputController.value.text = (currentProd.value.num).toString();
@@ -161,9 +166,23 @@ class UserController extends GetxController {
   //改变扫码商品库存时调用
   setInventory(int newVal) {
     currentProd.value.num = newVal;
+    currentProd.value.diffNum = newVal - currentProd.value.onlineNum;
+    currentProd.refresh();
+    debugPrint('新值是$newVal');
+    debugPrint('老库存是是${currentProd.value.onlineNum}');
+    debugPrint('差异是${currentProd.value.diffNum}');
     int i = codeList
         .indexWhere((element) => element.code == currentProd.value.code);
-    codeList[i] = currentProd.value;
+    codeList[i] = OnlineSingleProdInventory(
+        currentProd.value.code,
+        currentProd.value.prodName,
+        currentProd.value.catName,
+        currentProd.value.speName,
+        currentProd.value.codeThumbnail,
+        currentProd.value.styleId,
+        newVal,
+        currentProd.value.onlineNum,
+        currentProd.value.diffNum);
   }
 
   bool checkCodeExist(List<OnlineSingleProdInventory> list, String code) {
@@ -178,7 +197,7 @@ class UserController extends GetxController {
     var listDynamic = await _productRepository.getOnlineInventory(shopId.value);
     onlineInventoryList.value = (listDynamic as List<dynamic>)
         .map((e) => OnlineSingleProdInventory(
-            e['prodCode'], '', '', '', '', 0, 0, e['prodCount']))
+            e['prodCode'], '', '', '', '', 0, 0, e['prodCount'], 0))
         .toList();
   }
 
@@ -206,6 +225,15 @@ class OnlineSingleProdInventory {
   //数量
   int num;
   int onlineNum;
-  OnlineSingleProdInventory(this.code, this.prodName, this.catName,
-      this.speName, this.codeThumbnail, this.styleId, this.num, this.onlineNum);
+  int diffNum;
+  OnlineSingleProdInventory(
+      this.code,
+      this.prodName,
+      this.catName,
+      this.speName,
+      this.codeThumbnail,
+      this.styleId,
+      this.num,
+      this.onlineNum,
+      this.diffNum);
 }
