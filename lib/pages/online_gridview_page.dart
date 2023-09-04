@@ -3,7 +3,6 @@ import 'package:beyond_pda/pages/choose_shop_page.dart';
 import 'package:beyond_pda/pages/historic_record_page.dart';
 import 'package:beyond_pda/pages/holdon_record_page.dart';
 import 'package:beyond_pda/pages/online_scan_page.dart';
-import 'package:beyond_pda/pages/user_deatail_page.dart';
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
