@@ -51,6 +51,21 @@ const ProductDataSchema = CollectionSchema(
       id: 6,
       name: r'styleId',
       type: IsarType.long,
+    ),
+    r'styleThumbnail': PropertySchema(
+      id: 7,
+      name: r'styleThumbnail',
+      type: IsarType.string,
+    ),
+    r'typeName': PropertySchema(
+      id: 8,
+      name: r'typeName',
+      type: IsarType.string,
+    ),
+    r'yearName': PropertySchema(
+      id: 9,
+      name: r'yearName',
+      type: IsarType.string,
     )
   },
   estimateSize: _productDataEstimateSize,
@@ -117,6 +132,24 @@ int _productDataEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  {
+    final value = object.styleThumbnail;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.typeName;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.yearName;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -133,6 +166,9 @@ void _productDataSerialize(
   writer.writeString(offsets[4], object.prodName);
   writer.writeString(offsets[5], object.speName);
   writer.writeLong(offsets[6], object.styleId);
+  writer.writeString(offsets[7], object.styleThumbnail);
+  writer.writeString(offsets[8], object.typeName);
+  writer.writeString(offsets[9], object.yearName);
 }
 
 ProductData _productDataDeserialize(
@@ -150,6 +186,9 @@ ProductData _productDataDeserialize(
     prodName: reader.readStringOrNull(offsets[4]),
     speName: reader.readStringOrNull(offsets[5]),
     styleId: reader.readLongOrNull(offsets[6]),
+    styleThumbnail: reader.readStringOrNull(offsets[7]),
+    typeName: reader.readStringOrNull(offsets[8]),
+    yearName: reader.readStringOrNull(offsets[9]),
   );
   return object;
 }
@@ -175,6 +214,12 @@ P _productDataDeserializeProp<P>(
       return (reader.readStringOrNull(offset)) as P;
     case 6:
       return (reader.readLongOrNull(offset)) as P;
+    case 7:
+      return (reader.readStringOrNull(offset)) as P;
+    case 8:
+      return (reader.readStringOrNull(offset)) as P;
+    case 9:
+      return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -1314,6 +1359,466 @@ extension ProductDataQueryFilter
       ));
     });
   }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      styleThumbnailIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'styleThumbnail',
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      styleThumbnailIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'styleThumbnail',
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      styleThumbnailEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'styleThumbnail',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      styleThumbnailGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'styleThumbnail',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      styleThumbnailLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'styleThumbnail',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      styleThumbnailBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'styleThumbnail',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      styleThumbnailStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'styleThumbnail',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      styleThumbnailEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'styleThumbnail',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      styleThumbnailContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'styleThumbnail',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      styleThumbnailMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'styleThumbnail',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      styleThumbnailIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'styleThumbnail',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      styleThumbnailIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'styleThumbnail',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      typeNameIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'typeName',
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      typeNameIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'typeName',
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition> typeNameEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'typeName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      typeNameGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'typeName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      typeNameLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'typeName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition> typeNameBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'typeName',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      typeNameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'typeName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      typeNameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'typeName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      typeNameContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'typeName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition> typeNameMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'typeName',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      typeNameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'typeName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      typeNameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'typeName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      yearNameIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'yearName',
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      yearNameIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'yearName',
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition> yearNameEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'yearName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      yearNameGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'yearName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      yearNameLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'yearName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition> yearNameBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'yearName',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      yearNameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'yearName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      yearNameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'yearName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      yearNameContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'yearName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition> yearNameMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'yearName',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      yearNameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'yearName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterFilterCondition>
+      yearNameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'yearName',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension ProductDataQueryObject
@@ -1406,6 +1911,43 @@ extension ProductDataQuerySortBy
   QueryBuilder<ProductData, ProductData, QAfterSortBy> sortByStyleIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'styleId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterSortBy> sortByStyleThumbnail() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'styleThumbnail', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterSortBy>
+      sortByStyleThumbnailDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'styleThumbnail', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterSortBy> sortByTypeName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'typeName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterSortBy> sortByTypeNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'typeName', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterSortBy> sortByYearName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'yearName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterSortBy> sortByYearNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'yearName', Sort.desc);
     });
   }
 }
@@ -1508,6 +2050,43 @@ extension ProductDataQuerySortThenBy
       return query.addSortBy(r'styleId', Sort.desc);
     });
   }
+
+  QueryBuilder<ProductData, ProductData, QAfterSortBy> thenByStyleThumbnail() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'styleThumbnail', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterSortBy>
+      thenByStyleThumbnailDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'styleThumbnail', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterSortBy> thenByTypeName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'typeName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterSortBy> thenByTypeNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'typeName', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterSortBy> thenByYearName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'yearName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QAfterSortBy> thenByYearNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'yearName', Sort.desc);
+    });
+  }
 }
 
 extension ProductDataQueryWhereDistinct
@@ -1559,6 +2138,28 @@ extension ProductDataQueryWhereDistinct
       return query.addDistinctBy(r'styleId');
     });
   }
+
+  QueryBuilder<ProductData, ProductData, QDistinct> distinctByStyleThumbnail(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'styleThumbnail',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QDistinct> distinctByTypeName(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'typeName', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<ProductData, ProductData, QDistinct> distinctByYearName(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'yearName', caseSensitive: caseSensitive);
+    });
+  }
 }
 
 extension ProductDataQueryProperty
@@ -1608,6 +2209,25 @@ extension ProductDataQueryProperty
   QueryBuilder<ProductData, int?, QQueryOperations> styleIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'styleId');
+    });
+  }
+
+  QueryBuilder<ProductData, String?, QQueryOperations>
+      styleThumbnailProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'styleThumbnail');
+    });
+  }
+
+  QueryBuilder<ProductData, String?, QQueryOperations> typeNameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'typeName');
+    });
+  }
+
+  QueryBuilder<ProductData, String?, QQueryOperations> yearNameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'yearName');
     });
   }
 }

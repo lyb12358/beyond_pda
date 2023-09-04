@@ -68,21 +68,3 @@ class _MyState extends State<PdaOfflineScanPage>
     c.addCode(code);
   }
 }
-
-
-// class PdaOfflineScanPage extends GetResponsiveView<OfflineScanController> {
-//   PdaOfflineScanPage({super.key});
-//   @override
-//   Widget? builder() {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('离线盘点'.tr),
-//       ),
-//       body: GetX<OfflineScanController>(builder: (controller) {
-//         return ListView(
-//           children: [],
-//         );
-//       }),
-//     );
-//   }
-// }

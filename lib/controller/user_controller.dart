@@ -29,7 +29,8 @@ class UserController extends GetxController {
   //单独扫码库存变动控制器
   final manualInputController = TextEditingController().obs;
   //记录
-  final recordStatus = 0.obs; // 1. 在线扫码记录  2. 挂单记录 3. 在线单据记录
+  final recordStatus = 1.obs; // 1. 在线扫码记录  2. 挂单记录 3. 历史记录
+  final inventory = Inventory().obs;
   //temporary variable
   final tempBaseUrl = "https://ims-backend.beyond-itservice.com";
 
@@ -97,7 +98,12 @@ class UserController extends GetxController {
   Future<void> addCode(
     String code,
   ) async {
+    //商品不在资料库则报错
     await getSingleProd(code);
+    if ((singleProd.value.prodCode ?? '').isEmpty) {
+      Get.snackbar('警告', '非博洋产品，将不计入盘点!');
+      return;
+    }
     int onlineNum = getOnlineNum(code);
     currentProd.value.code = singleProd.value.prodCode ?? '';
     currentProd.value.prodName = singleProd.value.prodName ?? '';
@@ -105,6 +111,10 @@ class UserController extends GetxController {
     currentProd.value.speName = singleProd.value.speName ?? '';
     currentProd.value.codeThumbnail = singleProd.value.codeThumbnail ?? '';
     currentProd.value.styleId = singleProd.value.styleId ?? 0;
+    currentProd.value.codeId = singleProd.value.codeId ?? 0;
+    currentProd.value.styleThumbnail = singleProd.value.styleThumbnail ?? '';
+    currentProd.value.typeName = singleProd.value.typeName ?? '';
+    currentProd.value.yearName = singleProd.value.yearName ?? '';
     currentProd.value.onlineNum = onlineNum;
     //新建对象防止响应式对象污染list
     if (checkCodeExist(codeList, code)) {
@@ -137,6 +147,10 @@ class UserController extends GetxController {
       spd.speName = currentProd.value.speName;
       spd.codeThumbnail = currentProd.value.codeThumbnail;
       spd.styleId = currentProd.value.styleId;
+      spd.codeId = currentProd.value.codeId;
+      spd.styleThumbnail = currentProd.value.styleThumbnail;
+      spd.typeName = currentProd.value.typeName;
+      spd.yearName = currentProd.value.yearName;
       spd.num = 1;
       spd.onlineNum = onlineNum;
       spd.diffNum = currentProd.value.diffNum;
@@ -176,6 +190,7 @@ class UserController extends GetxController {
       var spd = OnlineSingleProdInventory();
       spd.code = e['prodCode'];
       spd.styleId = 0;
+      spd.codeId = 0;
       spd.num = 0;
       spd.onlineNum = e['prodCount'];
       spd.diffNum = 0;
@@ -193,6 +208,24 @@ class UserController extends GetxController {
           .onlineNum!;
     } else {
       return 0;
+    }
+  }
+
+  //计算图片地址
+  String calImageUrl(OnlineSingleProdInventory prod) {
+    String baseLocation = tempBaseUrl;
+    String codeLocation = "/image/code/";
+    String matLocation = "/image/mat/";
+    String styleLocation = "/image/style/";
+    if ((prod.codeThumbnail ?? '').isEmpty &&
+        (prod.styleThumbnail ?? '').isEmpty) {
+      return '$baseLocation/template/noImage.jpg';
+    } else if ((prod.styleId ?? 0) == 0) {
+      return '$baseLocation$matLocation${prod.codeId}/${prod.codeThumbnail}';
+    } else if ((prod.codeThumbnail ?? '').isEmpty) {
+      return '$baseLocation$styleLocation${prod.styleId}/${prod.styleThumbnail}';
+    } else {
+      return '$baseLocation$codeLocation${prod.codeId}/${prod.codeThumbnail}';
     }
   }
 }

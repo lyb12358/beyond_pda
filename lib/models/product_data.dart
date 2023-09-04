@@ -12,6 +12,9 @@ class ProductData {
   String? catName;
   String? speName;
   String? codeThumbnail;
+  String? styleThumbnail;
+  String? typeName;
+  String? yearName;
 
   ProductData(
       {this.id,
@@ -21,7 +24,10 @@ class ProductData {
       this.prodName,
       this.catName,
       this.speName,
-      this.codeThumbnail});
+      this.codeThumbnail,
+      this.styleThumbnail,
+      this.typeName,
+      this.yearName});
 
   factory ProductData.fromJson(Map<String, dynamic> json) {
     return ProductData(
@@ -33,6 +39,9 @@ class ProductData {
       catName: json['catName'],
       speName: json['speName'],
       codeThumbnail: json['codeThumbnail'],
+      styleThumbnail: json['styleThumbnail'],
+      typeName: json['typeName'],
+      yearName: json['yearName'],
     );
   }
 }

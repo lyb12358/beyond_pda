@@ -7,14 +7,14 @@ class Inventory {
   int? shopId;
   int? userId;
   String? documentCode;
-  OnlineSingleProdInventory? inventoryDetail;
+  List<OnlineSingleProdInventory>? inventoryList;
 
   Inventory(
       {this.id,
       this.shopId,
       this.userId,
       this.documentCode,
-      this.inventoryDetail});
+      this.inventoryList});
 }
 
 @embedded
@@ -24,6 +24,10 @@ class OnlineSingleProdInventory {
   String? catName;
   String? speName;
   String? codeThumbnail;
+  int? codeId;
+  String? styleThumbnail;
+  String? typeName;
+  String? yearName;
   int? styleId;
   //数量
   int? num;

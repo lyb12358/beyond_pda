@@ -1,5 +1,5 @@
-import 'package:beyond_pda/controller/online_scan_controller.dart';
 import 'package:beyond_pda/controller/user_controller.dart';
+import 'package:beyond_pda/pages/record_detail_page.dart';
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,8 +23,6 @@ class _MyState extends State<OnlineScanPage>
 
   @override
   Widget build(BuildContext context) {
-    Get.put(OnlineScanController());
-    OnlineScanController c2 = Get.find();
     Map<String, String> headersMap = {
       'Cookie': 'x-token=${box.read("x-token")}'
     };
@@ -63,7 +61,7 @@ class _MyState extends State<OnlineScanPage>
                           Icons.list,
                         ),
                         onTap: () {
-                          BrnToast.show('更多按钮被点击', context);
+                          Get.to(() => RecordDetailPage());
                         })
                   ])
             ],
@@ -77,7 +75,7 @@ class _MyState extends State<OnlineScanPage>
                 child: Column(
                   children: <Widget>[
                     Image.network(
-                      c2.calImageUrl(),
+                      c.calImageUrl(c.currentProd.value),
                       headers: headersMap,
                       scale: 2,
                     ),

@@ -1,8 +1,11 @@
 import 'package:beyond_pda/controller/user_controller.dart';
 import 'package:bruno/bruno.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:beyond_pda/animation/fade_animation.dart';
 import 'package:get/get.dart';
+
+import 'offline_sacn_page.dart';
 
 class PdaLoginPage extends StatelessWidget {
   const PdaLoginPage({super.key});
@@ -168,11 +171,14 @@ class PdaLoginPage extends StatelessWidget {
                       ),
                       FadeAnimation(
                           1.5,
-                          Text(
-                            "离线盘点?",
-                            style: TextStyle(
-                                color: Color.fromRGBO(143, 148, 251, 1)),
-                          )),
+                          Text.rich(TextSpan(
+                              text: "离线盘点?",
+                              style: TextStyle(
+                                  color: Color.fromRGBO(143, 148, 251, 1)),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Get.to(() => const PdaOfflineScanPage());
+                                }))),
                     ],
                   ),
                 )
