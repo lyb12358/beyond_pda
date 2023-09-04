@@ -17,24 +17,54 @@ const InventorySchema = CollectionSchema(
   name: r'Inventory',
   id: 9013770421438767579,
   properties: {
-    r'documentCode': PropertySchema(
+    r'checkTime': PropertySchema(
       id: 0,
+      name: r'checkTime',
+      type: IsarType.dateTime,
+    ),
+    r'createTime': PropertySchema(
+      id: 1,
+      name: r'createTime',
+      type: IsarType.dateTime,
+    ),
+    r'documentCode': PropertySchema(
+      id: 2,
       name: r'documentCode',
       type: IsarType.string,
     ),
+    r'documentId': PropertySchema(
+      id: 3,
+      name: r'documentId',
+      type: IsarType.long,
+    ),
     r'inventoryList': PropertySchema(
-      id: 1,
+      id: 4,
       name: r'inventoryList',
       type: IsarType.objectList,
       target: r'OnlineSingleProdInventory',
     ),
+    r'prodTotal': PropertySchema(
+      id: 5,
+      name: r'prodTotal',
+      type: IsarType.long,
+    ),
     r'shopId': PropertySchema(
-      id: 2,
+      id: 6,
       name: r'shopId',
       type: IsarType.long,
     ),
+    r'status': PropertySchema(
+      id: 7,
+      name: r'status',
+      type: IsarType.long,
+    ),
+    r'total': PropertySchema(
+      id: 8,
+      name: r'total',
+      type: IsarType.long,
+    ),
     r'userId': PropertySchema(
-      id: 3,
+      id: 9,
       name: r'userId',
       type: IsarType.long,
     )
@@ -90,15 +120,21 @@ void _inventorySerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.documentCode);
+  writer.writeDateTime(offsets[0], object.checkTime);
+  writer.writeDateTime(offsets[1], object.createTime);
+  writer.writeString(offsets[2], object.documentCode);
+  writer.writeLong(offsets[3], object.documentId);
   writer.writeObjectList<OnlineSingleProdInventory>(
-    offsets[1],
+    offsets[4],
     allOffsets,
     OnlineSingleProdInventorySchema.serialize,
     object.inventoryList,
   );
-  writer.writeLong(offsets[2], object.shopId);
-  writer.writeLong(offsets[3], object.userId);
+  writer.writeLong(offsets[5], object.prodTotal);
+  writer.writeLong(offsets[6], object.shopId);
+  writer.writeLong(offsets[7], object.status);
+  writer.writeLong(offsets[8], object.total);
+  writer.writeLong(offsets[9], object.userId);
 }
 
 Inventory _inventoryDeserialize(
@@ -108,16 +144,22 @@ Inventory _inventoryDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Inventory(
-    documentCode: reader.readStringOrNull(offsets[0]),
+    checkTime: reader.readDateTimeOrNull(offsets[0]),
+    createTime: reader.readDateTimeOrNull(offsets[1]),
+    documentCode: reader.readStringOrNull(offsets[2]),
+    documentId: reader.readLongOrNull(offsets[3]),
     id: id,
     inventoryList: reader.readObjectList<OnlineSingleProdInventory>(
-      offsets[1],
+      offsets[4],
       OnlineSingleProdInventorySchema.deserialize,
       allOffsets,
       OnlineSingleProdInventory(),
     ),
-    shopId: reader.readLongOrNull(offsets[2]),
-    userId: reader.readLongOrNull(offsets[3]),
+    prodTotal: reader.readLongOrNull(offsets[5]),
+    shopId: reader.readLongOrNull(offsets[6]),
+    status: reader.readLongOrNull(offsets[7]),
+    total: reader.readLongOrNull(offsets[8]),
+    userId: reader.readLongOrNull(offsets[9]),
   );
   return object;
 }
@@ -130,17 +172,29 @@ P _inventoryDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 1:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 2:
+      return (reader.readStringOrNull(offset)) as P;
+    case 3:
+      return (reader.readLongOrNull(offset)) as P;
+    case 4:
       return (reader.readObjectList<OnlineSingleProdInventory>(
         offset,
         OnlineSingleProdInventorySchema.deserialize,
         allOffsets,
         OnlineSingleProdInventory(),
       )) as P;
-    case 2:
+    case 5:
       return (reader.readLongOrNull(offset)) as P;
-    case 3:
+    case 6:
+      return (reader.readLongOrNull(offset)) as P;
+    case 7:
+      return (reader.readLongOrNull(offset)) as P;
+    case 8:
+      return (reader.readLongOrNull(offset)) as P;
+    case 9:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -238,6 +292,148 @@ extension InventoryQueryWhere
 
 extension InventoryQueryFilter
     on QueryBuilder<Inventory, Inventory, QFilterCondition> {
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> checkTimeIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'checkTime',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition>
+      checkTimeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'checkTime',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> checkTimeEqualTo(
+      DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'checkTime',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition>
+      checkTimeGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'checkTime',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> checkTimeLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'checkTime',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> checkTimeBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'checkTime',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> createTimeIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'createTime',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition>
+      createTimeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'createTime',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> createTimeEqualTo(
+      DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'createTime',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition>
+      createTimeGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'createTime',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> createTimeLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'createTime',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> createTimeBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'createTime',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Inventory, Inventory, QAfterFilterCondition>
       documentCodeIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -387,6 +583,77 @@ extension InventoryQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'documentCode',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> documentIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'documentId',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition>
+      documentIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'documentId',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> documentIdEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'documentId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition>
+      documentIdGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'documentId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> documentIdLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'documentId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> documentIdBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'documentId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -567,6 +834,77 @@ extension InventoryQueryFilter
     });
   }
 
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> prodTotalIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'prodTotal',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition>
+      prodTotalIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'prodTotal',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> prodTotalEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'prodTotal',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition>
+      prodTotalGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'prodTotal',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> prodTotalLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'prodTotal',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> prodTotalBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'prodTotal',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Inventory, Inventory, QAfterFilterCondition> shopIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -628,6 +966,144 @@ extension InventoryQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'shopId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> statusIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'status',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> statusIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'status',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> statusEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'status',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> statusGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'status',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> statusLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'status',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> statusBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'status',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> totalIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'total',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> totalIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'total',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> totalEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'total',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> totalGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'total',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> totalLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'total',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> totalBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'total',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -720,6 +1196,30 @@ extension InventoryQueryLinks
     on QueryBuilder<Inventory, Inventory, QFilterCondition> {}
 
 extension InventoryQuerySortBy on QueryBuilder<Inventory, Inventory, QSortBy> {
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByCheckTime() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'checkTime', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByCheckTimeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'checkTime', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByCreateTime() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createTime', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByCreateTimeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createTime', Sort.desc);
+    });
+  }
+
   QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByDocumentCode() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'documentCode', Sort.asc);
@@ -732,6 +1232,30 @@ extension InventoryQuerySortBy on QueryBuilder<Inventory, Inventory, QSortBy> {
     });
   }
 
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByDocumentId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'documentId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByDocumentIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'documentId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByProdTotal() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'prodTotal', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByProdTotalDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'prodTotal', Sort.desc);
+    });
+  }
+
   QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByShopId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'shopId', Sort.asc);
@@ -741,6 +1265,30 @@ extension InventoryQuerySortBy on QueryBuilder<Inventory, Inventory, QSortBy> {
   QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByShopIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'shopId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByStatus() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByStatusDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByTotal() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'total', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByTotalDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'total', Sort.desc);
     });
   }
 
@@ -759,6 +1307,30 @@ extension InventoryQuerySortBy on QueryBuilder<Inventory, Inventory, QSortBy> {
 
 extension InventoryQuerySortThenBy
     on QueryBuilder<Inventory, Inventory, QSortThenBy> {
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByCheckTime() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'checkTime', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByCheckTimeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'checkTime', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByCreateTime() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createTime', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByCreateTimeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createTime', Sort.desc);
+    });
+  }
+
   QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByDocumentCode() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'documentCode', Sort.asc);
@@ -768,6 +1340,18 @@ extension InventoryQuerySortThenBy
   QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByDocumentCodeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'documentCode', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByDocumentId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'documentId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByDocumentIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'documentId', Sort.desc);
     });
   }
 
@@ -783,6 +1367,18 @@ extension InventoryQuerySortThenBy
     });
   }
 
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByProdTotal() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'prodTotal', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByProdTotalDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'prodTotal', Sort.desc);
+    });
+  }
+
   QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByShopId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'shopId', Sort.asc);
@@ -792,6 +1388,30 @@ extension InventoryQuerySortThenBy
   QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByShopIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'shopId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByStatus() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByStatusDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByTotal() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'total', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByTotalDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'total', Sort.desc);
     });
   }
 
@@ -810,6 +1430,18 @@ extension InventoryQuerySortThenBy
 
 extension InventoryQueryWhereDistinct
     on QueryBuilder<Inventory, Inventory, QDistinct> {
+  QueryBuilder<Inventory, Inventory, QDistinct> distinctByCheckTime() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'checkTime');
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QDistinct> distinctByCreateTime() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'createTime');
+    });
+  }
+
   QueryBuilder<Inventory, Inventory, QDistinct> distinctByDocumentCode(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -817,9 +1449,33 @@ extension InventoryQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Inventory, Inventory, QDistinct> distinctByDocumentId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'documentId');
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QDistinct> distinctByProdTotal() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'prodTotal');
+    });
+  }
+
   QueryBuilder<Inventory, Inventory, QDistinct> distinctByShopId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'shopId');
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QDistinct> distinctByStatus() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'status');
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QDistinct> distinctByTotal() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'total');
     });
   }
 
@@ -838,9 +1494,27 @@ extension InventoryQueryProperty
     });
   }
 
+  QueryBuilder<Inventory, DateTime?, QQueryOperations> checkTimeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'checkTime');
+    });
+  }
+
+  QueryBuilder<Inventory, DateTime?, QQueryOperations> createTimeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'createTime');
+    });
+  }
+
   QueryBuilder<Inventory, String?, QQueryOperations> documentCodeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'documentCode');
+    });
+  }
+
+  QueryBuilder<Inventory, int?, QQueryOperations> documentIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'documentId');
     });
   }
 
@@ -851,9 +1525,27 @@ extension InventoryQueryProperty
     });
   }
 
+  QueryBuilder<Inventory, int?, QQueryOperations> prodTotalProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'prodTotal');
+    });
+  }
+
   QueryBuilder<Inventory, int?, QQueryOperations> shopIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'shopId');
+    });
+  }
+
+  QueryBuilder<Inventory, int?, QQueryOperations> statusProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'status');
+    });
+  }
+
+  QueryBuilder<Inventory, int?, QQueryOperations> totalProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'total');
     });
   }
 

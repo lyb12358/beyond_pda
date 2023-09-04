@@ -7,6 +7,18 @@ class Inventory {
   int? shopId;
   int? userId;
   String? documentCode;
+  //单据id
+  int? documentId;
+  //盘点时间
+  DateTime? checkTime;
+  //创建时间
+  DateTime? createTime;
+  //产品编号数
+  int? prodTotal;
+  //盘点数量
+  int? total;
+  //状态(0:录入中,1:已盘点,2:作废,3:确认)
+  int? status;
   List<OnlineSingleProdInventory>? inventoryList;
 
   Inventory(
@@ -14,6 +26,12 @@ class Inventory {
       this.shopId,
       this.userId,
       this.documentCode,
+      this.documentId,
+      this.checkTime,
+      this.createTime,
+      this.prodTotal,
+      this.total,
+      this.status,
       this.inventoryList});
 }
 

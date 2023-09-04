@@ -82,4 +82,24 @@ class ProductRepository extends GetxService {
       Get.snackbar('警告', '网络连接失败');
     }
   }
+
+  //盘点单据
+  Future getInventoryList(int shopId) async {
+    try {
+      final response = await _httpService.post(
+          '/shop-storage/shopStorageCheck/list',
+          queryParameters: {'page': 1, 'limit': 1000, 'shopId': shopId},
+          data: {'page': 1, 'limit': 1000, 'shopId': shopId});
+      if (response.data['code'] == 200) {
+        return response.data['data']['data'];
+      } else {
+        Get.snackbar('警告', response.data['msg']);
+        throw Exception('请求失败');
+      }
+    } catch (e) {
+      // 处理错误，例如自动重试
+      debugPrint(e.toString());
+      Get.snackbar('警告', '网络连接失败');
+    }
+  }
 }
