@@ -45,6 +45,28 @@ class _MyState extends State<OnlineScanPage>
             )),
           )
         : Scaffold(
+            persistentFooterButtons: [
+              BrnBottomButtonPanel(
+                  mainButtonName: '结束',
+                  mainButtonOnTap: () {
+                    BrnToast.show('主按钮被点击', context);
+                  },
+                  secondaryButtonName: '挂起',
+                  secondaryButtonOnTap: () {
+                    BrnToast.show('次按钮被点击', context);
+                  },
+                  iconButtonList: [
+                    //构造Icon按钮
+                    BrnVerticalIconButton(
+                        name: '记录',
+                        iconWidget: Icon(
+                          Icons.list,
+                        ),
+                        onTap: () {
+                          BrnToast.show('更多按钮被点击', context);
+                        })
+                  ])
+            ],
             appBar: AppBar(
               title: const Text('在线扫码'),
             ),
@@ -127,8 +149,8 @@ class _MyState extends State<OnlineScanPage>
                               style: TextStyle(
                                 fontSize: 16,
                               )),
-                          valuePart: Text(
-                              (c.currentProd.value.onlineNum ?? 0).toString()),
+                          valuePart:
+                              Text((c.currentProd.value.onlineNum).toString()),
                         ),
                         BrnInfoModal(
                             keyPart: Text('差异:',
@@ -136,13 +158,9 @@ class _MyState extends State<OnlineScanPage>
                                 style: TextStyle(
                                   fontSize: 16,
                                 )),
-                            valuePart: Text((c.currentProd.value.num! -
-                                    (c.currentProd.value.onlineNum ?? 0))
-                                .toString())),
+                            valuePart:
+                                Text(c.currentProd.value.diffNum.toString())),
                       ],
-                    ),
-                    Container(
-                      height: 20,
                     ),
                   ],
                 ),
@@ -154,6 +172,10 @@ class _MyState extends State<OnlineScanPage>
   @override
   Future<void> shangmiCodeHandle(String code) async {
     /// 编写你的逻辑
-    c.addCode(code);
+    var x = DateTime.now();
+    await c.addCode(code);
+    var y = DateTime.now();
+    var diff = y.difference(x);
+    debugPrint('执行时间${diff.inMilliseconds.toString()}毫秒');
   }
 }
