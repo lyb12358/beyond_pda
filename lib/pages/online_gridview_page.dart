@@ -7,6 +7,7 @@ import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controller/historic_record_controller.dart';
 import 'offline_sacn_page.dart';
 
 class OnlineGridviewPage extends StatelessWidget {
@@ -15,6 +16,10 @@ class OnlineGridviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserController c = Get.find();
+    //几个子页面controller初始化
+    Get.put(HistoricRecordController());
+    HistoricRecordController c1 = Get.find();
+
     BrnEnhanceOperationDialog checkShopDialog = BrnEnhanceOperationDialog(
       context: context,
       iconType: BrnDialogConstants.iconAlert,
@@ -140,11 +145,15 @@ class OnlineGridviewPage extends StatelessWidget {
                   )
                 ],
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (c.shopId.value == 0) {
                   checkShopDialog.show();
                 } else {
+                  BrnLoadingDialog.show(context, barrierDismissible: false);
+                  await c1.getOnlineInventory();
                   Get.to(() => const HistoricRecordPage());
+                  //debugPrint(c1.inventoryList[0].documentCode);
+                  BrnLoadingDialog.dismiss(context);
                 }
               },
             ),

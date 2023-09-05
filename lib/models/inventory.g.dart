@@ -20,12 +20,12 @@ const InventorySchema = CollectionSchema(
     r'checkTime': PropertySchema(
       id: 0,
       name: r'checkTime',
-      type: IsarType.dateTime,
+      type: IsarType.string,
     ),
     r'createTime': PropertySchema(
       id: 1,
       name: r'createTime',
-      type: IsarType.dateTime,
+      type: IsarType.string,
     ),
     r'documentCode': PropertySchema(
       id: 2,
@@ -48,23 +48,28 @@ const InventorySchema = CollectionSchema(
       name: r'prodTotal',
       type: IsarType.long,
     ),
-    r'shopId': PropertySchema(
+    r'remark': PropertySchema(
       id: 6,
+      name: r'remark',
+      type: IsarType.string,
+    ),
+    r'shopId': PropertySchema(
+      id: 7,
       name: r'shopId',
       type: IsarType.long,
     ),
     r'status': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'status',
       type: IsarType.long,
     ),
     r'total': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'total',
       type: IsarType.long,
     ),
     r'userId': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'userId',
       type: IsarType.long,
     )
@@ -92,6 +97,18 @@ int _inventoryEstimateSize(
 ) {
   var bytesCount = offsets.last;
   {
+    final value = object.checkTime;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.createTime;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.documentCode;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -111,6 +128,12 @@ int _inventoryEstimateSize(
       }
     }
   }
+  {
+    final value = object.remark;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -120,8 +143,8 @@ void _inventorySerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeDateTime(offsets[0], object.checkTime);
-  writer.writeDateTime(offsets[1], object.createTime);
+  writer.writeString(offsets[0], object.checkTime);
+  writer.writeString(offsets[1], object.createTime);
   writer.writeString(offsets[2], object.documentCode);
   writer.writeLong(offsets[3], object.documentId);
   writer.writeObjectList<OnlineSingleProdInventory>(
@@ -131,10 +154,11 @@ void _inventorySerialize(
     object.inventoryList,
   );
   writer.writeLong(offsets[5], object.prodTotal);
-  writer.writeLong(offsets[6], object.shopId);
-  writer.writeLong(offsets[7], object.status);
-  writer.writeLong(offsets[8], object.total);
-  writer.writeLong(offsets[9], object.userId);
+  writer.writeString(offsets[6], object.remark);
+  writer.writeLong(offsets[7], object.shopId);
+  writer.writeLong(offsets[8], object.status);
+  writer.writeLong(offsets[9], object.total);
+  writer.writeLong(offsets[10], object.userId);
 }
 
 Inventory _inventoryDeserialize(
@@ -144,8 +168,8 @@ Inventory _inventoryDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Inventory(
-    checkTime: reader.readDateTimeOrNull(offsets[0]),
-    createTime: reader.readDateTimeOrNull(offsets[1]),
+    checkTime: reader.readStringOrNull(offsets[0]),
+    createTime: reader.readStringOrNull(offsets[1]),
     documentCode: reader.readStringOrNull(offsets[2]),
     documentId: reader.readLongOrNull(offsets[3]),
     id: id,
@@ -156,10 +180,11 @@ Inventory _inventoryDeserialize(
       OnlineSingleProdInventory(),
     ),
     prodTotal: reader.readLongOrNull(offsets[5]),
-    shopId: reader.readLongOrNull(offsets[6]),
-    status: reader.readLongOrNull(offsets[7]),
-    total: reader.readLongOrNull(offsets[8]),
-    userId: reader.readLongOrNull(offsets[9]),
+    remark: reader.readStringOrNull(offsets[6]),
+    shopId: reader.readLongOrNull(offsets[7]),
+    status: reader.readLongOrNull(offsets[8]),
+    total: reader.readLongOrNull(offsets[9]),
+    userId: reader.readLongOrNull(offsets[10]),
   );
   return object;
 }
@@ -172,9 +197,9 @@ P _inventoryDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 1:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 2:
       return (reader.readStringOrNull(offset)) as P;
     case 3:
@@ -189,12 +214,14 @@ P _inventoryDeserializeProp<P>(
     case 5:
       return (reader.readLongOrNull(offset)) as P;
     case 6:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 7:
       return (reader.readLongOrNull(offset)) as P;
     case 8:
       return (reader.readLongOrNull(offset)) as P;
     case 9:
+      return (reader.readLongOrNull(offset)) as P;
+    case 10:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -310,47 +337,55 @@ extension InventoryQueryFilter
   }
 
   QueryBuilder<Inventory, Inventory, QAfterFilterCondition> checkTimeEqualTo(
-      DateTime? value) {
+    String? value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'checkTime',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Inventory, Inventory, QAfterFilterCondition>
       checkTimeGreaterThan(
-    DateTime? value, {
+    String? value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'checkTime',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Inventory, Inventory, QAfterFilterCondition> checkTimeLessThan(
-    DateTime? value, {
+    String? value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'checkTime',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Inventory, Inventory, QAfterFilterCondition> checkTimeBetween(
-    DateTime? lower,
-    DateTime? upper, {
+    String? lower,
+    String? upper, {
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -359,6 +394,76 @@ extension InventoryQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> checkTimeStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'checkTime',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> checkTimeEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'checkTime',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> checkTimeContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'checkTime',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> checkTimeMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'checkTime',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> checkTimeIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'checkTime',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition>
+      checkTimeIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'checkTime',
+        value: '',
       ));
     });
   }
@@ -381,47 +486,55 @@ extension InventoryQueryFilter
   }
 
   QueryBuilder<Inventory, Inventory, QAfterFilterCondition> createTimeEqualTo(
-      DateTime? value) {
+    String? value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'createTime',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Inventory, Inventory, QAfterFilterCondition>
       createTimeGreaterThan(
-    DateTime? value, {
+    String? value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'createTime',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Inventory, Inventory, QAfterFilterCondition> createTimeLessThan(
-    DateTime? value, {
+    String? value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'createTime',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Inventory, Inventory, QAfterFilterCondition> createTimeBetween(
-    DateTime? lower,
-    DateTime? upper, {
+    String? lower,
+    String? upper, {
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -430,6 +543,78 @@ extension InventoryQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition>
+      createTimeStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'createTime',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> createTimeEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'createTime',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> createTimeContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'createTime',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> createTimeMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'createTime',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition>
+      createTimeIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'createTime',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition>
+      createTimeIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'createTime',
+        value: '',
       ));
     });
   }
@@ -905,6 +1090,152 @@ extension InventoryQueryFilter
     });
   }
 
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> remarkIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'remark',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> remarkIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'remark',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> remarkEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'remark',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> remarkGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'remark',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> remarkLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'remark',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> remarkBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'remark',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> remarkStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'remark',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> remarkEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'remark',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> remarkContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'remark',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> remarkMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'remark',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> remarkIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'remark',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterFilterCondition> remarkIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'remark',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Inventory, Inventory, QAfterFilterCondition> shopIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1256,6 +1587,18 @@ extension InventoryQuerySortBy on QueryBuilder<Inventory, Inventory, QSortBy> {
     });
   }
 
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByRemark() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'remark', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByRemarkDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'remark', Sort.desc);
+    });
+  }
+
   QueryBuilder<Inventory, Inventory, QAfterSortBy> sortByShopId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'shopId', Sort.asc);
@@ -1379,6 +1722,18 @@ extension InventoryQuerySortThenBy
     });
   }
 
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByRemark() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'remark', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByRemarkDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'remark', Sort.desc);
+    });
+  }
+
   QueryBuilder<Inventory, Inventory, QAfterSortBy> thenByShopId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'shopId', Sort.asc);
@@ -1430,15 +1785,17 @@ extension InventoryQuerySortThenBy
 
 extension InventoryQueryWhereDistinct
     on QueryBuilder<Inventory, Inventory, QDistinct> {
-  QueryBuilder<Inventory, Inventory, QDistinct> distinctByCheckTime() {
+  QueryBuilder<Inventory, Inventory, QDistinct> distinctByCheckTime(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'checkTime');
+      return query.addDistinctBy(r'checkTime', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Inventory, Inventory, QDistinct> distinctByCreateTime() {
+  QueryBuilder<Inventory, Inventory, QDistinct> distinctByCreateTime(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'createTime');
+      return query.addDistinctBy(r'createTime', caseSensitive: caseSensitive);
     });
   }
 
@@ -1458,6 +1815,13 @@ extension InventoryQueryWhereDistinct
   QueryBuilder<Inventory, Inventory, QDistinct> distinctByProdTotal() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'prodTotal');
+    });
+  }
+
+  QueryBuilder<Inventory, Inventory, QDistinct> distinctByRemark(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'remark', caseSensitive: caseSensitive);
     });
   }
 
@@ -1494,13 +1858,13 @@ extension InventoryQueryProperty
     });
   }
 
-  QueryBuilder<Inventory, DateTime?, QQueryOperations> checkTimeProperty() {
+  QueryBuilder<Inventory, String?, QQueryOperations> checkTimeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'checkTime');
     });
   }
 
-  QueryBuilder<Inventory, DateTime?, QQueryOperations> createTimeProperty() {
+  QueryBuilder<Inventory, String?, QQueryOperations> createTimeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'createTime');
     });
@@ -1528,6 +1892,12 @@ extension InventoryQueryProperty
   QueryBuilder<Inventory, int?, QQueryOperations> prodTotalProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'prodTotal');
+    });
+  }
+
+  QueryBuilder<Inventory, String?, QQueryOperations> remarkProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'remark');
     });
   }
 
