@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:beyond_pda/models/product_data.dart';
 import 'package:beyond_pda/pages/online_workshop_page.dart';
 import 'package:beyond_pda/repository/product_repository.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:beyond_pda/repository/user_repository.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 
 import '../models/inventory.dart';
 import '../pages/home_page.dart';
@@ -22,7 +25,7 @@ class UserController extends GetxController {
   final shopId = 0.obs;
   final shopName = ''.obs;
   final shopNo = ''.obs;
-  //onlineData
+  //inventory
   final codeList = <OnlineSingleProdInventory>[].obs;
   final onlineInventoryList = <OnlineSingleProdInventory>[].obs;
   final currentProd = OnlineSingleProdInventory().obs;
@@ -105,7 +108,7 @@ class UserController extends GetxController {
       return;
     }
     int onlineNum = getOnlineNum(code);
-    currentProd.value.code = singleProd.value.prodCode ?? '';
+    currentProd.value.prodCode = singleProd.value.prodCode ?? '';
     currentProd.value.prodName = singleProd.value.prodName ?? '';
     currentProd.value.catName = singleProd.value.catName ?? '';
     currentProd.value.speName = singleProd.value.speName ?? '';
@@ -120,7 +123,7 @@ class UserController extends GetxController {
     if (checkCodeExist(codeList, code)) {
       debugPrint('编号存在');
       debugPrint('列表尺寸${codeList.length}');
-      int i = codeList.indexWhere((element) => element.code == code);
+      int i = codeList.indexWhere((element) => element.prodCode == code);
       debugPrint('索引是$i');
       OnlineSingleProdInventory spd = codeList[i];
       int num = spd.num!;
@@ -141,7 +144,7 @@ class UserController extends GetxController {
       currentProd.value.num = 1;
       currentProd.value.diffNum = 1 - onlineNum;
       var spd = OnlineSingleProdInventory();
-      spd.code = currentProd.value.code;
+      spd.prodCode = currentProd.value.prodCode;
       spd.prodName = currentProd.value.prodName;
       spd.catName = currentProd.value.catName;
       spd.speName = currentProd.value.speName;
@@ -168,8 +171,8 @@ class UserController extends GetxController {
     debugPrint('新值是$newVal');
     debugPrint('老库存是是${currentProd.value.onlineNum}');
     debugPrint('差异是${currentProd.value.diffNum}');
-    int i = codeList
-        .indexWhere((element) => element.code == currentProd.value.code);
+    int i = codeList.indexWhere(
+        (element) => element.prodCode == currentProd.value.prodCode);
     OnlineSingleProdInventory spd = codeList[i];
     spd.num = newVal;
     spd.diffNum = currentProd.value.diffNum;
@@ -180,7 +183,7 @@ class UserController extends GetxController {
     if (list.isEmpty) {
       return false;
     }
-    return list.any((element) => element.code == code);
+    return list.any((element) => element.prodCode == code);
   }
 
   //门店库存
@@ -188,7 +191,7 @@ class UserController extends GetxController {
     var listDynamic = await _productRepository.getOnlineInventory(shopId.value);
     onlineInventoryList.value = (listDynamic as List<dynamic>).map((e) {
       var spd = OnlineSingleProdInventory();
-      spd.code = e['prodCode'];
+      spd.prodCode = e['prodCode'];
       spd.styleId = 0;
       spd.codeId = 0;
       spd.num = 0;
@@ -204,11 +207,41 @@ class UserController extends GetxController {
     }
     if (checkCodeExist(onlineInventoryList, code)) {
       return onlineInventoryList
-          .firstWhere((element) => element.code == code)
+          .firstWhere((element) => element.prodCode == code)
           .onlineNum!;
     } else {
       return 0;
     }
+  }
+
+  Future<bool> addOnlineInventory(String remark) async {
+    return await _productRepository.addOnlineInventory(
+        brandId.value, shopId.value, remark, codeList);
+  }
+
+  Future<bool> putHoldonInventory(String remark) async {
+    inventory.value.remark = remark;
+    inventory.value.shopId = shopId.value;
+    inventory.value.prodTotal = (inventory.value.inventoryList ?? []).length;
+    inventory.value.total = calTotalNum();
+    inventory.value.createTime =
+        DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now());
+    await _productRepository.putHoldonInventory(inventory.value);
+    return true;
+  }
+
+  calTotalNum() {
+    var totalNum = 0;
+    for (var item in codeList) {
+      totalNum = totalNum + (item.num ?? 0);
+    }
+    return totalNum;
+  }
+
+  resetOnlineScan() {
+    singleProd.value = ProductData();
+    codeList.value = [];
+    currentProd.value = OnlineSingleProdInventory();
   }
 
   //计算图片地址

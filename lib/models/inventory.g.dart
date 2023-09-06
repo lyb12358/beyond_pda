@@ -1942,35 +1942,35 @@ const OnlineSingleProdInventorySchema = Schema(
       name: r'catName',
       type: IsarType.string,
     ),
-    r'code': PropertySchema(
-      id: 1,
-      name: r'code',
-      type: IsarType.string,
-    ),
     r'codeId': PropertySchema(
-      id: 2,
+      id: 1,
       name: r'codeId',
       type: IsarType.long,
     ),
     r'codeThumbnail': PropertySchema(
-      id: 3,
+      id: 2,
       name: r'codeThumbnail',
       type: IsarType.string,
     ),
     r'diffNum': PropertySchema(
-      id: 4,
+      id: 3,
       name: r'diffNum',
       type: IsarType.long,
     ),
     r'num': PropertySchema(
-      id: 5,
+      id: 4,
       name: r'num',
       type: IsarType.long,
     ),
     r'onlineNum': PropertySchema(
-      id: 6,
+      id: 5,
       name: r'onlineNum',
       type: IsarType.long,
+    ),
+    r'prodCode': PropertySchema(
+      id: 6,
+      name: r'prodCode',
+      type: IsarType.string,
     ),
     r'prodName': PropertySchema(
       id: 7,
@@ -2022,13 +2022,13 @@ int _onlineSingleProdInventoryEstimateSize(
     }
   }
   {
-    final value = object.code;
+    final value = object.codeThumbnail;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
   }
   {
-    final value = object.codeThumbnail;
+    final value = object.prodCode;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -2073,12 +2073,12 @@ void _onlineSingleProdInventorySerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.catName);
-  writer.writeString(offsets[1], object.code);
-  writer.writeLong(offsets[2], object.codeId);
-  writer.writeString(offsets[3], object.codeThumbnail);
-  writer.writeLong(offsets[4], object.diffNum);
-  writer.writeLong(offsets[5], object.num);
-  writer.writeLong(offsets[6], object.onlineNum);
+  writer.writeLong(offsets[1], object.codeId);
+  writer.writeString(offsets[2], object.codeThumbnail);
+  writer.writeLong(offsets[3], object.diffNum);
+  writer.writeLong(offsets[4], object.num);
+  writer.writeLong(offsets[5], object.onlineNum);
+  writer.writeString(offsets[6], object.prodCode);
   writer.writeString(offsets[7], object.prodName);
   writer.writeString(offsets[8], object.speName);
   writer.writeLong(offsets[9], object.styleId);
@@ -2095,12 +2095,12 @@ OnlineSingleProdInventory _onlineSingleProdInventoryDeserialize(
 ) {
   final object = OnlineSingleProdInventory();
   object.catName = reader.readStringOrNull(offsets[0]);
-  object.code = reader.readStringOrNull(offsets[1]);
-  object.codeId = reader.readLongOrNull(offsets[2]);
-  object.codeThumbnail = reader.readStringOrNull(offsets[3]);
-  object.diffNum = reader.readLongOrNull(offsets[4]);
-  object.num = reader.readLongOrNull(offsets[5]);
-  object.onlineNum = reader.readLongOrNull(offsets[6]);
+  object.codeId = reader.readLongOrNull(offsets[1]);
+  object.codeThumbnail = reader.readStringOrNull(offsets[2]);
+  object.diffNum = reader.readLongOrNull(offsets[3]);
+  object.num = reader.readLongOrNull(offsets[4]);
+  object.onlineNum = reader.readLongOrNull(offsets[5]);
+  object.prodCode = reader.readStringOrNull(offsets[6]);
   object.prodName = reader.readStringOrNull(offsets[7]);
   object.speName = reader.readStringOrNull(offsets[8]);
   object.styleId = reader.readLongOrNull(offsets[9]);
@@ -2120,17 +2120,17 @@ P _onlineSingleProdInventoryDeserializeProp<P>(
     case 0:
       return (reader.readStringOrNull(offset)) as P;
     case 1:
-      return (reader.readStringOrNull(offset)) as P;
-    case 2:
       return (reader.readLongOrNull(offset)) as P;
-    case 3:
+    case 2:
       return (reader.readStringOrNull(offset)) as P;
+    case 3:
+      return (reader.readLongOrNull(offset)) as P;
     case 4:
       return (reader.readLongOrNull(offset)) as P;
     case 5:
       return (reader.readLongOrNull(offset)) as P;
     case 6:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 7:
       return (reader.readStringOrNull(offset)) as P;
     case 8:
@@ -2301,162 +2301,6 @@ extension OnlineSingleProdInventoryQueryFilter on QueryBuilder<
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'catName',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
-      QAfterFilterCondition> codeIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'code',
-      ));
-    });
-  }
-
-  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
-      QAfterFilterCondition> codeIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'code',
-      ));
-    });
-  }
-
-  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
-      QAfterFilterCondition> codeEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'code',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
-      QAfterFilterCondition> codeGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'code',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
-      QAfterFilterCondition> codeLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'code',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
-      QAfterFilterCondition> codeBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'code',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
-      QAfterFilterCondition> codeStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'code',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
-      QAfterFilterCondition> codeEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'code',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
-          QAfterFilterCondition>
-      codeContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'code',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
-          QAfterFilterCondition>
-      codeMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'code',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
-      QAfterFilterCondition> codeIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'code',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
-      QAfterFilterCondition> codeIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'code',
         value: '',
       ));
     });
@@ -2910,6 +2754,162 @@ extension OnlineSingleProdInventoryQueryFilter on QueryBuilder<
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
+      QAfterFilterCondition> prodCodeIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'prodCode',
+      ));
+    });
+  }
+
+  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
+      QAfterFilterCondition> prodCodeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'prodCode',
+      ));
+    });
+  }
+
+  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
+      QAfterFilterCondition> prodCodeEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'prodCode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
+      QAfterFilterCondition> prodCodeGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'prodCode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
+      QAfterFilterCondition> prodCodeLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'prodCode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
+      QAfterFilterCondition> prodCodeBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'prodCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
+      QAfterFilterCondition> prodCodeStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'prodCode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
+      QAfterFilterCondition> prodCodeEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'prodCode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
+          QAfterFilterCondition>
+      prodCodeContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'prodCode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
+          QAfterFilterCondition>
+      prodCodeMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'prodCode',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
+      QAfterFilterCondition> prodCodeIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'prodCode',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
+      QAfterFilterCondition> prodCodeIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'prodCode',
+        value: '',
       ));
     });
   }

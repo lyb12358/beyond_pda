@@ -1,10 +1,15 @@
 import 'package:beyond_pda/controller/user_controller.dart';
+import 'package:beyond_pda/pages/historic_record_page.dart';
+import 'package:beyond_pda/pages/holdon_record_page.dart';
 import 'package:beyond_pda/pages/record_detail_page.dart';
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sm_scan/shangmi_scan_mixin.dart';
+
+import '../controller/historic_record_controller.dart';
+import '../controller/holdon_record_controller.dart';
 
 class OnlineScanPage extends StatefulWidget {
   const OnlineScanPage({super.key});
@@ -19,6 +24,8 @@ class OnlineScanPage extends StatefulWidget {
 class _MyState extends State<OnlineScanPage>
     with ShangmiScanMixin<OnlineScanPage> {
   UserController c = Get.find();
+  HoldonRecordController c1 = Get.find();
+  HistoricRecordController c2 = Get.find();
   final GetStorage box = GetStorage();
 
   @override
@@ -57,11 +64,15 @@ class _MyState extends State<OnlineScanPage>
                         maxLines: 2,
                         barrierDismissible: false,
                         textInputAction: TextInputAction.done,
-                        onConfirm: (value) {
-                          BrnToast.show(value, context);
+                        onConfirm: (value) async {
+                          if (await c.addOnlineInventory(value)) {
+                            Navigator.pop(context);
+                            c.resetOnlineScan();
+                            await c2.getOnlineInventoryList();
+                            Get.off(() => const HistoricRecordPage());
+                          }
                         },
                         onCancel: () {
-                          BrnToast.show("取消", context);
                           Navigator.pop(context);
                         }).show(context);
                   },
@@ -77,11 +88,15 @@ class _MyState extends State<OnlineScanPage>
                         maxLines: 2,
                         barrierDismissible: false,
                         textInputAction: TextInputAction.done,
-                        onConfirm: (value) {
-                          BrnToast.show(value, context);
+                        onConfirm: (value) async {
+                          if (await c.putHoldonInventory(value)) {
+                            Navigator.pop(context);
+                            c.resetOnlineScan();
+                            await c1.getHoldonInventoryList();
+                            Get.off(() => const HoldonRecordPage());
+                          }
                         },
                         onCancel: () {
-                          BrnToast.show("取消", context);
                           Navigator.pop(context);
                         }).show(context);
                   },
@@ -125,7 +140,7 @@ class _MyState extends State<OnlineScanPage>
                               style: TextStyle(
                                 fontSize: 16,
                               )),
-                          valuePart: Text(c.currentProd.value.code ?? '',
+                          valuePart: Text(c.currentProd.value.prodCode ?? '',
                               style: TextStyle(
                                 fontSize: 16,
                               )),

@@ -41,7 +41,7 @@ class RecordDetailPage extends GetView<RecordDetailController> {
                       children: [
                         Column(
                           children: [
-                            Text('编号：${c.codeList[index].code!}'),
+                            Text('编号：${c.codeList[index].prodCode!}'),
                             Text('盘点数量：${c.codeList[index].num!}'),
                             Text('库存差异：${c.codeList[index].diffNum!}'),
                           ],

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:beyond_pda/models/inventory.dart';
 import 'package:beyond_pda/models/product_data.dart';
 import 'package:dio/dio.dart';
@@ -104,6 +106,31 @@ class ProductRepository extends GetxService {
     }
   }
 
+  //创建盘点单
+  Future addOnlineInventory(int brandId, int shopId, String remark,
+      List<OnlineSingleProdInventory> list) async {
+    try {
+      final response = await _httpService
+          .post('/shop-storage/shopStorageCheck/', data: {
+        'brandId': brandId,
+        'shopId': shopId,
+        'remark': remark,
+        'details': list
+      });
+      if (response.data['code'] == 200) {
+        return true;
+      } else {
+        Get.snackbar('警告', response.data['msg']);
+        return false;
+      }
+    } catch (e) {
+      // 处理错误，例如自动重试
+      debugPrint(e.toString());
+      Get.snackbar('警告', '网络连接失败');
+      return false;
+    }
+  }
+
   //盘点挂单列表
   Future getHoldonInventoryList(int shopId) async {
     return await _isar.inventorys
@@ -112,5 +139,12 @@ class ProductRepository extends GetxService {
         .filter()
         .shopIdEqualTo(shopId)
         .findAll();
+  }
+
+  // 创建/修改盘点挂单
+  Future<void> putHoldonInventory(Inventory inventory) async {
+    await _isar.writeTxn(() async {
+      await _isar.inventorys.put(inventory);
+    });
   }
 }

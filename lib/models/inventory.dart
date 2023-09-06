@@ -39,7 +39,7 @@ class Inventory {
 
 @embedded
 class OnlineSingleProdInventory {
-  String? code;
+  String? prodCode;
   String? prodName;
   String? catName;
   String? speName;
@@ -64,5 +64,22 @@ class OnlineSingleProdInventory {
   //     this.num,
   //     this.onlineNum,
   //     this.diffNum);
+  Map<String, dynamic> toJson() {
+    return {
+      'prodCode': prodCode,
+      'prodName': prodName,
+      'catName': catName,
+      'speName': speName,
+      'codeThumbnail': codeThumbnail,
+      'codeId': codeId,
+      'styleThumbnail': styleThumbnail,
+      'typeName': typeName,
+      'yearName': yearName,
+      'styleId': styleId,
+      'num': num,
+      'onlineNum': onlineNum,
+      'diffNum': diffNum,
+    };
+  }
 }
 //flutter pub run build_runner build
