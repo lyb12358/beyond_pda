@@ -15,8 +15,9 @@ class HistoricRecordController extends GetxController {
   }
 
   //盘点列表
-  Future<void> getOnlineInventory() async {
-    var listDynamic = await _productRepository.getInventoryList(c.shopId.value);
+  Future<void> getOnlineInventoryList() async {
+    var listDynamic =
+        await _productRepository.getOnlineInventoryList(c.shopId.value);
     inventoryList.value = (listDynamic as List<dynamic>).map((e) {
       var spd = Inventory();
       spd.shopId = e['shopId'];

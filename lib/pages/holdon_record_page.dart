@@ -7,12 +7,40 @@ class HoldonRecordPage extends GetView<HoldonRecordController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(HoldonRecordController());
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('盘点挂单'),
-      ),
-      body: Center(child: Text('盘点挂单')),
-    );
+    return Obx(() => Scaffold(
+          appBar: AppBar(
+            title: const Text('历史盘点'),
+          ),
+          body: ListView.builder(
+              itemCount: controller.inventoryList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text('挂单号：${controller.inventoryList[index].id!}'),
+                  subtitle: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                              '盘点时间：${controller.inventoryList[index].checkTime ?? ''}'),
+                          Text(
+                              '状态：${controller.inventoryList[index].status ?? 0}'),
+                        ],
+                      ),
+                    ],
+                  ),
+                  // leading: Image.network(
+                  //   c.calImageUrl(c.codeList[index]),
+                  //   headers: headersMap,
+                  //   fit: BoxFit.cover,
+                  // ),
+                  trailing: const Icon(
+                    Icons.chevron_right,
+                    size: 22,
+                    color: Colors.grey,
+                  ),
+                );
+              }),
+        ));
   }
 }

@@ -1,5 +1,4 @@
 import 'package:beyond_pda/controller/historic_record_controller.dart';
-import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

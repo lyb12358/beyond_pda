@@ -1,3 +1,4 @@
+import 'package:beyond_pda/models/inventory.dart';
 import 'package:beyond_pda/models/product_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class ProductRepository extends GetxService {
   Future<Isar> open() async {
     final dir = await getApplicationDocumentsDirectory();
     final isar = await Isar.open(
-      [ProductDataSchema],
+      [ProductDataSchema, InventorySchema],
       directory: dir.path,
     );
     return isar;
@@ -83,8 +84,8 @@ class ProductRepository extends GetxService {
     }
   }
 
-  //盘点单据
-  Future getInventoryList(int shopId) async {
+  //在线盘点列表
+  Future getOnlineInventoryList(int shopId) async {
     try {
       final response = await _httpService.post(
           '/shop-storage/shopStorageCheck/list',
@@ -101,5 +102,15 @@ class ProductRepository extends GetxService {
       debugPrint(e.toString());
       Get.snackbar('警告', '网络连接失败');
     }
+  }
+
+  //盘点挂单列表
+  Future getHoldonInventoryList(int shopId) async {
+    return await _isar.inventorys
+        .where(sort: Sort.desc)
+        .anyId()
+        .filter()
+        .shopIdEqualTo(shopId)
+        .findAll();
   }
 }

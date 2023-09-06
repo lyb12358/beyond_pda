@@ -47,11 +47,43 @@ class _MyState extends State<OnlineScanPage>
               BrnBottomButtonPanel(
                   mainButtonName: '结束',
                   mainButtonOnTap: () {
-                    BrnToast.show('主按钮被点击', context);
+                    BrnMiddleInputDialog(
+                        title: '确定要结束本次盘点吗',
+                        message: '结束的盘点将同步至博店助手PC端，也可在历史盘点菜单中继续操作',
+                        hintText: '备注',
+                        cancelText: '取消',
+                        confirmText: '确定',
+                        maxLength: 1000,
+                        maxLines: 2,
+                        barrierDismissible: false,
+                        textInputAction: TextInputAction.done,
+                        onConfirm: (value) {
+                          BrnToast.show(value, context);
+                        },
+                        onCancel: () {
+                          BrnToast.show("取消", context);
+                          Navigator.pop(context);
+                        }).show(context);
                   },
                   secondaryButtonName: '挂起',
                   secondaryButtonOnTap: () {
-                    BrnToast.show('次按钮被点击', context);
+                    BrnMiddleInputDialog(
+                        title: '确定要挂起本次盘点吗',
+                        message: '挂起的盘点可在盘点挂单菜单中继续操作',
+                        hintText: '备注',
+                        cancelText: '取消',
+                        confirmText: '确定',
+                        maxLength: 1000,
+                        maxLines: 2,
+                        barrierDismissible: false,
+                        textInputAction: TextInputAction.done,
+                        onConfirm: (value) {
+                          BrnToast.show(value, context);
+                        },
+                        onCancel: () {
+                          BrnToast.show("取消", context);
+                          Navigator.pop(context);
+                        }).show(context);
                   },
                   iconButtonList: [
                     //构造Icon按钮

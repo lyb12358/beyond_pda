@@ -1,3 +1,4 @@
+import 'package:beyond_pda/controller/holdon_record_controller.dart';
 import 'package:beyond_pda/controller/user_controller.dart';
 import 'package:beyond_pda/pages/choose_shop_page.dart';
 import 'package:beyond_pda/pages/historic_record_page.dart';
@@ -17,8 +18,10 @@ class OnlineGridviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     UserController c = Get.find();
     //几个子页面controller初始化
+    Get.put(HoldonRecordController());
     Get.put(HistoricRecordController());
-    HistoricRecordController c1 = Get.find();
+    HoldonRecordController c1 = Get.find();
+    HistoricRecordController c2 = Get.find();
 
     BrnEnhanceOperationDialog checkShopDialog = BrnEnhanceOperationDialog(
       context: context,
@@ -114,11 +117,14 @@ class OnlineGridviewPage extends StatelessWidget {
                   )
                 ],
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (c.shopId.value == 0) {
                   checkShopDialog.show();
                 } else {
+                  BrnLoadingDialog.show(context, barrierDismissible: false);
+                  await c1.getHoldonInventoryList();
                   Get.to(() => const HoldonRecordPage());
+                  BrnLoadingDialog.dismiss(context);
                 }
               },
             ),
@@ -150,9 +156,8 @@ class OnlineGridviewPage extends StatelessWidget {
                   checkShopDialog.show();
                 } else {
                   BrnLoadingDialog.show(context, barrierDismissible: false);
-                  await c1.getOnlineInventory();
+                  await c2.getOnlineInventoryList();
                   Get.to(() => const HistoricRecordPage());
-                  //debugPrint(c1.inventoryList[0].documentCode);
                   BrnLoadingDialog.dismiss(context);
                 }
               },
