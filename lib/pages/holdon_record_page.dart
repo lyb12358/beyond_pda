@@ -9,7 +9,7 @@ class HoldonRecordPage extends GetView<HoldonRecordController> {
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
           appBar: AppBar(
-            title: const Text('历史盘点'),
+            title: const Text('盘点挂单'),
           ),
           body: ListView.builder(
               itemCount: controller.inventoryList.length,
@@ -22,9 +22,10 @@ class HoldonRecordPage extends GetView<HoldonRecordController> {
                       Column(
                         children: [
                           Text(
-                              '盘点时间：${controller.inventoryList[index].checkTime ?? ''}'),
+                              '创建时间：${controller.inventoryList[index].createTime ?? ''}'),
                           Text(
-                              '状态：${controller.inventoryList[index].status ?? 0}'),
+                              '盘点时间：${controller.inventoryList[index].checkTime ?? ''}'),
+                          Text('状态：挂单'),
                         ],
                       ),
                     ],

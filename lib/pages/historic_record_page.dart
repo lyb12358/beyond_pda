@@ -23,9 +23,11 @@ class HistoricRecordPage extends GetView<HistoricRecordController> {
                       Column(
                         children: [
                           Text(
+                              '创建时间：${controller.inventoryList[index].createTime ?? ''}'),
+                          Text(
                               '盘点时间：${controller.inventoryList[index].checkTime ?? ''}'),
                           Text(
-                              '状态：${controller.inventoryList[index].status ?? 0}'),
+                              '状态：${controller.checkStatus(controller.inventoryList[index].status ?? 0)}'),
                         ],
                       ),
                     ],

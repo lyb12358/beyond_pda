@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:beyond_pda/models/product_data.dart';
 import 'package:beyond_pda/pages/online_workshop_page.dart';
 import 'package:beyond_pda/repository/product_repository.dart';
@@ -242,6 +240,7 @@ class UserController extends GetxController {
     singleProd.value = ProductData();
     codeList.value = [];
     currentProd.value = OnlineSingleProdInventory();
+    inventory.value = Inventory();
   }
 
   //计算图片地址

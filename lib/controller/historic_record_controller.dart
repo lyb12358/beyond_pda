@@ -33,4 +33,19 @@ class HistoricRecordController extends GetxController {
       return spd;
     }).toList();
   }
+
+  checkStatus(int status) {
+    switch (status) {
+      case 0:
+        return '录入中';
+      case 1:
+        return '已盘点';
+      case 2:
+        return '已作废';
+      case 3:
+        return '已确认';
+      default:
+        return '未知';
+    }
+  }
 }

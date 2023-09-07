@@ -69,6 +69,7 @@ class _MyState extends State<OnlineScanPage>
                             Navigator.pop(context);
                             c.resetOnlineScan();
                             await c2.getOnlineInventoryList();
+                            BrnToast.show("录入成功", context);
                             Get.off(() => const HistoricRecordPage());
                           }
                         },
@@ -93,6 +94,7 @@ class _MyState extends State<OnlineScanPage>
                             Navigator.pop(context);
                             c.resetOnlineScan();
                             await c1.getHoldonInventoryList();
+                            BrnToast.show("挂起成功", context);
                             Get.off(() => const HoldonRecordPage());
                           }
                         },
