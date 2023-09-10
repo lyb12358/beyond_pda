@@ -35,7 +35,7 @@ class _MyState extends State<OnlineScanPage>
     };
     //赋予输入框初始值
     //c.manualInputController.value.text = (c.currentProd.value.num).toString();
-    return Obx(() => (c.singleProd.value.prodCode ?? '').isEmpty
+    return Obx(() => (c.currentProd.value.prodCode ?? '').isEmpty
         ? Scaffold(
             appBar: AppBar(
               title: const Text('在线扫码'),

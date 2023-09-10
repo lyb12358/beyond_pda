@@ -1,12 +1,17 @@
 import 'package:beyond_pda/controller/holdon_record_controller.dart';
+import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../controller/user_controller.dart';
+import 'online_scan_page.dart';
 
 class HoldonRecordPage extends GetView<HoldonRecordController> {
   const HoldonRecordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    UserController c = Get.find();
     return Obx(() => Scaffold(
           appBar: AppBar(
             title: const Text('盘点挂单'),
@@ -14,32 +19,100 @@ class HoldonRecordPage extends GetView<HoldonRecordController> {
           body: ListView.builder(
               itemCount: controller.inventoryList.length,
               itemBuilder: (context, index) {
-                return ListTile(
+                return ExpansionTile(
                   title: Text('挂单号：${controller.inventoryList[index].id!}'),
-                  subtitle: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Column(
+                  subtitle: Text(
+                      '创建时间：${controller.inventoryList[index].createTime ?? ''}'),
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 40, bottom: 10),
+                      child: BrnPairInfoTable(
+                        isValueAlign: true,
+                        rowDistance: 8,
+                        itemSpacing: 30,
                         children: [
-                          Text(
-                              '创建时间：${controller.inventoryList[index].createTime ?? ''}'),
-                          Text(
-                              '盘点时间：${controller.inventoryList[index].checkTime ?? ''}'),
-                          Text('状态：挂单'),
+                          BrnInfoModal(
+                            keyPart: Text('盘点个数:',
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                )),
+                            valuePart: Text(
+                                '${controller.inventoryList[index].prodTotal ?? 0}'),
+                          ),
+                          BrnInfoModal(
+                            keyPart: Text('盘点数量:',
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                )),
+                            valuePart: Text(
+                                '${controller.inventoryList[index].total ?? 0}'),
+                          ),
+                          BrnInfoModal(
+                              keyPart: Text('备注:',
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  )),
+                              valuePart: Text(
+                                  controller.inventoryList[index].remark ??
+                                      '')),
                         ],
                       ),
-                    ],
-                  ),
-                  // leading: Image.network(
-                  //   c.calImageUrl(c.codeList[index]),
-                  //   headers: headersMap,
-                  //   fit: BoxFit.cover,
-                  // ),
-                  trailing: const Icon(
-                    Icons.chevron_right,
-                    size: 22,
-                    color: Colors.grey,
-                  ),
+                    ),
+                    ButtonBar(
+                      alignment: MainAxisAlignment.center,
+                      overflowDirection: VerticalDirection.down,
+                      children: [
+                        BrnSmallOutlineButton(
+                          title: '删除',
+                          width: 60,
+                          textColor: Colors.red,
+                          onTap: () {
+                            BrnDialogManager.showConfirmDialog(context,
+                                title: "确定删除该挂单？",
+                                cancel: '取消',
+                                confirm: '确定', onConfirm: () async {
+                              Navigator.pop(context);
+                              BrnLoadingDialog.show(context,
+                                  barrierDismissible: false);
+                              if (await c.deleteHoldonInventory(
+                                  controller.inventoryList[index].id ?? 0)) {
+                                await controller.getHoldonInventoryList();
+                              } else {
+                                BrnToast.show("操作失败", context);
+                              }
+                              BrnLoadingDialog.dismiss(context);
+                            }, onCancel: () {
+                              Navigator.pop(context);
+                            });
+                          },
+                        ),
+                        BrnSmallMainButton(
+                          title: '继续盘点',
+                          width: 90,
+                          onTap: () {
+                            BrnDialogManager.showConfirmDialog(context,
+                                title: "确定继续盘点吗？",
+                                cancel: '取消',
+                                confirm: '确定', onConfirm: () async {
+                              Navigator.pop(context);
+                              BrnLoadingDialog.show(context,
+                                  barrierDismissible: false);
+                              controller
+                                  .restoreScan(controller.inventoryList[index]);
+                              await c.getOnlineInventory();
+                              BrnLoadingDialog.dismiss(context);
+                              Get.off(() => const OnlineScanPage());
+                            }, onCancel: () {
+                              Navigator.pop(context);
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
                 );
               }),
         ));

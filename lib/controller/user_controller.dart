@@ -220,11 +220,17 @@ class UserController extends GetxController {
   Future<bool> putHoldonInventory(String remark) async {
     inventory.value.remark = remark;
     inventory.value.shopId = shopId.value;
-    inventory.value.prodTotal = (inventory.value.inventoryList ?? []).length;
+    inventory.value.inventoryList = codeList;
+    inventory.value.prodTotal = codeList.length;
     inventory.value.total = calTotalNum();
     inventory.value.createTime =
         DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now());
     await _productRepository.putHoldonInventory(inventory.value);
+    return true;
+  }
+
+  Future<bool> deleteHoldonInventory(int id) async {
+    await _productRepository.deleteHoldonInventory(id);
     return true;
   }
 

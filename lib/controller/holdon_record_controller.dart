@@ -14,9 +14,15 @@ class HoldonRecordController extends GetxController {
     _productRepository = Get.find();
   }
 
-  //盘点列表
+  //盘点挂单列表
   Future<void> getHoldonInventoryList() async {
     inventoryList.value =
         await _productRepository.getHoldonInventoryList(c.shopId.value);
+  }
+
+  restoreScan(Inventory x) {
+    c.codeList.value = x.inventoryList ?? [];
+    c.currentProd.value = x.inventoryList?[0] ?? OnlineSingleProdInventory();
+    c.inventory.value = x;
   }
 }

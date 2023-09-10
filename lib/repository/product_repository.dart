@@ -145,4 +145,10 @@ class ProductRepository extends GetxService {
       await _isar.inventorys.put(inventory);
     });
   }
+
+  Future<void> deleteHoldonInventory(int id) async {
+    await _isar.writeTxn(() async {
+      await _isar.inventorys.delete(id);
+    });
+  }
 }
