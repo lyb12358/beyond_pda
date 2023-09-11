@@ -129,6 +129,26 @@ class ProductRepository extends GetxService {
     }
   }
 
+  //修改在线盘点单状态
+  Future changeOnlineInventoryStatus(int id, int action) async {
+    try {
+      final response = await _httpService.put(
+          '/shop-storage/shopStorageCheck/status/',
+          queryParameters: {'id': id, 'action': action});
+      if (response.data['code'] == 200) {
+        return true;
+      } else {
+        Get.snackbar('警告', response.data['msg']);
+        return false;
+      }
+    } catch (e) {
+      // 处理错误，例如自动重试
+      debugPrint(e.toString());
+      Get.snackbar('警告', '网络连接失败');
+      return false;
+    }
+  }
+
   //盘点挂单列表
   Future getHoldonInventoryList(int shopId) async {
     return await _isar.inventorys

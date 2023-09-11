@@ -85,30 +85,42 @@ class HistoricRecordPage extends GetView<HistoricRecordController> {
                         BrnSmallOutlineButton(
                           title: '明细',
                           width: 60,
-                          onTap: () {
-                            BrnToast.show('次按钮', context);
-                          },
+                          onTap: () {},
                         ),
                         BrnSmallOutlineButton(
                           title: '日志',
                           width: 60,
-                          onTap: () {
-                            BrnToast.show('次按钮', context);
-                          },
+                          onTap: () async {},
                         ),
-                        Visibility(
-                          visible:
-                              (controller.inventoryList[index].status ?? 0) ==
-                                  0,
-                          child: BrnSmallOutlineButton(
+                        if ((controller.inventoryList[index].status ?? 0) == 0)
+                          BrnSmallOutlineButton(
                             title: '作废',
                             width: 60,
                             textColor: Colors.red,
                             onTap: () {
-                              BrnToast.show('次按钮', context);
+                              BrnDialogManager.showConfirmDialog(context,
+                                  title: "确定作废该单据？",
+                                  cancel: '取消',
+                                  confirm: '确定', onConfirm: () async {
+                                Navigator.pop(context);
+                                BrnLoadingDialog.show(context,
+                                    barrierDismissible: false);
+                                if (await controller
+                                    .changeOnlineInventoryStatus(
+                                        controller
+                                            .inventoryList[index].documentId!,
+                                        2)) {
+                                  BrnToast.show("操作成功", context);
+                                  await controller.getOnlineInventoryList();
+                                } else {
+                                  BrnToast.show("操作失败", context);
+                                }
+                                BrnLoadingDialog.dismiss(context);
+                              }, onCancel: () {
+                                Navigator.pop(context);
+                              });
                             },
                           ),
-                        ),
                         Visibility(
                           visible:
                               (controller.inventoryList[index].status ?? 0) ==
@@ -117,7 +129,27 @@ class HistoricRecordPage extends GetView<HistoricRecordController> {
                             title: '确认',
                             width: 60,
                             onTap: () {
-                              BrnToast.show('次按钮', context);
+                              BrnDialogManager.showConfirmDialog(context,
+                                  title: "将确认该单据",
+                                  cancel: '否',
+                                  confirm: '是', onConfirm: () async {
+                                Navigator.pop(context);
+                                BrnLoadingDialog.show(context,
+                                    barrierDismissible: false);
+                                if (await controller
+                                    .changeOnlineInventoryStatus(
+                                        controller
+                                            .inventoryList[index].documentId!,
+                                        3)) {
+                                  BrnToast.show("操作成功", context);
+                                  await controller.getOnlineInventoryList();
+                                } else {
+                                  BrnToast.show("操作失败", context);
+                                }
+                                BrnLoadingDialog.dismiss(context);
+                              }, onCancel: () {
+                                Navigator.pop(context);
+                              });
                             },
                           ),
                         ),
@@ -129,7 +161,27 @@ class HistoricRecordPage extends GetView<HistoricRecordController> {
                             title: '取消确认',
                             width: 80,
                             onTap: () {
-                              BrnToast.show('次按钮', context);
+                              BrnDialogManager.showConfirmDialog(context,
+                                  title: "将取消确认该单据",
+                                  cancel: '否',
+                                  confirm: '是', onConfirm: () async {
+                                Navigator.pop(context);
+                                BrnLoadingDialog.show(context,
+                                    barrierDismissible: false);
+                                if (await controller
+                                    .changeOnlineInventoryStatus(
+                                        controller
+                                            .inventoryList[index].documentId!,
+                                        -3)) {
+                                  BrnToast.show("操作成功", context);
+                                  await controller.getOnlineInventoryList();
+                                } else {
+                                  BrnToast.show("操作失败", context);
+                                }
+                                BrnLoadingDialog.dismiss(context);
+                              }, onCancel: () {
+                                Navigator.pop(context);
+                              });
                             },
                           ),
                         ),
@@ -141,10 +193,27 @@ class HistoricRecordPage extends GetView<HistoricRecordController> {
                             title: '盘点',
                             width: 60,
                             onTap: () async {
-                              BrnLoadingDialog.show(context,
-                                  barrierDismissible: false);
-                              await controller.getOnlineInventoryList();
-                              BrnLoadingDialog.dismiss(context);
+                              BrnDialogManager.showConfirmDialog(context,
+                                  title: "是否盘点该单据",
+                                  cancel: '否',
+                                  confirm: '是', onConfirm: () async {
+                                Navigator.pop(context);
+                                BrnLoadingDialog.show(context,
+                                    barrierDismissible: false);
+                                if (await controller
+                                    .changeOnlineInventoryStatus(
+                                        controller
+                                            .inventoryList[index].documentId!,
+                                        1)) {
+                                  BrnToast.show("操作成功", context);
+                                  await controller.getOnlineInventoryList();
+                                } else {
+                                  BrnToast.show("操作失败", context);
+                                }
+                                BrnLoadingDialog.dismiss(context);
+                              }, onCancel: () {
+                                Navigator.pop(context);
+                              });
                             },
                           ),
                         ),

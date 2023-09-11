@@ -34,6 +34,11 @@ class HistoricRecordController extends GetxController {
     }).toList();
   }
 
+  //盘点状态修改
+  Future<bool> changeOnlineInventoryStatus(int id, int action) async {
+    return await _productRepository.changeOnlineInventoryStatus(id, action);
+  }
+
   checkStatus(int status) {
     switch (status) {
       case 0:

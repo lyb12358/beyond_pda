@@ -79,6 +79,7 @@ class HoldonRecordPage extends GetView<HoldonRecordController> {
                                   barrierDismissible: false);
                               if (await c.deleteHoldonInventory(
                                   controller.inventoryList[index].id ?? 0)) {
+                                BrnToast.show("操作成功", context);
                                 await controller.getHoldonInventoryList();
                               } else {
                                 BrnToast.show("操作失败", context);
