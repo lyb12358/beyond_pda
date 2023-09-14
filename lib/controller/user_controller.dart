@@ -266,4 +266,22 @@ class UserController extends GetxController {
       return '$baseLocation$codeLocation${prod.codeId}/${prod.codeThumbnail}';
     }
   }
+
+  //计算图片地址(map)
+  String calImageUrlByMap(Map prod) {
+    String baseLocation = tempBaseUrl;
+    String codeLocation = "/image/code/";
+    String matLocation = "/image/mat/";
+    String styleLocation = "/image/style/";
+    if ((prod['codeThumbnail'] ?? '').isEmpty &&
+        (prod['styleThumbnail'] ?? '').isEmpty) {
+      return '$baseLocation/template/noImage.jpg';
+    } else if ((prod['styleId'] ?? 0) == 0) {
+      return '$baseLocation$matLocation${prod['codeId']}/${prod['codeThumbnail']}';
+    } else if ((prod['codeThumbnail'] ?? '').isEmpty) {
+      return '$baseLocation$styleLocation${prod['styleId']}/${prod['styleThumbnail']}';
+    } else {
+      return '$baseLocation$codeLocation${prod['codeId']}/${prod['codeThumbnail']}';
+    }
+  }
 }

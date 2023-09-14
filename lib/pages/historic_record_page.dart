@@ -90,7 +90,48 @@ class HistoricRecordPage extends GetView<HistoricRecordController> {
                         BrnSmallOutlineButton(
                           title: '日志',
                           width: 60,
-                          onTap: () async {},
+                          onTap: () async {
+                            BrnLoadingDialog.show(context,
+                                barrierDismissible: false);
+                            await controller.getOnlineOperationLogList(
+                                controller.inventoryList[index].documentId!);
+                            BrnLoadingDialog.dismiss(context);
+                            BrnDialogManager.showSingleButtonDialog(context,
+                                //showIcon: false,
+                                title: "操作日志",
+                                messageWidget: Container(
+                                  height: 500,
+                                  child: ListView.builder(
+                                      itemCount:
+                                          controller.operationLogList.length,
+                                      itemBuilder: (context, index) {
+                                        return ListTile(
+                                          title: Text(
+                                              controller.operationLogList[index]
+                                                  ['operation']!,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                          subtitle: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                      '操作人：${controller.operationLogList[index]['createUserName']!}'),
+                                                  Text(
+                                                      '操作时间：${controller.operationLogList[index]['createTime']!}'),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }),
+                                ),
+                                label: "关闭", onTap: () {
+                              Navigator.pop(context);
+                            });
+                          },
                         ),
                         if ((controller.inventoryList[index].status ?? 0) == 0)
                           BrnSmallOutlineButton(

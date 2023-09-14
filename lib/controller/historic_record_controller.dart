@@ -8,6 +8,7 @@ class HistoricRecordController extends GetxController {
   UserController c = Get.find();
   late ProductRepository _productRepository;
   final inventoryList = <Inventory>[].obs;
+  final operationLogList = [].obs;
   @override
   void onInit() async {
     super.onInit();
@@ -37,6 +38,14 @@ class HistoricRecordController extends GetxController {
   //盘点状态修改
   Future<bool> changeOnlineInventoryStatus(int id, int action) async {
     return await _productRepository.changeOnlineInventoryStatus(id, action);
+  }
+
+  //在线盘点单操作记录列表
+  Future<void> getOnlineOperationLogList(int id) async {
+    var listDynamic = await _productRepository.getOnlineOperationLogList(id);
+    operationLogList.value = (listDynamic as List<dynamic>).map((e) {
+      return e;
+    }).toList();
   }
 
   checkStatus(int status) {

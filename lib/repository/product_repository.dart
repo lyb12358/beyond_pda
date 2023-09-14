@@ -149,6 +149,26 @@ class ProductRepository extends GetxService {
     }
   }
 
+  //在线盘点单操作记录列表
+  Future getOnlineOperationLogList(int id) async {
+    try {
+      final response = await _httpService.post(
+          '/shop-storage/operationLog/list',
+          queryParameters: {'page': 1, 'limit': 1000},
+          data: {'page': 1, 'limit': 1000, 'objectId': id, 'type': '库存盘点'});
+      if (response.data['code'] == 200) {
+        return response.data['data']['data'];
+      } else {
+        Get.snackbar('警告', response.data['msg']);
+        throw Exception('请求失败');
+      }
+    } catch (e) {
+      // 处理错误，例如自动重试
+      debugPrint(e.toString());
+      Get.snackbar('警告', '网络连接失败');
+    }
+  }
+
   //盘点挂单列表
   Future getHoldonInventoryList(int shopId) async {
     return await _isar.inventorys
@@ -170,5 +190,22 @@ class ProductRepository extends GetxService {
     await _isar.writeTxn(() async {
       await _isar.inventorys.delete(id);
     });
+  }
+
+  //产品查询
+  Future getOnlineProdList(Map form) async {
+    try {
+      final response = await _httpService.post('/pm/prodCodes', data: form);
+      if (response.data['code'] == 200) {
+        return response.data['data']['data'];
+      } else {
+        Get.snackbar('警告', response.data['msg']);
+        throw Exception('请求失败');
+      }
+    } catch (e) {
+      // 处理错误，例如自动重试
+      debugPrint(e.toString());
+      Get.snackbar('警告', '网络连接失败');
+    }
   }
 }
