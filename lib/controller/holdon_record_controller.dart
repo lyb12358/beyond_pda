@@ -21,8 +21,21 @@ class HoldonRecordController extends GetxController {
   }
 
   restoreScan(Inventory x) {
-    c.codeList.value = x.inventoryList ?? [];
-    c.currentProd.value = x.inventoryList?[0] ?? OnlineSingleProdInventory();
+    c.codeList.value = [];
+    c.codeList.addAll(x.inventoryList!);
+    var singleProd = c.codeList[0];
+    c.currentProd.value.prodCode = singleProd.prodCode ?? '';
+    c.currentProd.value.prodName = singleProd.prodName ?? '';
+    c.currentProd.value.catName = singleProd.catName ?? '';
+    c.currentProd.value.speName = singleProd.speName ?? '';
+    c.currentProd.value.codeThumbnail = singleProd.codeThumbnail ?? '';
+    c.currentProd.value.styleId = singleProd.styleId ?? 0;
+    c.currentProd.value.codeId = singleProd.codeId ?? 0;
+    c.currentProd.value.styleThumbnail = singleProd.styleThumbnail ?? '';
+    c.currentProd.value.typeName = singleProd.typeName ?? '';
+    c.currentProd.value.yearName = singleProd.yearName ?? '';
+    c.currentProd.value.onlineNum = singleProd.onlineNum!;
     c.inventory.value = x;
+    c.manualInputController.value.text = (singleProd.num).toString();
   }
 }

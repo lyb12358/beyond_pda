@@ -20,6 +20,7 @@ class UserController extends GetxController {
   final singleProd = ProductData().obs;
   //shop
   final brandId = 0.obs;
+  final departId = 0.obs;
   final shopId = 0.obs;
   final shopName = ''.obs;
   final shopNo = ''.obs;
@@ -44,6 +45,7 @@ class UserController extends GetxController {
     _productRepository = Get.find();
     updateTime.value = box.read('updateTime') ?? '';
     brandId.value = box.read('brandId') ?? 0;
+    departId.value = box.read('departId') ?? 0;
     shopId.value = box.read('shopId') ?? 0;
     shopName.value = box.read('shopName') ?? '';
     shopNo.value = box.read('shopNo') ?? '';
@@ -105,6 +107,7 @@ class UserController extends GetxController {
       Get.snackbar('警告', '非博洋产品，将不计入盘点!');
       return;
     }
+    debugPrint('1第一个商品是${codeList.isNotEmpty ? codeList[0].prodName : '空'}');
     int onlineNum = getOnlineNum(code);
     currentProd.value.prodCode = singleProd.value.prodCode ?? '';
     currentProd.value.prodName = singleProd.value.prodName ?? '';
@@ -117,10 +120,11 @@ class UserController extends GetxController {
     currentProd.value.typeName = singleProd.value.typeName ?? '';
     currentProd.value.yearName = singleProd.value.yearName ?? '';
     currentProd.value.onlineNum = onlineNum;
-    //新建对象防止响应式对象污染list
+    debugPrint('2第一个商品是${codeList.isNotEmpty ? codeList[0].prodName : '空'}');
     if (checkCodeExist(codeList, code)) {
       debugPrint('编号存在');
       debugPrint('列表尺寸${codeList.length}');
+      debugPrint('3第一个商品是${codeList.isNotEmpty ? codeList[0].prodName : '空'}');
       int i = codeList.indexWhere((element) => element.prodCode == code);
       debugPrint('索引是$i');
       OnlineSingleProdInventory spd = codeList[i];
@@ -131,12 +135,8 @@ class UserController extends GetxController {
       spd.num = num + 1;
       spd.diffNum = num + 1 - onlineNum;
       debugPrint('新库存是${currentProd.value.num}');
-      if (i == 0) {
-        codeList[0] = spd;
-      } else {
-        codeList.removeAt(i);
-        codeList.insert(0, spd);
-      }
+      codeList.removeAt(i);
+      codeList.insert(0, spd);
     } else {
       debugPrint('编号不存在');
       currentProd.value.num = 1;
@@ -159,12 +159,14 @@ class UserController extends GetxController {
     }
     //改变输入框的值
     manualInputController.value.text = (currentProd.value.num).toString();
+    currentProd.refresh();
   }
 
   //改变扫码商品库存时调用
   setInventory(int newVal) {
     currentProd.value.num = newVal;
     currentProd.value.diffNum = newVal - currentProd.value.onlineNum!;
+    //刷新对象防止响应式对象污染list
     currentProd.refresh();
     debugPrint('新值是$newVal');
     debugPrint('老库存是是${currentProd.value.onlineNum}');

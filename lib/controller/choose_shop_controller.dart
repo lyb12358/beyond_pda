@@ -17,6 +17,8 @@ class ChooseShopController extends GetxController {
   void chooseShop(Map map) {
     c.brandId.value = map['brandId'];
     box.write('brandId', map['brandId']);
+    c.departId.value = map['departId'];
+    box.write('departId', map['departId']);
     c.shopId.value = map['id'];
     box.write('shopId', map['id']);
     c.shopNo.value = map['shopNo'];

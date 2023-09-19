@@ -184,7 +184,6 @@ class _MyState extends State<OnlineScanPage>
                               controller: c.manualInputController.value,
                               maxLimit: 9999,
                               onChanged: (oldValue, newValue) {
-                                debugPrint(newValue.toString());
                                 c.setInventory(newValue);
                               },
                             ),

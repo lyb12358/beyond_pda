@@ -101,9 +101,9 @@ class HoldonRecordPage extends GetView<HoldonRecordController> {
                               Navigator.pop(context);
                               BrnLoadingDialog.show(context,
                                   barrierDismissible: false);
+                              await c.getOnlineInventory();
                               controller
                                   .restoreScan(controller.inventoryList[index]);
-                              await c.getOnlineInventory();
                               BrnLoadingDialog.dismiss(context);
                               Get.off(() => const OnlineScanPage());
                             }, onCancel: () {
