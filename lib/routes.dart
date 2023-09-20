@@ -2,6 +2,7 @@ import 'package:beyond_pda/pages/choose_shop_page.dart';
 import 'package:beyond_pda/pages/historic_record_page.dart';
 import 'package:beyond_pda/pages/holdon_record_page.dart';
 import 'package:beyond_pda/pages/inventory_query_page.dart';
+import 'package:beyond_pda/pages/offline_record_page.dart';
 import 'package:beyond_pda/pages/online_gridview_page.dart';
 import 'package:beyond_pda/pages/online_workshop_page.dart';
 import 'package:beyond_pda/pages/home_page.dart';
@@ -18,6 +19,7 @@ final routes = [
   GetPage(name: '/', page: () => const HomePage()),
   GetPage(name: '/login', page: () => const PdaLoginPage()),
   GetPage(name: '/offlineScan', page: () => const PdaOfflineScanPage()),
+  GetPage(name: '/offlineRecord', page: () => const OfflineRecordPage()),
   GetPage(name: '/onlineWorkshop', page: () => const OnlineWorkshopPage()),
   GetPage(name: '/onlineGridview', page: () => const OnlineGridviewPage()),
   GetPage(name: '/holdonRecord', page: () => const HoldonRecordPage()),

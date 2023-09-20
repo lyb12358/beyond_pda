@@ -30,6 +30,10 @@ class UserController extends GetxController {
   final currentProd = OnlineSingleProdInventory().obs;
   //单独扫码库存变动控制器
   final manualInputController = TextEditingController().obs;
+  //备注框
+  final remarkInputController = TextEditingController();
+  //record_detail数量
+  final countInputController = TextEditingController();
   //记录
   final recordStatus = 1.obs; // 1. 在线扫码记录  2. 挂单记录 3. 历史记录
   final inventory = Inventory().obs;
@@ -179,6 +183,21 @@ class UserController extends GetxController {
     codeList[i] = spd;
   }
 
+  //改变record_detail数量时调用
+  setInventoryInDetail(String code, int newVal) {
+    int i = codeList.indexWhere((element) => element.prodCode == code);
+    var spd = codeList[i];
+    spd.num = newVal;
+    spd.diffNum = newVal - spd.onlineNum!;
+    codeList[i] = spd;
+    if (i == 0) {
+      currentProd.value.num = newVal;
+      currentProd.value.diffNum = newVal - currentProd.value.onlineNum!;
+      currentProd.refresh();
+      manualInputController.value.text = newVal.toString();
+    }
+  }
+
   bool checkCodeExist(List<OnlineSingleProdInventory> list, String code) {
     if (list.isEmpty) {
       return false;
@@ -219,6 +238,11 @@ class UserController extends GetxController {
         brandId.value, shopId.value, remark, codeList);
   }
 
+  Future<bool> syncOnlineInventory(Inventory x) async {
+    return await _productRepository.addOnlineInventory(
+        brandId.value, shopId.value, x.remark ?? '', x.inventoryList!);
+  }
+
   Future<bool> putHoldonInventory(String remark) async {
     inventory.value.remark = remark;
     inventory.value.shopId = shopId.value;
@@ -227,12 +251,12 @@ class UserController extends GetxController {
     inventory.value.total = calTotalNum();
     inventory.value.createTime =
         DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now());
-    await _productRepository.putHoldonInventory(inventory.value);
+    await _productRepository.putInventory(inventory.value);
     return true;
   }
 
   Future<bool> deleteHoldonInventory(int id) async {
-    await _productRepository.deleteHoldonInventory(id);
+    await _productRepository.deleteInventory(id);
     return true;
   }
 
@@ -242,6 +266,14 @@ class UserController extends GetxController {
       totalNum = totalNum + (item.num ?? 0);
     }
     return totalNum;
+  }
+
+  calTotalOnlineNum() {
+    var totalOnlineNum = 0;
+    for (var item in onlineInventoryList) {
+      totalOnlineNum = totalOnlineNum + (item.onlineNum ?? 0);
+    }
+    return totalOnlineNum;
   }
 
   resetOnlineScan() {

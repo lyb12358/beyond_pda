@@ -12,6 +12,8 @@ import 'package:beyond_pda/service/http_service.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import 'controller/offline_record_controller.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
@@ -34,6 +36,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(UserController());
     Get.put(OfflineScanController());
+    Get.put(OfflineRecordController());
     return GetMaterialApp(
       initialRoute: '/',
       getPages: routes,

@@ -176,17 +176,30 @@ class ProductRepository extends GetxService {
         .anyId()
         .filter()
         .shopIdEqualTo(shopId)
+        .and()
+        .not()
+        .statusEqualTo(4)
         .findAll();
   }
 
-  // 创建/修改盘点挂单
-  Future<void> putHoldonInventory(Inventory inventory) async {
+  //离线挂单列表
+  Future getOfflineInventoryList() async {
+    return await _isar.inventorys
+        .where(sort: Sort.desc)
+        .anyId()
+        .filter()
+        .statusEqualTo(4)
+        .findAll();
+  }
+
+  // 创建/修改盘点挂单/离线单
+  Future<void> putInventory(Inventory inventory) async {
     await _isar.writeTxn(() async {
       await _isar.inventorys.put(inventory);
     });
   }
 
-  Future<void> deleteHoldonInventory(int id) async {
+  Future<void> deleteInventory(int id) async {
     await _isar.writeTxn(() async {
       await _isar.inventorys.delete(id);
     });

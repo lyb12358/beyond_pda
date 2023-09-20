@@ -1,3 +1,4 @@
+import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -58,6 +59,33 @@ class RecordDetailPage extends GetView<RecordDetailController> {
                       size: 22,
                       color: Colors.grey,
                     ),
+                    onTap: () {
+                      c.countInputController.text =
+                          c.codeList[index].num!.toString();
+                      BrnDialogManager.showSingleButtonDialog(
+                        context,
+                        title: "数量修改",
+                        label: '确认',
+                        messageWidget: Column(
+                          children: [
+                            BrnStepInputFormItem(
+                              title: "数量",
+                              canManualInput: true,
+                              isEdit: true,
+                              controller: c.countInputController,
+                              maxLimit: 9999,
+                              onChanged: (oldValue, newValue) {
+                                c.setInventoryInDetail(
+                                    c.codeList[index].prodCode!, newValue);
+                              },
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
                   );
                 })));
   }

@@ -77,7 +77,8 @@ class UserDetailPage extends GetView<UserController> {
                   leading: Icon(
                     Icons.store,
                   ), //左图标
-                  title: Obx(() => Text('当前门店:${c.shopName.value}')), //中间标题
+                  title: Obx(() => Text(
+                      '当前门店:${c.shopNo.value}-${c.shopName.value}')), //中间标题
                   trailing: Icon(Icons.arrow_forward_ios),
                   onTap: () => {Get.to(() => const ChooseShopPage())}),
               Divider(),

@@ -56,11 +56,12 @@ class _MyState extends State<OnlineScanPage>
                   mainButtonOnTap: () {
                     BrnMiddleInputDialog(
                         title: '确定要结束本次盘点吗',
-                        message: '结束的盘点将同步至博店助手PC端，也可在历史盘点菜单中继续操作',
+                        message:
+                            '盘点个数${c.codeList.length}，盘点数量${c.calTotalNum()}，系统库存${c.calTotalOnlineNum()}，差异${c.calTotalNum() - c.calTotalOnlineNum()}',
                         hintText: '备注',
                         cancelText: '取消',
                         confirmText: '确定',
-                        maxLength: 1000,
+                        maxLength: 100,
                         maxLines: 2,
                         barrierDismissible: false,
                         textInputAction: TextInputAction.done,
@@ -79,15 +80,19 @@ class _MyState extends State<OnlineScanPage>
                   },
                   secondaryButtonName: '挂起',
                   secondaryButtonOnTap: () {
+                    c.remarkInputController.text =
+                        c.inventory.value.remark ?? '';
                     BrnMiddleInputDialog(
                         title: '确定要挂起本次盘点吗',
-                        message: '挂起的盘点可在盘点挂单菜单中继续操作',
+                        message:
+                            '盘点个数${c.codeList.length}，盘点数量${c.calTotalNum()}，系统库存${c.calTotalOnlineNum()}，差异${c.calTotalNum() - c.calTotalOnlineNum()}',
                         hintText: '备注',
                         cancelText: '取消',
                         confirmText: '确定',
-                        maxLength: 1000,
+                        maxLength: 100,
                         maxLines: 2,
                         barrierDismissible: false,
+                        inputEditingController: c.remarkInputController,
                         textInputAction: TextInputAction.done,
                         onConfirm: (value) async {
                           if (await c.putHoldonInventory(value)) {
@@ -103,7 +108,6 @@ class _MyState extends State<OnlineScanPage>
                         }).show(context);
                   },
                   iconButtonList: [
-                    //构造Icon按钮
                     BrnVerticalIconButton(
                         name: '记录',
                         iconWidget: Icon(
@@ -111,6 +115,22 @@ class _MyState extends State<OnlineScanPage>
                         ),
                         onTap: () {
                           Get.to(() => RecordDetailPage());
+                        }),
+                    BrnVerticalIconButton(
+                        name: '重置',
+                        iconWidget: Icon(
+                          Icons.restart_alt,
+                        ),
+                        onTap: () {
+                          BrnDialogManager.showConfirmDialog(context,
+                              title: "确定重置盘点吗？",
+                              cancel: '取消',
+                              confirm: '确定', onConfirm: () async {
+                            Navigator.pop(context);
+                            c.resetOnlineScan();
+                          }, onCancel: () {
+                            Navigator.pop(context);
+                          });
                         })
                   ])
             ],

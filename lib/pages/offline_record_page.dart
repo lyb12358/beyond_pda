@@ -1,26 +1,41 @@
-import 'package:beyond_pda/controller/holdon_record_controller.dart';
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controller/offline_record_controller.dart';
+import '../controller/offline_scan_controller.dart';
 import '../controller/user_controller.dart';
-import 'online_scan_page.dart';
+import 'choose_shop_page.dart';
+import 'offline_sacn_page.dart';
 
-class HoldonRecordPage extends GetView<HoldonRecordController> {
-  const HoldonRecordPage({super.key});
+class OfflineRecordPage extends GetView<OfflineRecordController> {
+  const OfflineRecordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    UserController c = Get.find();
+    OfflineScanController c = Get.find();
+    UserController uc = Get.find();
+    BrnEnhanceOperationDialog checkShopDialog = BrnEnhanceOperationDialog(
+      context: context,
+      iconType: BrnDialogConstants.iconAlert,
+      titleText: "提示",
+      descText: '使用该功能前必须先选择门店',
+      mainButtonText: "选择门店",
+      secondaryButtonText: "关闭",
+      onMainButtonClick: () {
+        Get.to(() => const ChooseShopPage());
+      },
+      onSecondaryButtonClick: () {},
+    );
     return Obx(() => Scaffold(
           appBar: AppBar(
-            title: const Text('盘点挂单'),
+            title: const Text('离线盘点记录'),
           ),
           body: ListView.builder(
               itemCount: controller.inventoryList.length,
               itemBuilder: (context, index) {
                 return ExpansionTile(
-                  title: Text('挂单号：${controller.inventoryList[index].id!}'),
+                  title: Text('离线单号：${controller.inventoryList[index].id!}'),
                   subtitle: Text(
                       '创建时间：${controller.inventoryList[index].createTime ?? ''}'),
                   children: <Widget>[
@@ -71,16 +86,16 @@ class HoldonRecordPage extends GetView<HoldonRecordController> {
                           textColor: Colors.red,
                           onTap: () {
                             BrnDialogManager.showConfirmDialog(context,
-                                title: "确定删除该挂单？",
+                                title: "确定删除该单据？",
                                 cancel: '取消',
                                 confirm: '确定', onConfirm: () async {
                               Navigator.pop(context);
                               BrnLoadingDialog.show(context,
                                   barrierDismissible: false);
-                              if (await c.deleteHoldonInventory(
+                              if (await c.deleteOfflineInventory(
                                   controller.inventoryList[index].id ?? 0)) {
                                 BrnToast.show("操作成功", context);
-                                await controller.getHoldonInventoryList();
+                                await controller.getOfflineInventoryList();
                               } else {
                                 BrnToast.show("操作失败", context);
                               }
@@ -101,11 +116,10 @@ class HoldonRecordPage extends GetView<HoldonRecordController> {
                               Navigator.pop(context);
                               BrnLoadingDialog.show(context,
                                   barrierDismissible: false);
-                              await c.getOnlineInventory();
                               controller
                                   .restoreScan(controller.inventoryList[index]);
                               BrnLoadingDialog.dismiss(context);
-                              Get.off(() => const OnlineScanPage());
+                              Get.off(() => const PdaOfflineScanPage());
                             }, onCancel: () {
                               Navigator.pop(context);
                             });
@@ -115,24 +129,29 @@ class HoldonRecordPage extends GetView<HoldonRecordController> {
                           title: '同步',
                           width: 60,
                           onTap: () {
-                            BrnDialogManager.showConfirmDialog(context,
-                                title: "确定同步到博洋云店吗？",
-                                cancel: '取消',
-                                confirm: '确定', onConfirm: () async {
-                              Navigator.pop(context);
-                              BrnLoadingDialog.show(context,
-                                  barrierDismissible: false);
-                              if (await c.syncOnlineInventory(
-                                  controller.inventoryList[index])) {
-                                c.deleteHoldonInventory(
-                                    controller.inventoryList[index].id ?? 0);
-                              }
-                              BrnLoadingDialog.dismiss(context);
-                              BrnToast.show("操作成功", context);
-                            }, onCancel: () {
-                              Navigator.pop(context);
-                              BrnToast.show("操作失败", context);
-                            });
+                            if (uc.shopId.value == 0) {
+                              checkShopDialog.show();
+                            } else {
+                              BrnDialogManager.showConfirmDialog(context,
+                                  title: "确定同步到博洋云店吗？",
+                                  cancel: '取消',
+                                  confirm: '确定', onConfirm: () async {
+                                Navigator.pop(context);
+                                BrnLoadingDialog.show(context,
+                                    barrierDismissible: false);
+                                if (await uc.syncOnlineInventory(
+                                    controller.inventoryList[index])) {
+                                  c.deleteOfflineInventory(
+                                      controller.inventoryList[index].id ?? 0);
+                                  await controller.getOfflineInventoryList();
+                                  BrnLoadingDialog.dismiss(context);
+                                  BrnToast.show("操作成功", context);
+                                }
+                              }, onCancel: () {
+                                Navigator.pop(context);
+                                BrnToast.show("操作失败", context);
+                              });
+                            }
                           },
                         ),
                       ],

@@ -23,7 +23,8 @@ class ChooseShopPage extends GetView<ChooseShopController> {
                       child: Column(
                         children: [
                           ListTile(
-                            title: Text(controller.shopList[index]['shopName'],
+                            title: Text(
+                                '${controller.shopList[index]['shopName']}',
                                 style: TextStyle(fontSize: 28)),
                             subtitle:
                                 Text(controller.shopList[index]['shopNo']),

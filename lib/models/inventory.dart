@@ -17,7 +17,7 @@ class Inventory {
   int? prodTotal;
   //盘点数量
   int? total;
-  //状态(0:录入中,1:已盘点,2:作废,3:确认)
+  //状态(0:录入中,1:已盘点,2:作废,3:确认,4:离线)
   int? status;
   String? remark;
   List<OnlineSingleProdInventory>? inventoryList;

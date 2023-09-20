@@ -3,14 +3,14 @@ import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controller/user_controller.dart';
+//import '../controller/user_controller.dart';
 
 class HistoricRecordPage extends GetView<HistoricRecordController> {
   const HistoricRecordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    UserController c = Get.find();
+    //UserController c = Get.find();
     return Obx(() => Scaffold(
           appBar: AppBar(
             title: const Text('历史盘点'),
