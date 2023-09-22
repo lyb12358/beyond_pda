@@ -150,13 +150,13 @@ class ProdQueryPage extends GetView<ProdQueryController> {
                   messageWidget: Column(
                     children: [
                       BrnTextInputFormItem(
-                        //controller: TextEditingController()..text = "300",
+                        controller: controller.codeCtrl.value,
                         title: "编号",
                         hint: "请输入",
                         onChanged: (newValue) {},
                       ),
                       BrnTextInputFormItem(
-                        //controller: TextEditingController()..text = "300",
+                        controller: controller.nameCtrl.value,
                         title: "名称",
                         hint: "请输入",
                         onChanged: (newValue) {},
@@ -164,6 +164,7 @@ class ProdQueryPage extends GetView<ProdQueryController> {
                     ],
                   ), onConfirm: () {
                 Navigator.pop(context);
+                controller.getOnlineProdList();
               }, onCancel: () {
                 Navigator.pop(context);
               });

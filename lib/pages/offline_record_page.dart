@@ -144,9 +144,10 @@ class OfflineRecordPage extends GetView<OfflineRecordController> {
                                   c.deleteOfflineInventory(
                                       controller.inventoryList[index].id ?? 0);
                                   await controller.getOfflineInventoryList();
-                                  BrnLoadingDialog.dismiss(context);
+
                                   BrnToast.show("操作成功", context);
                                 }
+                                BrnLoadingDialog.dismiss(context);
                               }, onCancel: () {
                                 Navigator.pop(context);
                                 BrnToast.show("操作失败", context);
