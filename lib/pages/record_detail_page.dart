@@ -23,7 +23,7 @@ class RecordDetailPage extends GetView<RecordDetailController> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text('盘点数量：${controller.totalNum.value}'),
-                  Text('库存数量：${controller.totalOnlineNum.value}'),
+                  Text('库存总数量：${controller.totalOnlineNum.value}'),
                   Text(
                       '差异：${controller.totalNum.value - controller.totalOnlineNum.value}'),
                 ],

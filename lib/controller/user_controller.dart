@@ -14,6 +14,7 @@ class UserController extends GetxController {
   late UserRepository _userRepository;
   late ProductRepository _productRepository;
   final user = {}.obs;
+  final operations = [].obs;
   final name = ''.obs;
   final pwd = ''.obs;
   final updateTime = ''.obs;
@@ -58,6 +59,19 @@ class UserController extends GetxController {
   getUserInfo() async {
     try {
       final userInfo = await _userRepository.getUserInfo();
+      operations.value = await _userRepository.getMenusByBrand();
+      // debugPrint((operations.firstWhere((element) =>
+      //             element['operationType'] ==
+      //             'directInventory:view')['columnPermissions'] ??
+      //         [])
+      //     .any((element) => element['columnName'] == 'supplyPrice')
+      //     .toString());
+      // debugPrint((operations.firstWhere((element) =>
+      //             element['operationType'] ==
+      //             'productList:view')['columnPermissions'] ??
+      //         [])
+      //     .any((element) => element['columnName'] == 'supplyPrice')
+      //     .toString());
       user.value = userInfo;
       String xx = box.read('name') ?? '';
       name.value = user['realName'];
@@ -238,6 +252,15 @@ class UserController extends GetxController {
         brandId.value, shopId.value, remark, codeList);
   }
 
+  Future<bool> updateOnlineInventory(String remark) async {
+    return await _productRepository.updateOnlineInventory(
+        inventory.value.documentId!,
+        inventory.value.documentCode!,
+        shopId.value,
+        remark,
+        codeList);
+  }
+
   Future<bool> syncOnlineInventory(Inventory x) async {
     return await _productRepository.addOnlineInventory(
         brandId.value, shopId.value, x.remark ?? '', x.inventoryList!);
@@ -281,6 +304,7 @@ class UserController extends GetxController {
     codeList.value = [];
     currentProd.value = OnlineSingleProdInventory();
     inventory.value = Inventory();
+    recordStatus.value = 1;
   }
 
   //计算图片地址

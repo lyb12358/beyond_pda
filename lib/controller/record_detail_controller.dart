@@ -22,6 +22,7 @@ class RecordDetailController extends GetxController {
   }
 
   calTotalOnlineNum() {
+    totalOnlineNum.value = 0;
     for (var item in c.onlineInventoryList) {
       totalOnlineNum.value = totalOnlineNum.value + (item.onlineNum ?? 0);
     }

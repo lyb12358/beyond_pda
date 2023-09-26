@@ -104,6 +104,24 @@ class ProductRepository extends GetxService {
     }
   }
 
+  //在线盘点单详情
+  Future getOnlineInventoryDetail(int id) async {
+    try {
+      final response =
+          await _httpService.get('/shop-storage/shopStorageCheck/$id');
+      if (response.data['code'] == 200) {
+        return response.data['data'];
+      } else {
+        Get.snackbar('警告', response.data['msg']);
+        throw Exception('请求失败');
+      }
+    } catch (e) {
+      // 处理错误，例如自动重试
+      debugPrint(e.toString());
+      Get.snackbar('警告', '网络连接失败');
+    }
+  }
+
   //创建盘点单
   Future addOnlineInventory(int brandId, int shopId, String remark,
       List<OnlineSingleProdInventory> list) async {
@@ -111,6 +129,32 @@ class ProductRepository extends GetxService {
       final response = await _httpService
           .post('/shop-storage/shopStorageCheck/', data: {
         'brandId': brandId,
+        'shopId': shopId,
+        'remark': remark,
+        'details': list
+      });
+      if (response.data['code'] == 200) {
+        return true;
+      } else {
+        Get.snackbar('警告', response.data['msg']);
+        return false;
+      }
+    } catch (e) {
+      // 处理错误，例如自动重试
+      debugPrint(e.toString());
+      Get.snackbar('警告', '网络连接失败');
+      return false;
+    }
+  }
+
+  //修改盘点单
+  Future updateOnlineInventory(int id, String docmentCode, int shopId,
+      String remark, List<OnlineSingleProdInventory> list) async {
+    try {
+      final response =
+          await _httpService.post('/shop-storage/shopStorageCheck/', data: {
+        'id': id,
+        'documentCode': docmentCode,
         'shopId': shopId,
         'remark': remark,
         'details': list
@@ -208,7 +252,9 @@ class ProductRepository extends GetxService {
   //产品查询
   Future getOnlineProdList(Map form) async {
     try {
-      final response = await _httpService.post('/pm/prodCodes', data: form);
+      final response = await _httpService.post('/shop-storage/product/list',
+          queryParameters: {'page': form['page'], 'limit': form['limit']},
+          data: form);
       if (response.data['code'] == 200) {
         return response.data['data']['data'];
       } else {

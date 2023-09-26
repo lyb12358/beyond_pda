@@ -141,16 +141,14 @@ class OfflineRecordPage extends GetView<OfflineRecordController> {
                                     barrierDismissible: false);
                                 if (await uc.syncOnlineInventory(
                                     controller.inventoryList[index])) {
-                                  c.deleteOfflineInventory(
+                                  await c.deleteOfflineInventory(
                                       controller.inventoryList[index].id ?? 0);
                                   await controller.getOfflineInventoryList();
-
                                   BrnToast.show("操作成功", context);
                                 }
                                 BrnLoadingDialog.dismiss(context);
                               }, onCancel: () {
                                 Navigator.pop(context);
-                                BrnToast.show("操作失败", context);
                               });
                             }
                           },

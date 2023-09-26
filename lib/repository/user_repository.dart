@@ -34,6 +34,24 @@ class UserRepository extends GetxService {
     }
   }
 
+  Future getMenusByBrand() async {
+    try {
+      final response = await _httpService.post(
+          '/beyond-usercenter/common/getMenusByBrand',
+          data: {'systemCode': 'TerminalPlatform', 'brandId': 1});
+      if (response.data['code'] == 200) {
+        return response.data['data']['operations'];
+      } else {
+        Get.snackbar('警告', response.data['msg']);
+        throw Exception('请求失败');
+      }
+    } catch (e) {
+      // 处理错误，例如自动重试
+      debugPrint(e.toString());
+      Get.snackbar('警告', '网络连接失败');
+    }
+  }
+
   getToken() {
     GetStorage box = GetStorage();
     var token = box.read("x-token") ?? '';

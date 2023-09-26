@@ -131,7 +131,6 @@ class HoldonRecordPage extends GetView<HoldonRecordController> {
                               BrnToast.show("操作成功", context);
                             }, onCancel: () {
                               Navigator.pop(context);
-                              BrnToast.show("操作失败", context);
                             });
                           },
                         ),

@@ -35,7 +35,10 @@ class HoldonRecordController extends GetxController {
     c.currentProd.value.typeName = singleProd.typeName ?? '';
     c.currentProd.value.yearName = singleProd.yearName ?? '';
     c.currentProd.value.onlineNum = singleProd.onlineNum!;
+    c.currentProd.value.num = singleProd.num!;
+    c.currentProd.value.diffNum = singleProd.num! - singleProd.onlineNum!;
     c.inventory.value = x;
+    c.recordStatus.value = 2;
     c.manualInputController.value.text = (singleProd.num).toString();
   }
 }

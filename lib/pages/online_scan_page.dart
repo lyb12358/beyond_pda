@@ -54,38 +54,12 @@ class _MyState extends State<OnlineScanPage>
               BrnBottomButtonPanel(
                   mainButtonName: '结束',
                   mainButtonOnTap: () {
-                    BrnMiddleInputDialog(
-                        title: '确定要结束本次盘点吗',
-                        message:
-                            '盘点个数${c.codeList.length}，盘点数量${c.calTotalNum()}，系统库存${c.calTotalOnlineNum()}，差异${c.calTotalNum() - c.calTotalOnlineNum()}',
-                        hintText: '备注',
-                        cancelText: '取消',
-                        confirmText: '确定',
-                        maxLength: 100,
-                        maxLines: 2,
-                        barrierDismissible: false,
-                        textInputAction: TextInputAction.done,
-                        onConfirm: (value) async {
-                          if (await c.addOnlineInventory(value)) {
-                            Navigator.pop(context);
-                            c.resetOnlineScan();
-                            await c2.getOnlineInventoryList();
-                            BrnToast.show("录入成功", context);
-                            Get.off(() => const HistoricRecordPage());
-                          }
-                        },
-                        onCancel: () {
-                          Navigator.pop(context);
-                        }).show(context);
-                  },
-                  secondaryButtonName: '挂起',
-                  secondaryButtonOnTap: () {
                     c.remarkInputController.text =
                         c.inventory.value.remark ?? '';
                     BrnMiddleInputDialog(
-                        title: '确定要挂起本次盘点吗',
+                        title: '确定要结束本次盘点吗',
                         message:
-                            '盘点个数${c.codeList.length}，盘点数量${c.calTotalNum()}，系统库存${c.calTotalOnlineNum()}，差异${c.calTotalNum() - c.calTotalOnlineNum()}',
+                            '盘点个数${c.codeList.length}，盘点数量${c.calTotalNum()}，系统总库存${c.calTotalOnlineNum()}，差异${c.calTotalNum() - c.calTotalOnlineNum()}',
                         hintText: '备注',
                         cancelText: '取消',
                         confirmText: '确定',
@@ -95,6 +69,49 @@ class _MyState extends State<OnlineScanPage>
                         inputEditingController: c.remarkInputController,
                         textInputAction: TextInputAction.done,
                         onConfirm: (value) async {
+                          Navigator.pop(context);
+                          BrnLoadingDialog.show(context,
+                              barrierDismissible: false);
+                          await c2.getOnlineInventoryList();
+                          var x = false;
+                          if ((c.inventory.value.status ?? -1) == 0) {
+                            x = await c.updateOnlineInventory(value);
+                          } else {
+                            x = await c.addOnlineInventory(value);
+                          }
+                          if (x) {
+                            c.resetOnlineScan();
+                            BrnToast.show("录入成功", context);
+                            Get.off(() => const HistoricRecordPage());
+                          }
+                          BrnLoadingDialog.dismiss(context);
+                        },
+                        onCancel: () {
+                          Navigator.pop(context);
+                        }).show(context);
+                  },
+                  enableMainButton: (c.inventory.value.status ?? 0) == 0,
+                  enableSecondaryButton: (c.inventory.value.status ?? 0) == 0,
+                  secondaryButtonName: '挂起',
+                  secondaryButtonOnTap: () {
+                    c.remarkInputController.text =
+                        c.inventory.value.remark ?? '';
+                    BrnMiddleInputDialog(
+                        title: '确定要挂起本次盘点吗',
+                        message:
+                            '盘点个数${c.codeList.length}，盘点数量${c.calTotalNum()}，系统总库存${c.calTotalOnlineNum()}，差异${c.calTotalNum() - c.calTotalOnlineNum()}',
+                        hintText: '备注',
+                        cancelText: '取消',
+                        confirmText: '确定',
+                        maxLength: 100,
+                        maxLines: 2,
+                        barrierDismissible: false,
+                        inputEditingController: c.remarkInputController,
+                        textInputAction: TextInputAction.done,
+                        onConfirm: (value) async {
+                          Navigator.pop(context);
+                          BrnLoadingDialog.show(context,
+                              barrierDismissible: false);
                           if (await c.putHoldonInventory(value)) {
                             Navigator.pop(context);
                             c.resetOnlineScan();
@@ -102,6 +119,7 @@ class _MyState extends State<OnlineScanPage>
                             BrnToast.show("挂起成功", context);
                             Get.off(() => const HoldonRecordPage());
                           }
+                          BrnLoadingDialog.dismiss(context);
                         },
                         onCancel: () {
                           Navigator.pop(context);

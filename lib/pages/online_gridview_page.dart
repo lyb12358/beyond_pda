@@ -156,6 +156,7 @@ class OnlineGridviewPage extends StatelessWidget {
                   checkShopDialog.show();
                 } else {
                   BrnLoadingDialog.show(context, barrierDismissible: false);
+                  await c.getOnlineInventory();
                   await c2.getOnlineInventoryList();
                   Get.to(() => const HistoricRecordPage());
                   BrnLoadingDialog.dismiss(context);

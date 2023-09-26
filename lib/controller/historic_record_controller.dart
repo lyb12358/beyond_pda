@@ -1,6 +1,7 @@
 import 'package:beyond_pda/models/inventory.dart';
 import 'package:get/get.dart';
 
+import '../models/product_data.dart';
 import '../repository/product_repository.dart';
 import 'user_controller.dart';
 
@@ -61,5 +62,69 @@ class HistoricRecordController extends GetxController {
       default:
         return '未知';
     }
+  }
+
+  restoreScan(int id) async {
+    var inventoryMap = await _productRepository.getOnlineInventoryDetail(id);
+    var x = Inventory();
+    x.shopId = inventoryMap['shopId'];
+    x.userId = inventoryMap['createUser'];
+    x.documentCode = inventoryMap['documentCode'];
+    x.documentId = inventoryMap['id'];
+    x.checkTime = inventoryMap['checkTime'];
+    x.createTime = inventoryMap['createTime'];
+    x.prodTotal = inventoryMap['prodTotal'];
+    x.status = inventoryMap['status'];
+    x.total = inventoryMap['total'];
+    x.remark = inventoryMap['remark'];
+    var codes = (inventoryMap['details'] as List<dynamic>).map((e) {
+      return e['prodCode'];
+    }).toList();
+    var prods = <ProductData>[];
+    for (var element in codes) {
+      prods.add(
+          await _productRepository.getSingleProd(element) ?? ProductData());
+    }
+    x.inventoryList = (inventoryMap['details'] as List<dynamic>).map((e) {
+      var spd = OnlineSingleProdInventory();
+      var sp = ProductData();
+      sp = prods.firstWhere((element) => element.prodCode == e['prodCode']);
+      spd.prodCode = e['prodCode'];
+      spd.prodName = sp.prodName ?? '';
+      spd.catName = sp.catName ?? '';
+      spd.speName = sp.speName ?? '';
+      spd.codeThumbnail = sp.codeThumbnail ?? '';
+      spd.styleId = sp.styleId ?? 0;
+      spd.codeId = sp.codeId ?? 0;
+      spd.styleThumbnail = sp.styleThumbnail ?? '';
+      spd.typeName = sp.typeName ?? '';
+      spd.yearName = sp.yearName ?? '';
+      spd.num = e['num']!;
+      spd.onlineNum = e['prodCount'] ??
+          c.onlineInventoryList
+              .firstWhere((element) => element.prodCode == e['prodCode'])
+              .onlineNum;
+      spd.diffNum = spd.num! - spd.onlineNum!;
+      return spd;
+    }).toList();
+    c.codeList.value = [];
+    c.codeList.addAll(x.inventoryList!);
+    var singleProd = c.codeList[0];
+    c.currentProd.value.prodCode = singleProd.prodCode ?? '';
+    c.currentProd.value.prodName = singleProd.prodName ?? '';
+    c.currentProd.value.catName = singleProd.catName ?? '';
+    c.currentProd.value.speName = singleProd.speName ?? '';
+    c.currentProd.value.codeThumbnail = singleProd.codeThumbnail ?? '';
+    c.currentProd.value.styleId = singleProd.styleId ?? 0;
+    c.currentProd.value.codeId = singleProd.codeId ?? 0;
+    c.currentProd.value.styleThumbnail = singleProd.styleThumbnail ?? '';
+    c.currentProd.value.typeName = singleProd.typeName ?? '';
+    c.currentProd.value.yearName = singleProd.yearName ?? '';
+    c.currentProd.value.onlineNum = singleProd.onlineNum!;
+    c.currentProd.value.num = singleProd.num!;
+    c.currentProd.value.diffNum = singleProd.num! - singleProd.onlineNum!;
+    c.inventory.value = x;
+    c.recordStatus.value = 3;
+    c.manualInputController.value.text = (singleProd.num).toString();
   }
 }

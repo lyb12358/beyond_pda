@@ -7,7 +7,7 @@ import '../repository/product_repository.dart';
 class OfflineRecordController extends GetxController {
   OfflineScanController c = Get.find();
   late ProductRepository _productRepository;
-  final inventoryList = <Inventory>[].obs;
+  final inventoryList = [].obs;
   @override
   void onInit() async {
     super.onInit();

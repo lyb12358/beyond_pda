@@ -17,6 +17,11 @@ class ProdQueryPage extends GetView<ProdQueryController> {
     Map<String, String> headersMap = {
       'Cookie': 'x-token=${box.read("x-token")}'
     };
+    var isSupply = (c.operations.firstWhere((element) =>
+                element['operationType'] ==
+                'productList:view')['columnPermissions'] ??
+            [])
+        .any((element) => element['columnName'] == 'supplyPrice');
     return Obx(() => Scaffold(
           body: controller.prodList.isEmpty
               ? Center(
@@ -130,9 +135,12 @@ class ProdQueryPage extends GetView<ProdQueryController> {
                                         style: TextStyle(
                                           fontSize: 16,
                                         )),
-                                    valuePart: Text(controller.prodList[index]
-                                            ['supplyPrice']
-                                        .toString())),
+                                    valuePart: Visibility(
+                                      visible: !isSupply,
+                                      child: Text(controller.prodList[index]
+                                              ['supplyPrice']
+                                          .toString()),
+                                    )),
                               ],
                             ),
                           ),
