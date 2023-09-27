@@ -169,22 +169,39 @@ class InventoryQueryPage extends GetView<InventoryQueryController> {
                   messageWidget: Column(
                     children: [
                       BrnTextInputFormItem(
-                        //controller: TextEditingController()..text = "300",
+                        controller: controller.codeCtrl.value,
                         title: "编号",
                         hint: "请输入",
                         onChanged: (newValue) {},
                       ),
                       BrnTextInputFormItem(
-                        //controller: TextEditingController()..text = "300",
+                        controller: controller.nameCtrl.value,
                         title: "名称",
                         hint: "请输入",
                         onChanged: (newValue) {},
                       ),
+                      BrnRadioInputFormItem(
+                        title: "隐藏零库存",
+                        options: [
+                          "是",
+                          "否",
+                        ],
+                        value: controller.prodCountStatusLabel.value,
+                        onChanged: (oldValue, newValue) {
+                          controller.checkStatus(newValue);
+                        },
+                      ),
                     ],
-                  ), onConfirm: () {
+                  ), onConfirm: () async {
                 Navigator.pop(context);
-              }, onCancel: () {
+                BrnLoadingDialog.show(context, barrierDismissible: false);
+                await controller.inventoryQuery();
+                BrnLoadingDialog.dismiss(context);
+              }, onCancel: () async {
                 Navigator.pop(context);
+                BrnLoadingDialog.show(context, barrierDismissible: false);
+                await controller.resetForm();
+                BrnLoadingDialog.dismiss(context);
               });
             },
           ),

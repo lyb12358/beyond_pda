@@ -11,8 +11,9 @@ import 'package:beyond_pda/pages/unknown.dart';
 import 'package:beyond_pda/service/http_service.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
 import 'controller/offline_record_controller.dart';
+
+//import 'package:bot_toast/bot_toast.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
     Get.put(UserController());
     Get.put(OfflineScanController());
     Get.put(OfflineRecordController());
+    //final botToastBuilder = BotToastInit();
     return GetMaterialApp(
       initialRoute: '/',
       getPages: routes,
@@ -77,6 +79,14 @@ class MyApp extends StatelessWidget {
       locale: const Locale('zh'),
       translations: MyTranslations(),
       builder: EasyLoading.init(),
+      // builder: (BuildContext context, Widget? child) {
+      //   // 1.调用BotToastInit
+      //   child = botToastBuilder(context, child);
+      //   EasyLoading.init();
+      //   return child;
+      // },
+      //2. registered route observer
+      //navigatorObservers: [BotToastNavigatorObserver()],
       debugShowCheckedModeBanner: false,
     );
   }

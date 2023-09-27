@@ -124,11 +124,12 @@ class HoldonRecordPage extends GetView<HoldonRecordController> {
                                   barrierDismissible: false);
                               if (await c.syncOnlineInventory(
                                   controller.inventoryList[index])) {
-                                c.deleteHoldonInventory(
+                                await c.deleteHoldonInventory(
                                     controller.inventoryList[index].id ?? 0);
+                                await controller.getHoldonInventoryList();
+                                BrnToast.show("操作成功", context);
                               }
                               BrnLoadingDialog.dismiss(context);
-                              BrnToast.show("操作成功", context);
                             }, onCancel: () {
                               Navigator.pop(context);
                             });

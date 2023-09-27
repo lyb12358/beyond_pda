@@ -307,7 +307,7 @@ class UserController extends GetxController {
     recordStatus.value = 1;
   }
 
-  //计算图片地址
+  //pm计算图片地址
   String calImageUrl(OnlineSingleProdInventory prod) {
     String baseLocation = tempBaseUrl;
     String codeLocation = "/image/code/";
@@ -325,7 +325,7 @@ class UserController extends GetxController {
     }
   }
 
-  //计算图片地址(map)
+  //pm计算图片地址(map)
   String calImageUrlByMap(Map prod) {
     String baseLocation = tempBaseUrl;
     String codeLocation = "/image/code/";

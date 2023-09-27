@@ -10,26 +10,43 @@ class ProdQueryController extends GetxController {
 
   final prodList = [].obs;
   final searchForm = {}.obs;
+  final page = 1.obs;
+  final limit = 10.obs;
+  final prodClass = [].obs;
   //搜索框
-  final prodCode = ''.obs;
-  final prodName = ''.obs;
   final codeCtrl = TextEditingController().obs;
   final nameCtrl = TextEditingController().obs;
+  final yearCtrl = TextEditingController().obs;
 
   @override
   void onInit() async {
     super.onInit();
     _productRepository = Get.find();
-    searchForm['page'] = 1;
-    searchForm['row'] = 10;
-    await getOnlineProdList();
+    //prodClass.value = await _productRepository.getProdClass();
   }
 
   //产品查询
   Future<void> getOnlineProdList() async {
+    searchForm['page'] = page.value;
+    searchForm['limit'] = limit.value;
+    searchForm['prodCode'] = codeCtrl.value.text;
+    searchForm['prodName'] = nameCtrl.value.text;
+    searchForm['yearName'] = yearCtrl.value.text;
+    searchForm.refresh();
     var listDynamic = await _productRepository.getOnlineProdList(searchForm);
     prodList.value = (listDynamic as List<dynamic>).map((e) {
       return e;
     }).toList();
+  }
+
+  resetForm() async {
+    codeCtrl.value.text = '';
+    nameCtrl.value.text = '';
+    yearCtrl.value.text = '';
+    page.value = 1;
+    limit.value = 10;
+    searchForm.value = {};
+    searchForm.refresh();
+    await getOnlineProdList();
   }
 }

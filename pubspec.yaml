@@ -54,6 +54,26 @@ dependencies:
   simple_animations: ^5.0.2
   bruno: ^3.4.2
   intl: ^0.18.1
+  # 路由管理 https://pub.flutter-io.cn/packages/fluro
+  fluro: ^2.0.5
+  # flustars很久不维护，可以使用这个替代 https://pub.flutter-io.cn/packages/flustars_flutter3
+  flustars_flutter3: ^3.0.0
+  # 加密 https://pub.flutter-io.cn/packages/encrypt
+  encrypt: ^5.0.1
+  # 获取版本信息 https://pub.flutter-io.cn/packages/package_info_plus
+  package_info_plus: ^4.0.2
+  # 下拉刷新(flutter_easyrefresh 3.0版本) https://pub.flutter-io.cn/packages/easy_refresh
+  easy_refresh: ^3.3.2+1
+  # 加载动画 https://pub.flutter-io.cn/packages/flutter_spinkit
+  flutter_spinkit: ^5.2.0
+  # 加载框 https://pub.flutter-io.cn/packages/bot_toast
+  bot_toast: ^4.0.4
+  # webview https://pub.flutter-io.cn/packages/webview_flutter
+  webview_flutter: ^4.2.2
+  # 状态管理 https://pub.flutter-io.cn/packages/provider
+  provider: ^6.0.5
+  # 监测网络状态 https://pub.flutter-io.cn/packages/connectivity_plus
+  connectivity_plus: ^4.0.1
 
 dev_dependencies:
   change_app_package_name: ^1.1.0

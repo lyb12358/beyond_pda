@@ -54,7 +54,7 @@ class ProdQueryPage extends GetView<ProdQueryController> {
                         subtitle: Text(
                             '编号：${controller.prodList[index]['prodCode']!}'),
                         leading: Image.network(
-                          c.calImageUrlByMap(controller.prodList[index]),
+                          controller.prodList[index]['thumbnail']!,
                           headers: headersMap,
                           fit: BoxFit.cover,
                         ),
@@ -101,6 +101,15 @@ class ProdQueryPage extends GetView<ProdQueryController> {
                                         )),
                                     valuePart: Text(controller.prodList[index]
                                             ['catName'] ??
+                                        '')),
+                                BrnInfoModal(
+                                    keyPart: Text('规格:',
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        )),
+                                    valuePart: Text(controller.prodList[index]
+                                            ['speName'] ??
                                         '')),
                                 BrnInfoModal(
                                     keyPart: Text('材质:',
@@ -161,20 +170,38 @@ class ProdQueryPage extends GetView<ProdQueryController> {
                         controller: controller.codeCtrl.value,
                         title: "编号",
                         hint: "请输入",
+                        maxCharCount: 50,
                         onChanged: (newValue) {},
                       ),
                       BrnTextInputFormItem(
                         controller: controller.nameCtrl.value,
                         title: "名称",
                         hint: "请输入",
+                        maxCharCount: 50,
                         onChanged: (newValue) {},
                       ),
+                      BrnTextInputFormItem(
+                        controller: controller.yearCtrl.value,
+                        title: "年份",
+                        hint: "请输入",
+                        maxCharCount: 4,
+                        onChanged: (newValue) {},
+                      ),
+                      // BrnIconButton(
+                      //     name: '分类',
+                      //     direction: Direction.left,
+                      //     iconWidget: Icon(
+                      //       Icons.format_list_bulleted,
+                      //     ),
+                      //     onTap: () {}),
+                      // Text('${controller.prodClass.length}'),
                     ],
-                  ), onConfirm: () {
+                  ), onConfirm: () async {
                 Navigator.pop(context);
-                controller.getOnlineProdList();
-              }, onCancel: () {
+                await controller.getOnlineProdList();
+              }, onCancel: () async {
                 Navigator.pop(context);
+                await controller.resetForm();
               });
             },
           ),
