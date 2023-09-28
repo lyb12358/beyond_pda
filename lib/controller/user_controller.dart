@@ -60,6 +60,12 @@ class UserController extends GetxController {
     try {
       final userInfo = await _userRepository.getUserInfo();
       operations.value = await _userRepository.getMenusByBrand();
+      //如果只有一家门店，默认选择
+      var spList = [];
+      spList = await getShopList();
+      if (spList.length == 1) {
+        chooseShop(spList[0]);
+      }
       // debugPrint((operations.firstWhere((element) =>
       //             element['operationType'] ==
       //             'directInventory:view')['columnPermissions'] ??
@@ -98,6 +104,19 @@ class UserController extends GetxController {
   getShopList() async {
     String xx = box.read('workCode') ?? '';
     return await _userRepository.getShopList(xx);
+  }
+
+  void chooseShop(Map map) {
+    brandId.value = map['brandId'];
+    box.write('brandId', map['brandId']);
+    departId.value = map['departId'];
+    box.write('departId', map['departId']);
+    shopId.value = map['id'];
+    box.write('shopId', map['id']);
+    shopNo.value = map['shopNo'];
+    box.write('shopNo', map['shopNo']);
+    shopName.value = map['shopName'];
+    box.write('shopName', map['shopName']);
   }
 
   updatePdaData() async {

@@ -1,4 +1,5 @@
 import 'package:beyond_pda/controller/user_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -7,6 +8,9 @@ class ChooseShopController extends GetxController {
   GetStorage box = GetStorage();
   late UserController c;
 
+  //搜索框
+  final spCtrl = TextEditingController().obs;
+
   @override
   void onInit() async {
     super.onInit();
@@ -14,16 +18,15 @@ class ChooseShopController extends GetxController {
     shopList.value = await c.getShopList();
   }
 
-  void chooseShop(Map map) {
-    c.brandId.value = map['brandId'];
-    box.write('brandId', map['brandId']);
-    c.departId.value = map['departId'];
-    box.write('departId', map['departId']);
-    c.shopId.value = map['id'];
-    box.write('shopId', map['id']);
-    c.shopNo.value = map['shopNo'];
-    box.write('shopNo', map['shopNo']);
-    c.shopName.value = map['shopName'];
-    box.write('shopName', map['shopName']);
+  filterShop() {
+    shopList.value = shopList.where((element) {
+      return ((element['shopName']).contains(spCtrl.value.text) ||
+          (element['shopNo']).contains(spCtrl.value.text));
+    }).toList();
+  }
+
+  resetForm() async {
+    spCtrl.value.text = '';
+    shopList.value = await c.getShopList();
   }
 }

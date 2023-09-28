@@ -1,5 +1,6 @@
 import 'package:beyond_pda/controller/offline_scan_controller.dart';
 import 'package:beyond_pda/repository/product_repository.dart';
+import 'package:bruno/bruno.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -9,6 +10,7 @@ import 'package:beyond_pda/repository/user_repository.dart';
 import 'package:beyond_pda/routes.dart';
 import 'package:beyond_pda/pages/unknown.dart';
 import 'package:beyond_pda/service/http_service.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'controller/offline_record_controller.dart';
@@ -40,6 +42,18 @@ class MyApp extends StatelessWidget {
     Get.put(OfflineRecordController());
     //final botToastBuilder = BotToastInit();
     return GetMaterialApp(
+      // 新增
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        BrnLocalizationDelegate.delegate,
+      ],
+      // 新增
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('zh', 'CN'),
+      ],
       initialRoute: '/',
       getPages: routes,
       unknownRoute:
