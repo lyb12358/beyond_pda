@@ -158,6 +158,76 @@ class OfflineRecordPage extends GetView<OfflineRecordController> {
                   ],
                 );
               }),
+          floatingActionButton: FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () {
+              BrnDialogManager.showConfirmDialog(context,
+                  title: "单据搜索",
+                  cancel: '重置',
+                  confirm: '搜索',
+                  messageWidget: Column(
+                    children: [
+                      BrnIconButton(
+                          name: '时间',
+                          direction: Direction.left,
+                          iconWidget: Icon(
+                            Icons.schedule,
+                          ),
+                          onTap: () {
+                            DateTime currentTime = DateTime.now();
+                            String format = 'MM月-dd日';
+                            String MIN_DATETIME =
+                                '${currentTime.year}-01-01 00:00:00';
+                            String MAX_DATETIME =
+                                '${currentTime.year}-12-31 23:59:59';
+                            BrnPickerTitleConfig pickerTitleConfig =
+                                BrnPickerTitleConfig(titleContent: "选择时间范围");
+                            BrnDateRangePicker.showDatePicker(
+                              context,
+                              isDismissible: false,
+                              minDateTime: DateTime.parse(MIN_DATETIME),
+                              maxDateTime: DateTime.parse(MAX_DATETIME),
+                              pickerMode: BrnDateTimeRangePickerMode.date,
+                              pickerTitleConfig: pickerTitleConfig,
+                              dateFormat: format,
+                              initialStartDateTime: DateTime(
+                                  currentTime.year,
+                                  currentTime.month,
+                                  currentTime.day,
+                                  0,
+                                  00,
+                                  00),
+                              initialEndDateTime: DateTime(
+                                  currentTime.year,
+                                  currentTime.month,
+                                  currentTime.day,
+                                  0,
+                                  00,
+                                  00),
+                              onConfirm: (startDateTime, endDateTime, startlist,
+                                  endlist) {
+                                controller.changeTime(
+                                    startDateTime, endDateTime);
+                              },
+                            );
+                          }),
+                      BrnTextInputFormItem(
+                        isEdit: false,
+                        controller: controller.timeCtrl.value,
+                        maxCharCount: 100,
+                        hint: "",
+                        onChanged: (newValue) {},
+                      ),
+                    ],
+                  ), onConfirm: () async {
+                Navigator.pop(context);
+                await controller.filterInventory();
+              }, onCancel: () async {
+                Navigator.pop(context);
+                await controller.resetForm();
+              });
+            },
+          ),
         ));
   }
 }

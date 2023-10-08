@@ -9,7 +9,10 @@ import '../repository/product_repository.dart';
 
 class OfflineScanController extends GetxController {
   final codeList = <OnlineSingleProdInventory>[].obs;
+  final filteredCodeList = <OnlineSingleProdInventory>[].obs;
   final inventory = Inventory().obs;
+  //扫码界面搜索框
+  final searchCtrl = TextEditingController().obs;
   //数量框
   final countInputController = TextEditingController();
   //备注框
@@ -22,6 +25,7 @@ class OfflineScanController extends GetxController {
   void onInit() async {
     super.onInit();
     _productRepository = Get.find();
+    //ever(codeList, (_) => filterList());
   }
 
   Future<void> addCode(String code) async {
@@ -36,6 +40,17 @@ class OfflineScanController extends GetxController {
       spd.prodCode = code;
       spd.prodName = name;
       spd.num = 1;
+    }
+    //check visible
+    if (searchCtrl.value.text.isNotEmpty) {
+      if ((spd.prodCode!).contains(searchCtrl.value.text) ||
+          (spd.prodName ?? '').contains(searchCtrl.value.text)) {
+        spd.visible = true;
+      } else {
+        spd.visible = false;
+      }
+    } else {
+      spd.visible = true;
     }
     codeList.insert(0, spd);
   }
@@ -86,7 +101,47 @@ class OfflineScanController extends GetxController {
   }
 
   resetOfflineScan() {
+    searchCtrl.value.text = '';
     codeList.value = [];
     inventory.value = Inventory();
+  }
+
+  // filterList() {
+  //   if (searchCtrl.value.text.isNotEmpty) {
+  //     filteredCodeList.value = codeList.where((element) {
+  //       return ((element.prodCode!).contains(searchCtrl.value.text) ||
+  //           (element.prodName ?? '').contains(searchCtrl.value.text));
+  //     }).toList();
+  //   } else {
+  //     filteredCodeList.value = codeList;
+  //   }
+  // }
+
+  // resetSearch() {
+  //   searchCtrl.value.text = '';
+  //   filterList();
+  // }
+  filterList() {
+    if (searchCtrl.value.text.isNotEmpty) {
+      codeList.value = codeList.map((element) {
+        if ((element.prodCode!).contains(searchCtrl.value.text) ||
+            (element.prodName ?? '').contains(searchCtrl.value.text)) {
+          element.visible = true;
+        } else {
+          element.visible = false;
+        }
+        return element;
+      }).toList();
+    } else {
+      codeList.value = codeList.map((element) {
+        element.visible = true;
+        return element;
+      }).toList();
+    }
+  }
+
+  resetSearch() {
+    searchCtrl.value.text = '';
+    filterList();
   }
 }

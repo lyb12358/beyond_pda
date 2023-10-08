@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../repository/product_repository.dart';
+import 'user_controller.dart';
 
 class InventoryQueryController extends GetxController {
   late ProductRepository _productRepository;
-
+  UserController c = Get.find();
   final inventoryList = [].obs;
   final searchForm = {}.obs;
   final page = 1.obs;
@@ -15,12 +16,13 @@ class InventoryQueryController extends GetxController {
   //搜索框
   final codeCtrl = TextEditingController().obs;
   final nameCtrl = TextEditingController().obs;
-  final prodCountStatusLabel = '否'.obs;
+  final prodCountStatusLabel = '是'.obs;
 
   @override
   void onInit() async {
     super.onInit();
     _productRepository = Get.find();
+    await checkShop();
   }
 
   //库存查询
@@ -56,6 +58,16 @@ class InventoryQueryController extends GetxController {
     } else {
       prodCountStatus.value = 2;
       prodCountStatusLabel.value = '否';
+    }
+  }
+
+  checkShop() async {
+    if (c.shopId.value != 0) {
+      searchForm['departId'] = c.departId.value;
+      var x = [];
+      x.add(c.shopId.value);
+      searchForm['shopIds'] = x;
+      await inventoryQuery();
     }
   }
 }

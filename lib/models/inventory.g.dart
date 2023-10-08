@@ -1997,8 +1997,13 @@ const OnlineSingleProdInventorySchema = Schema(
       name: r'typeName',
       type: IsarType.string,
     ),
-    r'yearName': PropertySchema(
+    r'visible': PropertySchema(
       id: 12,
+      name: r'visible',
+      type: IsarType.bool,
+    ),
+    r'yearName': PropertySchema(
+      id: 13,
       name: r'yearName',
       type: IsarType.string,
     )
@@ -2084,7 +2089,8 @@ void _onlineSingleProdInventorySerialize(
   writer.writeLong(offsets[9], object.styleId);
   writer.writeString(offsets[10], object.styleThumbnail);
   writer.writeString(offsets[11], object.typeName);
-  writer.writeString(offsets[12], object.yearName);
+  writer.writeBool(offsets[12], object.visible);
+  writer.writeString(offsets[13], object.yearName);
 }
 
 OnlineSingleProdInventory _onlineSingleProdInventoryDeserialize(
@@ -2106,7 +2112,8 @@ OnlineSingleProdInventory _onlineSingleProdInventoryDeserialize(
   object.styleId = reader.readLongOrNull(offsets[9]);
   object.styleThumbnail = reader.readStringOrNull(offsets[10]);
   object.typeName = reader.readStringOrNull(offsets[11]);
-  object.yearName = reader.readStringOrNull(offsets[12]);
+  object.visible = reader.readBoolOrNull(offsets[12]);
+  object.yearName = reader.readStringOrNull(offsets[13]);
   return object;
 }
 
@@ -2142,6 +2149,8 @@ P _onlineSingleProdInventoryDeserializeProp<P>(
     case 11:
       return (reader.readStringOrNull(offset)) as P;
     case 12:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 13:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -3608,6 +3617,34 @@ extension OnlineSingleProdInventoryQueryFilter on QueryBuilder<
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'typeName',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
+      QAfterFilterCondition> visibleIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'visible',
+      ));
+    });
+  }
+
+  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
+      QAfterFilterCondition> visibleIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'visible',
+      ));
+    });
+  }
+
+  QueryBuilder<OnlineSingleProdInventory, OnlineSingleProdInventory,
+      QAfterFilterCondition> visibleEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'visible',
+        value: value,
       ));
     });
   }

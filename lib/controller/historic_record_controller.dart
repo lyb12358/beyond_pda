@@ -1,5 +1,7 @@
 import 'package:beyond_pda/models/inventory.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../models/product_data.dart';
 import '../repository/product_repository.dart';
@@ -10,6 +12,15 @@ class HistoricRecordController extends GetxController {
   late ProductRepository _productRepository;
   final inventoryList = <Inventory>[].obs;
   final operationLogList = [].obs;
+  //搜索框
+  final idCtrl = TextEditingController().obs;
+  final remarkCtrl = TextEditingController().obs;
+  final timeCtrl = TextEditingController().obs;
+  final statusCtrl = TextEditingController().obs;
+  final startTime = ''.obs;
+  final endTime = ''.obs;
+  final status = 5.obs;
+
   @override
   void onInit() async {
     super.onInit();
@@ -126,5 +137,62 @@ class HistoricRecordController extends GetxController {
     c.inventory.value = x;
     c.recordStatus.value = 3;
     c.manualInputController.value.text = (singleProd.num).toString();
+  }
+
+  filterInventory() {
+    inventoryList.value = inventoryList.where((element) {
+      return (idCtrl.value.text.isNotEmpty
+              ? (element.documentCode!).toString().contains(idCtrl.value.text)
+              : true) &&
+          (remarkCtrl.value.text.isNotEmpty
+              ? (element.remark ?? '').contains(remarkCtrl.value.text)
+              : true) &&
+          (status.value != 5 ? (element.status!) == status.value : true) &&
+          (startTime.value.isNotEmpty
+              ? DateTime.parse(element.createTime!)
+                  .isAfter(DateTime.parse(startTime.value))
+              : true) &&
+          (endTime.value.isNotEmpty
+              ? DateTime.parse(element.createTime!)
+                  .isBefore(DateTime.parse(endTime.value))
+              : true);
+    }).toList();
+  }
+
+  resetForm() async {
+    idCtrl.value.text = '';
+    remarkCtrl.value.text = '';
+    timeCtrl.value.text = '';
+    startTime.value = '';
+    endTime.value = '';
+    statusCtrl.value.text = '';
+    status.value = 5;
+    getOnlineInventoryList();
+  }
+
+  changeTime(x, y) {
+    startTime.value = DateFormat('yyyy-MM-dd').format(x);
+    endTime.value = DateFormat('yyyy-MM-dd').format(y);
+    timeCtrl.value.text = '${startTime.value}~${endTime.value}';
+  }
+
+  changeSatatus(x) {
+    status.value = checkStatusReverse(x);
+    statusCtrl.value.text = x;
+  }
+
+  checkStatusReverse(String statusName) {
+    switch (statusName) {
+      case '录入中':
+        return 0;
+      case '已盘点':
+        return 1;
+      case '已作废':
+        return 2;
+      case '已确认':
+        return 3;
+      default:
+        return 5;
+    }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:isar/isar.dart';
 part 'inventory.g.dart';
 
@@ -53,6 +55,8 @@ class OnlineSingleProdInventory {
   int? num;
   int? onlineNum;
   int? diffNum;
+  //是否可见
+  bool? visible;
 
   // OnlineSingleProdInventory(
   //     this.code,
@@ -79,6 +83,7 @@ class OnlineSingleProdInventory {
       'num': num,
       'onlineNum': onlineNum,
       'diffNum': diffNum,
+      'visible': visible,
     };
   }
 }
