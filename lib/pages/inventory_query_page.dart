@@ -3,6 +3,7 @@ import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sm_scan/shangmi_util.dart';
 
 import '../controller/user_controller.dart';
 
@@ -160,29 +161,46 @@ class InventoryQueryPage extends GetView<InventoryQueryController> {
                     );
                   }),
           floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add),
+            child: const Icon(Icons.search_outlined),
             onPressed: () {
+              ShangMiScanUtil().listen((value) {
+                debugPrint("库存查询快捷编号输入");
+                controller.codeCtrl.value.text = value;
+              });
               BrnDialogManager.showConfirmDialog(context,
                   title: "库存搜索",
                   cancel: '重置',
                   confirm: '搜索',
+                  barrierDismissible: false,
                   messageWidget: Column(
                     children: [
                       BrnTextInputFormItem(
                         controller: controller.codeCtrl.value,
-                        title: "编号",
+                        title: "产品编号",
                         hint: "请输入",
                         onChanged: (newValue) {},
                       ),
                       BrnTextInputFormItem(
                         controller: controller.nameCtrl.value,
-                        title: "名称",
+                        title: "产品名称",
+                        hint: "请输入",
+                        onChanged: (newValue) {},
+                      ),
+                      BrnTextInputFormItem(
+                        controller: controller.spCodeCtrl.value,
+                        title: "门店编号",
+                        hint: "请输入",
+                        onChanged: (newValue) {},
+                      ),
+                      BrnTextInputFormItem(
+                        controller: controller.spNameCtrl.value,
+                        title: "门店名称",
                         hint: "请输入",
                         onChanged: (newValue) {},
                       ),
                       BrnRadioInputFormItem(
                         title: "隐藏零库存",
-                        options: [
+                        options: const [
                           "是",
                           "否",
                         ],
@@ -197,11 +215,13 @@ class InventoryQueryPage extends GetView<InventoryQueryController> {
                 BrnLoadingDialog.show(context, barrierDismissible: false);
                 await controller.inventoryQuery();
                 BrnLoadingDialog.dismiss(context);
+                ShangMiScanUtil().cancel();
               }, onCancel: () async {
                 Navigator.pop(context);
                 BrnLoadingDialog.show(context, barrierDismissible: false);
                 await controller.resetForm();
                 BrnLoadingDialog.dismiss(context);
+                ShangMiScanUtil().cancel();
               });
             },
           ),

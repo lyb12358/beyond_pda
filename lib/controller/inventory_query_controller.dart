@@ -10,12 +10,14 @@ class InventoryQueryController extends GetxController {
   final inventoryList = [].obs;
   final searchForm = {}.obs;
   final page = 1.obs;
-  final limit = 10.obs;
+  final limit = 50.obs;
   final prodCountStatus = 3.obs;
   final prodClass = [].obs;
   //搜索框
   final codeCtrl = TextEditingController().obs;
   final nameCtrl = TextEditingController().obs;
+  final spCodeCtrl = TextEditingController().obs;
+  final spNameCtrl = TextEditingController().obs;
   final prodCountStatusLabel = '是'.obs;
 
   @override
@@ -32,6 +34,8 @@ class InventoryQueryController extends GetxController {
     searchForm['prodCountStatus'] = prodCountStatus.value;
     searchForm['prodCode'] = codeCtrl.value.text;
     searchForm['prodName'] = nameCtrl.value.text;
+    searchForm['shopCode'] = spCodeCtrl.value.text;
+    searchForm['shopName'] = spNameCtrl.value.text;
     searchForm.refresh();
     var listDynamic = await _productRepository.inventoryQuery(searchForm);
     inventoryList.value = (listDynamic as List<dynamic>).map((e) {
@@ -42,10 +46,12 @@ class InventoryQueryController extends GetxController {
   resetForm() async {
     codeCtrl.value.text = '';
     nameCtrl.value.text = '';
+    spCodeCtrl.value.text = '';
+    spNameCtrl.value.text = '';
     prodCountStatus.value = 3;
     prodCountStatusLabel.value = '是';
     page.value = 1;
-    limit.value = 10;
+    limit.value = 50;
     searchForm.value = {};
     searchForm.refresh();
     await inventoryQuery();

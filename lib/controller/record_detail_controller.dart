@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'user_controller.dart';
@@ -6,6 +7,10 @@ class RecordDetailController extends GetxController {
   UserController c = Get.find();
   final totalNum = 0.obs;
   final totalOnlineNum = 0.obs;
+  //搜索框
+  final cnCtrl = TextEditingController().obs;
+  final isDiff = false.obs;
+  final isDiffLabel = '否'.obs;
   @override
   void onInit() async {
     super.onInit();
@@ -39,5 +44,46 @@ class RecordDetailController extends GetxController {
       default:
         return '未知标题';
     }
+  }
+
+  checkStatus(val) {
+    if (val == '是') {
+      isDiff.value = true;
+      isDiffLabel.value = '是';
+    } else {
+      isDiff.value = false;
+      isDiffLabel.value = '否';
+    }
+  }
+
+  filterList() {
+    if (cnCtrl.value.text.isNotEmpty) {
+      c.codeList.value = c.codeList.map((element) {
+        if (((element.prodCode!).contains(cnCtrl.value.text) ||
+                (element.prodName ?? '').contains(cnCtrl.value.text)) &&
+            (isDiff.value ? (element.diffNum! != 0) : true)) {
+          element.visible = true;
+        } else {
+          element.visible = false;
+        }
+        return element;
+      }).toList();
+    } else {
+      c.codeList.value = c.codeList.map((element) {
+        if (isDiff.value ? (element.diffNum! != 0) : true) {
+          element.visible = true;
+        } else {
+          element.visible = false;
+        }
+        return element;
+      }).toList();
+    }
+  }
+
+  resetSearch() {
+    cnCtrl.value.text = '';
+    isDiff.value = false;
+    isDiffLabel.value = '否';
+    filterList();
   }
 }

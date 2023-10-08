@@ -305,7 +305,7 @@ class HistoricRecordPage extends GetView<HistoricRecordController> {
                 );
               }),
           floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add),
+            child: const Icon(Icons.search_outlined),
             onPressed: () {
               BrnDialogManager.showConfirmDialog(context,
                   title: "历史盘点搜索",

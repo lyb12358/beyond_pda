@@ -1,4 +1,5 @@
 import 'package:beyond_pda/controller/user_controller.dart';
+import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,18 +12,19 @@ class ProdQueryController extends GetxController {
   final prodList = [].obs;
   final searchForm = {}.obs;
   final page = 1.obs;
-  final limit = 10.obs;
-  final prodClass = [].obs;
+  final limit = 50.obs;
+  final prodClass = BrnPickerEntity();
   //搜索框
   final codeCtrl = TextEditingController().obs;
   final nameCtrl = TextEditingController().obs;
   final yearCtrl = TextEditingController().obs;
+  final classCtrl = TextEditingController().obs;
 
   @override
   void onInit() async {
     super.onInit();
     _productRepository = Get.find();
-    //prodClass.value = await _productRepository.getProdClass();
+    await getProdClass();
   }
 
   //产品查询
@@ -43,10 +45,52 @@ class ProdQueryController extends GetxController {
     codeCtrl.value.text = '';
     nameCtrl.value.text = '';
     yearCtrl.value.text = '';
+    classCtrl.value.text = '';
     page.value = 1;
-    limit.value = 10;
+    limit.value = 50;
     searchForm.value = {};
     searchForm.refresh();
     await getOnlineProdList();
+  }
+
+  //获取类别树
+  Future<void> getProdClass() async {
+    var listDynamic = await _productRepository.getProdClass();
+    // prodClass.uniqueId = '0';
+    prodClass.value = '0';
+    // prodClass.defaultValue = '';
+    prodClass.type = 'radio';
+    //prodClass.filterType = PickerFilterType.radio;
+    prodClass.key = '0';
+    prodClass.name = 'xx';
+    prodClass.children = [
+      ...(listDynamic as List<dynamic>).map((o) => newFromMap(o))
+    ];
+  }
+
+  BrnPickerEntity newFromMap(Map<String, dynamic>? map) {
+    if (map == null) return BrnPickerEntity();
+    BrnPickerEntity entity = BrnPickerEntity();
+    // entity.uniqueId = map['id']!.toString();
+    // entity.defaultValue = '';
+    entity.name = map['name'] ?? "";
+    entity.key = map['id']!.toString();
+    entity.type = 'radio';
+    //entity.filterType = PickerFilterType.radio;
+    entity.value = map['id']!.toString();
+    entity.children = []
+      ..addAll((map['sons'] as List? ?? []).map((o) => newFromMap(o)));
+    return entity;
+  }
+
+  changeClass(int index, String key, String name) {
+    if (index == 0) {
+      searchForm['prodFamily'] = key;
+    } else if (index == 1) {
+      searchForm['prodType'] = key;
+    } else {
+      searchForm['bigType'] = key;
+    }
+    classCtrl.value.text = name;
   }
 }

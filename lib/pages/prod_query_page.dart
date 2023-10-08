@@ -158,7 +158,7 @@ class ProdQueryPage extends GetView<ProdQueryController> {
                     );
                   }),
           floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add),
+            child: const Icon(Icons.search_outlined),
             onPressed: () {
               BrnDialogManager.showConfirmDialog(context,
                   title: "产品搜索",
@@ -187,14 +187,35 @@ class ProdQueryPage extends GetView<ProdQueryController> {
                         maxCharCount: 4,
                         onChanged: (newValue) {},
                       ),
-                      // BrnIconButton(
-                      //     name: '分类',
-                      //     direction: Direction.left,
-                      //     iconWidget: Icon(
-                      //       Icons.format_list_bulleted,
-                      //     ),
-                      //     onTap: () {}),
-                      // Text('${controller.prodClass.length}'),
+                      BrnTextSelectFormItem(
+                          title: "分类",
+                          onTap: () {
+                            var selectionMenuView = BrnMultiColumnPicker(
+                              entity: controller.prodClass,
+                              onConfirm: (result, firstIndex, secondIndex,
+                                  thirdIndex) {},
+                              onEntityTap: (int columnIndex, int rowIndex,
+                                  BrnPickerEntity entity) {
+                                BrnToast.show('选择${entity.name}', context);
+                                controller.changeClass(
+                                    columnIndex, entity.key!, entity.name);
+                              },
+                            );
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (BuildContext dialogContext) {
+                                return selectionMenuView;
+                              },
+                            );
+                          }),
+                      BrnTextInputFormItem(
+                        isEdit: false,
+                        controller: controller.classCtrl.value,
+                        maxCharCount: 100,
+                        hint: "",
+                        onChanged: (newValue) {},
+                      ),
                     ],
                   ), onConfirm: () async {
                 Navigator.pop(context);

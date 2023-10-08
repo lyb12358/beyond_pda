@@ -53,7 +53,7 @@ class ChooseShopPage extends GetView<ChooseShopController> {
                 );
               }),
           floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add),
+            child: const Icon(Icons.search_outlined),
             onPressed: () {
               BrnDialogManager.showConfirmDialog(context,
                   title: "门店搜索",

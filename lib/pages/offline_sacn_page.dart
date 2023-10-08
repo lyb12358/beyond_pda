@@ -215,7 +215,7 @@ class _MyState extends State<PdaOfflineScanPage>
                   );
                 }),
             floatingActionButton: FloatingActionButton(
-              child: const Icon(Icons.add),
+              child: const Icon(Icons.search_outlined),
               onPressed: () {
                 BrnDialogManager.showConfirmDialog(context,
                     title: "产品搜索",

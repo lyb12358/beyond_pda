@@ -18,24 +18,26 @@ class RecordDetailPage extends GetView<RecordDetailController> {
       'Cookie': 'x-token=${box.read("x-token")}'
     };
     return Obx(() => Scaffold(
-            persistentFooterButtons: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text('盘点数量：${controller.totalNum.value}'),
-                  Text('库存总数量：${controller.totalOnlineNum.value}'),
-                  Text(
-                      '差异：${controller.totalNum.value - controller.totalOnlineNum.value}'),
-                ],
-              ),
-            ],
-            appBar: AppBar(
-              title: Text(controller.calPageName()),
+          persistentFooterButtons: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text('盘点数量：${controller.totalNum.value}'),
+                Text('库存总数量：${controller.totalOnlineNum.value}'),
+                Text(
+                    '差异：${controller.totalNum.value - controller.totalOnlineNum.value}'),
+              ],
             ),
-            body: ListView.builder(
-                itemCount: c.codeList.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
+          ],
+          appBar: AppBar(
+            title: Text(controller.calPageName()),
+          ),
+          body: ListView.builder(
+              itemCount: c.codeList.length,
+              itemBuilder: (context, index) {
+                return Visibility(
+                  visible: c.codeList[index].visible ?? true,
+                  child: ListTile(
                     title: Text(c.codeList[index].prodName!),
                     subtitle: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -86,7 +88,46 @@ class RecordDetailPage extends GetView<RecordDetailController> {
                         },
                       );
                     },
-                  );
-                })));
+                  ),
+                );
+              }),
+          floatingActionButton: FloatingActionButton(
+            child: const Icon(Icons.search_outlined),
+            onPressed: () {
+              BrnDialogManager.showConfirmDialog(context,
+                  title: "明细",
+                  cancel: '重置',
+                  confirm: '搜索',
+                  barrierDismissible: false,
+                  messageWidget: Column(
+                    children: [
+                      BrnTextInputFormItem(
+                        controller: controller.cnCtrl.value,
+                        title: "编号/名称",
+                        hint: "请输入",
+                        onChanged: (newValue) {},
+                      ),
+                      BrnRadioInputFormItem(
+                        title: "仅显示差异产品",
+                        options: const [
+                          "是",
+                          "否",
+                        ],
+                        value: controller.isDiffLabel.value,
+                        onChanged: (oldValue, newValue) {
+                          controller.checkStatus(newValue);
+                        },
+                      ),
+                    ],
+                  ), onConfirm: () async {
+                Navigator.pop(context);
+                await controller.filterList();
+              }, onCancel: () async {
+                Navigator.pop(context);
+                await controller.resetSearch();
+              });
+            },
+          ),
+        ));
   }
 }

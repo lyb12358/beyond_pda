@@ -286,6 +286,11 @@ class UserController extends GetxController {
   }
 
   Future<bool> putHoldonInventory(String remark) async {
+    //清洗列表，全部设置为true
+    codeList.value = codeList.map((element) {
+      element.visible = true;
+      return element;
+    }).toList();
     inventory.value.remark = remark;
     inventory.value.shopId = shopId.value;
     inventory.value.inventoryList = codeList;

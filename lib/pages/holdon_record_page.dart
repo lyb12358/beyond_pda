@@ -2,7 +2,6 @@ import 'package:beyond_pda/controller/holdon_record_controller.dart';
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../controller/user_controller.dart';
 import 'online_scan_page.dart';
@@ -142,7 +141,7 @@ class HoldonRecordPage extends GetView<HoldonRecordController> {
                 );
               }),
           floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add),
+            child: const Icon(Icons.search_outlined),
             onPressed: () {
               BrnDialogManager.showConfirmDialog(context,
                   title: "挂单搜索",

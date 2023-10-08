@@ -159,7 +159,7 @@ class OfflineRecordPage extends GetView<OfflineRecordController> {
                 );
               }),
           floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add),
+            child: const Icon(Icons.search_outlined),
             onPressed: () {
               BrnDialogManager.showConfirmDialog(context,
                   title: "单据搜索",
