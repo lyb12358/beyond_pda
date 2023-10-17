@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../repository/product_repository.dart';
 import 'user_controller.dart';
@@ -7,6 +8,7 @@ import 'user_controller.dart';
 class InventoryQueryController extends GetxController {
   late ProductRepository _productRepository;
   UserController c = Get.find();
+  final GetStorage box = GetStorage();
   final inventoryList = [].obs;
   final searchForm = {}.obs;
   final page = 1.obs;
@@ -36,6 +38,8 @@ class InventoryQueryController extends GetxController {
     searchForm['prodName'] = nameCtrl.value.text;
     searchForm['shopCode'] = spCodeCtrl.value.text;
     searchForm['shopName'] = spNameCtrl.value.text;
+    searchForm['brandId'] = c.brandId.value;
+    searchForm['departId'] = c.departId.value;
     searchForm.refresh();
     var listDynamic = await _productRepository.inventoryQuery(searchForm);
     inventoryList.value = (listDynamic as List<dynamic>).map((e) {
@@ -69,10 +73,11 @@ class InventoryQueryController extends GetxController {
 
   checkShop() async {
     if (c.shopId.value != 0) {
-      searchForm['departId'] = c.departId.value;
-      var x = [];
-      x.add(c.shopId.value);
-      searchForm['shopIds'] = x;
+      // var x = [];
+      // x.add(c.shopId.value);
+      // searchForm['shopIds'] = x;
+      spNameCtrl.value.text = c.shopName.value;
+      spCodeCtrl.value.text = c.shopNo.value;
       await inventoryQuery();
     }
   }
