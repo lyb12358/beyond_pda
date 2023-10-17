@@ -271,8 +271,11 @@ class ProductRepository extends GetxService {
   Future getProdClass() async {
     try {
       final response = await _httpService.get(
-        '/shop-storage/product/productClass/tree',
+        '/pm/prodClasses/tree/bigType',
       );
+      // final response = await _httpService.get(
+      //   '/shop-storage/product/productClass/tree',
+      // );
       if (response.data['code'] == 200) {
         return response.data['data'];
       } else {

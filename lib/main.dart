@@ -27,6 +27,8 @@ void main() async {
 initServices() async {
   await Get.putAsync<HttpService>(() async => await HttpService()
       .init(baseUrl: "https://map.beyond-itcenter.com/usercenter"));
+  // await Get.putAsync<HttpService>(() async => await HttpService()
+  //     .init(baseUrl: "https://shop.beyond-itservice.com/usercenter"));
   await Get.putAsync<ProductRepository>(
       () async => await ProductRepository().init());
   Get.put(UserRepository().init());

@@ -38,8 +38,8 @@ class OfflineRecordController extends GetxController {
                   .isAfter(DateTime.parse(startTime.value))
               : true) &&
           (endTime.value.isNotEmpty
-              ? DateTime.parse(element.createTime!)
-                  .isBefore(DateTime.parse(endTime.value))
+              ? DateTime.parse(element.createTime!).isBefore(
+                  DateTime.parse(endTime.value).add(Duration(days: 1)))
               : true);
     }).toList();
   }

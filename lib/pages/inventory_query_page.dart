@@ -213,6 +213,9 @@ class InventoryQueryPage extends GetView<InventoryQueryController> {
                   ), onConfirm: () async {
                 Navigator.pop(context);
                 BrnLoadingDialog.show(context, barrierDismissible: false);
+                //门店编号强制大写
+                controller.spCodeCtrl.value.text =
+                    controller.spCodeCtrl.value.text.toUpperCase();
                 await controller.inventoryQuery();
                 BrnLoadingDialog.dismiss(context);
                 ShangMiScanUtil().cancel();

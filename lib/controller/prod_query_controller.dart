@@ -73,13 +73,13 @@ class ProdQueryController extends GetxController {
     BrnPickerEntity entity = BrnPickerEntity();
     // entity.uniqueId = map['id']!.toString();
     // entity.defaultValue = '';
-    entity.name = map['name'] ?? "";
-    entity.key = map['id']!.toString();
+    entity.name = map['label'] ?? "";
+    entity.key = map['value']!.toString();
     entity.type = 'radio';
     //entity.filterType = PickerFilterType.radio;
-    entity.value = map['id']!.toString();
+    entity.value = map['value']!.toString();
     entity.children = []
-      ..addAll((map['sons'] as List? ?? []).map((o) => newFromMap(o)));
+      ..addAll((map['children'] as List? ?? []).map((o) => newFromMap(o)));
     return entity;
   }
 
