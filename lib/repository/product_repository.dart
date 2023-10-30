@@ -35,7 +35,7 @@ class ProductRepository extends GetxService {
     try {
       final response = await _httpService.get('/pm/v1/pdaData',
           options:
-              Options(receiveTimeout: const Duration(milliseconds: 20000)));
+              Options(receiveTimeout: const Duration(milliseconds: 30000)));
       if (response.data['code'] == 200) {
         box.write('updateTime',
             DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()));
@@ -69,8 +69,10 @@ class ProductRepository extends GetxService {
   Future getOnlineInventory(int shopId) async {
     try {
       final response = await _httpService.post('/shop-storage/shopStorage/list',
-          queryParameters: {'page': 1, 'limit': 1000, 'shopId': shopId},
-          data: {'page': 1, 'limit': 1000, 'shopId': shopId});
+          // queryParameters: {'page': 1, 'limit': 5000, 'shopId': shopId},
+          // data: {'page': 1, 'limit': 1000, 'shopId': shopId});
+          queryParameters: {'shopId': shopId},
+          data: {'shopId': shopId});
       if (response.data['code'] == 200) {
         return response.data['data']['data'];
       } else {
