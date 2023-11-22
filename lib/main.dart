@@ -14,6 +14,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'controller/offline_record_controller.dart';
+import 'controller/record_detail_controller.dart';
 
 //import 'package:bot_toast/bot_toast.dart';
 
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(UserController());
+    Get.put(RecordDetailController());
     Get.put(OfflineScanController());
     Get.put(OfflineRecordController());
     //final botToastBuilder = BotToastInit();

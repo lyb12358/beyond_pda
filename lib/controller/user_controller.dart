@@ -17,6 +17,7 @@ class UserController extends GetxController {
   final operations = [].obs;
   final name = ''.obs;
   final pwd = ''.obs;
+  final isObscure = true.obs;
   final updateTime = ''.obs;
   final singleProd = ProductData().obs;
   //shop
@@ -40,6 +41,8 @@ class UserController extends GetxController {
   final inventory = Inventory().obs;
   //temporary variable
   final tempBaseUrl = "https://ims-backend.beyond-itservice.com";
+
+  final isSearch = false.obs;
 
   final GetStorage box = GetStorage();
 

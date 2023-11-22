@@ -1,9 +1,13 @@
+import 'package:beyond_pda/controller/prod_query_controller.dart';
 import 'package:beyond_pda/pages/inventory_query_page.dart';
 import 'package:beyond_pda/pages/online_gridview_page.dart';
 import 'package:beyond_pda/pages/prod_query_page.dart';
 import 'package:beyond_pda/pages/user_deatail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:bruno/bruno.dart';
+import 'package:get/get.dart';
+
+import '../controller/inventory_query_controller.dart';
 
 class OnlineWorkshopPage extends StatefulWidget {
   const OnlineWorkshopPage({super.key});
@@ -65,6 +69,15 @@ class _OnlineWorkshopState extends State<OnlineWorkshopPage> {
         items: bottomTabs,
         iconSize: 30,
         onTap: (index) {
+          if (index == 1) {
+            Get.put(ProdQueryController());
+            ProdQueryController p = Get.find();
+            p.onInit();
+          } else if (index == 2) {
+            Get.put(InventoryQueryController());
+            InventoryQueryController i = Get.find();
+            i.onInit();
+          }
           setState(() {
             currentIndex = index;
             currentPage = tabBodies[currentIndex];

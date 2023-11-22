@@ -294,7 +294,7 @@ class ProductRepository extends GetxService {
   Future inventoryQuery(Map form) async {
     try {
       final response = await _httpService.post(
-          '/query/dataSet/shopStorage/list',
+          '/query/dataSet/shopStorage/pda/list',
           queryParameters: {'page': form['page'], 'limit': form['limit']},
           data: form);
       if (response.data['code'] == 200) {

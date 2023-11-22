@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sm_scan/shangmi_util.dart';
 
 import '../repository/product_repository.dart';
 import 'user_controller.dart';
@@ -27,10 +28,19 @@ class InventoryQueryController extends GetxController {
     super.onInit();
     _productRepository = Get.find();
     await checkShop();
+    ShangMiScanUtil().listen((value) {
+      debugPrint("库存查询快捷编号输入");
+      codeCtrl.value.text = value;
+      inventoryQuery();
+    });
   }
 
   //库存查询
   Future<void> inventoryQuery() async {
+    if (c.shopId.value == 0) {
+      Get.snackbar('提示', '请先至-我的-菜单选择当前门店！');
+      return;
+    }
     searchForm['page'] = page.value;
     searchForm['limit'] = limit.value;
     searchForm['prodCountStatus'] = prodCountStatus.value;
@@ -40,6 +50,8 @@ class InventoryQueryController extends GetxController {
     searchForm['shopName'] = spNameCtrl.value.text;
     searchForm['brandId'] = c.brandId.value;
     searchForm['departId'] = c.departId.value;
+    //20231114
+    searchForm['sortShop'] = c.shopId.value;
     searchForm.refresh();
     var listDynamic = await _productRepository.inventoryQuery(searchForm);
     inventoryList.value = (listDynamic as List<dynamic>).map((e) {

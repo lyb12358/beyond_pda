@@ -1,3 +1,4 @@
+import 'package:beyond_pda/controller/record_detail_controller.dart';
 import 'package:beyond_pda/controller/user_controller.dart';
 import 'package:beyond_pda/pages/historic_record_page.dart';
 import 'package:beyond_pda/pages/holdon_record_page.dart';
@@ -165,6 +166,7 @@ class _MyState extends State<OnlineScanPage>
                       c.calImageUrl(c.currentProd.value),
                       headers: headersMap,
                       scale: 2,
+                      height: 280,
                     ),
                     SizedBox(
                       height: 10,
@@ -256,10 +258,12 @@ class _MyState extends State<OnlineScanPage>
   @override
   Future<void> shangmiCodeHandle(String code) async {
     /// 编写你的逻辑
-    var x = DateTime.now();
-    await c.addCode(code);
-    var y = DateTime.now();
-    var diff = y.difference(x);
-    debugPrint('执行时间${diff.inMilliseconds.toString()}毫秒');
+    if (c.isSearch.value) {
+      Get.put(RecordDetailController());
+      RecordDetailController r = Get.find();
+      r.cnCtrl.value.text = code;
+    } else {
+      c.addCode(code);
+    }
   }
 }

@@ -19,14 +19,19 @@ class RecordDetailPage extends GetView<RecordDetailController> {
     };
     return Obx(() => Scaffold(
           persistentFooterButtons: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text('盘点数量：${controller.totalNum.value}'),
-                Text('库存总数量：${controller.totalOnlineNum.value}'),
-                Text(
-                    '差异：${controller.totalNum.value - controller.totalOnlineNum.value}'),
-              ],
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.lightBlue,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('盘点数量：${controller.totalNum.value}'),
+                  Text('库存总数量：${controller.totalOnlineNum.value}'),
+                  Text(
+                      '差异：${controller.totalNum.value - controller.totalOnlineNum.value}'),
+                ],
+              ),
             ),
           ],
           appBar: AppBar(
@@ -94,6 +99,7 @@ class RecordDetailPage extends GetView<RecordDetailController> {
           floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.search_outlined),
             onPressed: () {
+              c.isSearch.value = true;
               BrnDialogManager.showConfirmDialog(context,
                   title: "明细",
                   cancel: '重置',
@@ -120,9 +126,11 @@ class RecordDetailPage extends GetView<RecordDetailController> {
                       ),
                     ],
                   ), onConfirm: () async {
+                c.isSearch.value = false;
                 Navigator.pop(context);
                 await controller.filterList();
               }, onCancel: () async {
+                c.isSearch.value = false;
                 Navigator.pop(context);
                 await controller.resetSearch();
               });

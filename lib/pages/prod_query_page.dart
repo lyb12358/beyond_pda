@@ -150,6 +150,18 @@ class ProdQueryPage extends GetView<ProdQueryController> {
                                               ['supplyPrice']
                                           .toString()),
                                     )),
+                                BrnInfoModal(
+                                    keyPart: Text('Fab:',
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        )),
+                                    valuePart: BrnExpandableText(
+                                      text: controller.prodList[index]
+                                              ['prodDesc'] ??
+                                          '',
+                                      maxLines: 2,
+                                    )),
                               ],
                             ),
                           ),

@@ -120,19 +120,28 @@ class PdaLoginPage extends StatelessWidget {
                                             TextStyle(color: Colors.grey[400])),
                                   ),
                                 ),
-                                Container(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: TextField(
-                                    onChanged: (text) {
-                                      c.pwd.value = text;
-                                    },
-                                    decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: "密码",
-                                        hintStyle:
-                                            TextStyle(color: Colors.grey[400])),
-                                  ),
-                                )
+                                Obx(() => Container(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: TextField(
+                                        onChanged: (text) {
+                                          c.pwd.value = text;
+                                        },
+                                        obscureText: c.isObscure.value,
+                                        decoration: InputDecoration(
+                                            suffixIcon: IconButton(
+                                                icon: Icon(c.isObscure.value
+                                                    ? Icons.visibility
+                                                    : Icons.visibility_off),
+                                                onPressed: () {
+                                                  c.isObscure.value =
+                                                      !c.isObscure.value;
+                                                }),
+                                            border: InputBorder.none,
+                                            hintText: "密码",
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey[400])),
+                                      ),
+                                    ))
                               ],
                             ),
                           )),

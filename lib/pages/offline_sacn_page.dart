@@ -166,61 +166,68 @@ class _MyState extends State<PdaOfflineScanPage>
                 itemBuilder: (context, index) {
                   return Visibility(
                     visible: c.codeList[index].visible ?? true,
-                    child: ListTile(
-                      title: Text(c.codeList[index].prodName!),
-                      subtitle: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Column(
-                            children: [
-                              Text('编号：${c.codeList[index].prodCode!}'),
-                              Text('盘点数量：${c.codeList[index].num!}'),
-                            ],
-                          ),
-                        ],
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: index == 0 ? Colors.lightBlue : Colors.white,
                       ),
-                      trailing: const Icon(
-                        Icons.chevron_right,
-                        size: 22,
-                        color: Colors.grey,
+                      child: ListTile(
+                        title: Text(c.codeList[index].prodName!),
+                        subtitle: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Column(
+                              children: [
+                                Text('编号：${c.codeList[index].prodCode!}'),
+                                Text('盘点数量：${c.codeList[index].num!}'),
+                              ],
+                            ),
+                          ],
+                        ),
+                        trailing: const Icon(
+                          Icons.chevron_right,
+                          size: 22,
+                          color: Colors.grey,
+                        ),
+                        onTap: () {
+                          c.countInputController.text =
+                              c.codeList[index].num!.toString();
+                          BrnDialogManager.showSingleButtonDialog(
+                            context,
+                            title: "数量修改",
+                            label: '确认',
+                            messageWidget: Column(
+                              children: [
+                                BrnStepInputFormItem(
+                                  title: "数量",
+                                  canManualInput: true,
+                                  isEdit: true,
+                                  controller: c.countInputController,
+                                  maxLimit: 9999,
+                                  onChanged: (oldValue, newValue) {
+                                    c.setCode(
+                                        c.codeList[index].prodCode!, newValue);
+                                  },
+                                ),
+                              ],
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          );
+                        },
                       ),
-                      onTap: () {
-                        c.countInputController.text =
-                            c.codeList[index].num!.toString();
-                        BrnDialogManager.showSingleButtonDialog(
-                          context,
-                          title: "数量修改",
-                          label: '确认',
-                          messageWidget: Column(
-                            children: [
-                              BrnStepInputFormItem(
-                                title: "数量",
-                                canManualInput: true,
-                                isEdit: true,
-                                controller: c.countInputController,
-                                maxLimit: 9999,
-                                onChanged: (oldValue, newValue) {
-                                  c.setCode(
-                                      c.codeList[index].prodCode!, newValue);
-                                },
-                              ),
-                            ],
-                          ),
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        );
-                      },
                     ),
                   );
                 }),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.search_outlined),
               onPressed: () {
+                c.isSearch.value = true;
                 BrnDialogManager.showConfirmDialog(context,
                     title: "产品搜索",
                     cancel: '重置',
                     confirm: '搜索',
+                    barrierDismissible: false,
                     messageWidget: Column(
                       children: [
                         BrnTextInputFormItem(
@@ -232,11 +239,14 @@ class _MyState extends State<PdaOfflineScanPage>
                         ),
                       ],
                     ), onConfirm: () async {
+                  c.isSearch.value = false;
                   Navigator.pop(context);
                   await c.filterList();
                 }, onCancel: () async {
+                  c.isSearch.value = false;
                   Navigator.pop(context);
                   await c.resetSearch();
+                  debugPrint('取消');
                 });
               },
             ),
@@ -246,6 +256,10 @@ class _MyState extends State<PdaOfflineScanPage>
   @override
   Future<void> shangmiCodeHandle(String code) async {
     /// 编写你的逻辑
-    c.addCode(code);
+    if (c.isSearch.value) {
+      c.searchCtrl.value.text = code;
+    } else {
+      c.addCode(code);
+    }
   }
 }

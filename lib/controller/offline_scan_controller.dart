@@ -21,6 +21,8 @@ class OfflineScanController extends GetxController {
   static OfflineScanController get to => Get.find();
   late ProductRepository _productRepository;
 
+  final isSearch = false.obs;
+
   @override
   void onInit() async {
     super.onInit();

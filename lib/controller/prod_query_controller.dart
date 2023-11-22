@@ -2,6 +2,7 @@ import 'package:beyond_pda/controller/user_controller.dart';
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sm_scan/shangmi_util.dart';
 
 import '../repository/product_repository.dart';
 
@@ -25,6 +26,11 @@ class ProdQueryController extends GetxController {
     super.onInit();
     _productRepository = Get.find();
     await getProdClass();
+    ShangMiScanUtil().listen((value) {
+      debugPrint("产品查询快捷编号输入");
+      codeCtrl.value.text = value;
+      getOnlineProdList();
+    });
   }
 
   //产品查询
