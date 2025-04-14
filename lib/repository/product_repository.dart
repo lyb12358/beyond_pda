@@ -68,11 +68,14 @@ class ProductRepository extends GetxService {
   //门店库存
   Future getOnlineInventory(int shopId) async {
     try {
-      final response = await _httpService.post('/shop-storage/shopStorage/list',
-          // queryParameters: {'page': 1, 'limit': 5000, 'shopId': shopId},
-          // data: {'page': 1, 'limit': 1000, 'shopId': shopId});
-          queryParameters: {'shopId': shopId},
-          data: {'shopId': shopId});
+      final response =
+          await _httpService.post('/query/dataSet/shopStorage/slim/list',
+              //20250121修复
+              // '/shop-storage/shopStorage/list',
+              // queryParameters: {'page': 1, 'limit': 5000, 'shopId': shopId},
+              // data: {'page': 1, 'limit': 1000, 'shopId': shopId});
+              queryParameters: {'shopId': shopId},
+              data: {'shopId': shopId});
       if (response.data['code'] == 200) {
         return response.data['data']['data'];
       } else {
